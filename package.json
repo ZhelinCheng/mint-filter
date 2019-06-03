@@ -1,0 +1,42 @@
+{
+  "name": "mint",
+  "version": "1.0.0",
+  "description": "🚀更轻巧的Node.js敏感词过滤库。",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-node": "nodemon",
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
+    "watch-test": "npm run test -- --watchAll",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "watch-ts": "tsc -w",
+    "build-ts": "tsc",
+    "debug": "npm run build && npm run watch-debug",
+    "build": "node ./clear.js && npm run build-ts && npm run tslint -s && echo Building success...",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
+    "serve-debug": "nodemon --inspect dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhelinCheng/mint.git"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/jest": "^24.0.11",
+    "concurrently": "^4.1.0",
+    "jest": "^24.7.1",
+    "nodemon": "^1.18.10",
+    "ts-jest": "^24.0.2"
+  },
+  "dependencies": {
+    "glob": "^7.1.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZhelinCheng/mint/issues"
+  },
+  "homepage": "https://github.com/ZhelinCheng/mint#readme"
+}

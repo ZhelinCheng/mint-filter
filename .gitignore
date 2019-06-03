@@ -56,6 +56,20 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.*
 
 # next.js build output
 .next
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+# Other
+package-lock.json
+yarn-lock.json

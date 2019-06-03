@@ -1,0 +1,13 @@
+{
+  "watch": [
+    "dist/**/*.js"
+  ],
+  "ignore": [
+    ".git",
+    "node_modules"
+  ],
+  "exec": "node dist/index.js",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

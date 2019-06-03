@@ -1,0 +1,15 @@
+{
+  "database": {
+    "host": "10.66.188.174",
+    "user" : "aiiuii",
+    "password" : "JXDlrv3eddlq@BFD",
+    "database" : "aiiuii_prod"
+  },
+  "devDatabase": {
+    "host" : "sh-cdb-oojdhv8t.sql.tencentcdb.com",
+    "port": "63099",
+    "user" : "aiiuii",
+    "password" : "YFARBo9XusJY&con",
+    "database" : "aiiuii_prod"
+  }
+}
