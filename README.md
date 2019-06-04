@@ -27,7 +27,7 @@ yarn add mint-filter
 const Mint = require('mint-filter')
 
 // 实例化的时候可以传递自定义敏感词路径
-const mint = new Mint()
+const mint = new Mint("敏感词文件路径，可不填")
 
 // 异步方法，该方法返回的是一个Promise对象
 mint.filter('word')
@@ -42,7 +42,7 @@ mint.filterSync('word')
 // 实例化的时候可以传递自定义敏感词路径
 
 import Mint from 'mint-filter'
-const mint = new Mint()
+const mint = new Mint("敏感词文件路径，可不填")
 
 // 异步方法，该方法返回的是一个Promise对象
 mint.filter('word')
