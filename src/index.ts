@@ -2,9 +2,6 @@
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
-
-import fs from 'fs'
-import path from 'path'
 import {
   getAllKeywords
 } from './core'
@@ -52,6 +49,8 @@ export default class Mint extends Tree {
     let filterText: string = word
     let filterKeywords: Array<string> = []
 
+    word = word.toLocaleUpperCase()
+
     for (let i = 0; i < wordLen; i++) {
       if (node instanceof Node) {
         prevNode = node
@@ -71,7 +70,6 @@ export default class Mint extends Tree {
         isJudge = true
       } else {
         if (startIndex !== endIndex && prevNode.word) {
-          // filterText +=
           filterText = replaceAt(filterText, startIndex, endIndex)
           filterKeywords.push(word.slice(startIndex, endIndex + 1))
         }
