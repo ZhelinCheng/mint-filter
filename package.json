@@ -1,8 +1,8 @@
 {
   "name": "mint-filter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "🚀更轻巧的Node.js敏感词过滤库。",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
@@ -38,7 +38,8 @@
   "keywords": [
     "sensitive word filter",
     "sensitive",
-    "filter"
+    "filter",
+    "敏感词"
   ],
   "author": {
     "name": "ZhelinCheng",
