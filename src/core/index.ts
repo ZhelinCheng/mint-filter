@@ -7,8 +7,6 @@
 import glob from 'glob'
 import path from 'path'
 import fs from 'fs'
-import Node from './node'
-import Tree from './tree'
 
 /**
  * 读取文件内容

@@ -1,3 +1,7 @@
+/**
+ * Created by ChengZheLin on 2019/6/3.
+ * Features: index
+ */
 import Tree from './core/tree';
 interface FilterValue {
     text: string;

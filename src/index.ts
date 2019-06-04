@@ -2,6 +2,9 @@
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
+
+import fs from 'fs'
+import path from 'path'
 import {
   getAllKeywords
 } from './core'
@@ -69,7 +72,6 @@ export default class Mint extends Tree {
       } else {
         if (startIndex !== endIndex && prevNode.word) {
           // filterText +=
-          console.log(startIndex, endIndex)
           filterText = replaceAt(filterText, startIndex, endIndex)
           filterKeywords.push(word.slice(startIndex, endIndex + 1))
         }
@@ -98,12 +100,6 @@ export default class Mint extends Tree {
 if (require.main === module) {
   (async function f() {
     let m = new Mint()
-    console.time('同步：')
-    console.log(m.filterSync('成功法轮川的事件法轮功法1'))
-    console.timeEnd('同步：')
-
-    /*console.time('异步：')
-    console.log(await m.filter('成功法轮川的事件法轮功法2'))
-    console.timeEnd('异步：')*/
+    console.log(m.filterSync('测试'))
   }())
 }

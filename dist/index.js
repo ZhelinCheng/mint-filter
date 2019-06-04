@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * Created by ChengZheLin on 2019/6/3.
+ * Features: index
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -11,10 +15,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by ChengZheLin on 2019/6/3.
- * Features: index
- */
 const core_1 = require("./core");
 const tree_1 = __importDefault(require("./core/tree"));
 const node_1 = __importDefault(require("./core/node"));
@@ -67,7 +67,6 @@ class Mint extends tree_1.default {
             else {
                 if (startIndex !== endIndex && prevNode.word) {
                     // filterText +=
-                    console.log(startIndex, endIndex);
                     filterText = replaceAt(filterText, startIndex, endIndex);
                     filterKeywords.push(word.slice(startIndex, endIndex + 1));
                 }
@@ -96,12 +95,7 @@ if (require.main === module) {
     (function f() {
         return __awaiter(this, void 0, void 0, function* () {
             let m = new Mint();
-            console.time('同步：');
-            console.log(m.filterSync('成功法轮川的事件法轮功法1'));
-            console.timeEnd('同步：');
-            /*console.time('异步：')
-            console.log(await m.filter('成功法轮川的事件法轮功法2'))
-            console.timeEnd('异步：')*/
+            console.log(m.filterSync('测试'));
         });
     }());
 }
