@@ -7,7 +7,7 @@
     "start": "node ./dist/index.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "nodemon",
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
+    "test": "jest --forceExit --verbose --detectOpenHandles --coverage",
     "watch-test": "npm run test -- --watchAll",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "watch-ts": "tsc -w",
@@ -16,7 +16,7 @@
     "build": "node ./clear.js && npm run build-ts && npm run tslint -s && echo Building success...",
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
     "serve-debug": "nodemon --inspect dist/index.js",
-    "coveralls": "npm run test && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "jest --coverage --coverageReporters=./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",

@@ -5,6 +5,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D3.0-green.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D7.6.0-green.svg)](https://nodejs.org/en/)
 ![GitHub](https://img.shields.io/github/license/ZhelinCheng/mint-filter.svg)
+[![Coverage Status](https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master)](https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master)
 
 ## 说明
 基于Trie树实现的敏感词过滤方案，Trie树也称为字典树、单词查找树，其最大的特点就是共享字符串的公共前缀来达到节省空间的目的。
