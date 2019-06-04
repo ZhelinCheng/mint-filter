@@ -12,6 +12,6 @@ describe('Core test.', () => {
   })
 
   it('Function getAllKeywords:', () => {
-    expect(getAllKeywords(path.resolve(__dirname, './test.txt'))).toHaveLength(1)
+    expect(getAllKeywords(path.resolve(__dirname, './test.txt'))).toEqual(expect.arrayContaining(['TEST']))
   })
 })

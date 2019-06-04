@@ -3,12 +3,17 @@
  * Features: index.test
  */
 
-import Mint from '../src/index'
 import path from 'path'
+import Mint from '../src/index'
 
 describe('Index test.', () => {
-  it('Class Mint:', () => {
-    const mint = new Mint(path.resolve(__dirname, './test.txt'))
+  const mint = new Mint(path.resolve(__dirname, './test.txt'))
+  it('Function filterSync:', () => {
     expect(mint.filterSync('TEST').text).toBe('****')
+  })
+
+  it('Function filter:', async () => {
+    let data = await mint.filter('TEST')
+    expect(await data.text).toBe('****')
   })
 })
