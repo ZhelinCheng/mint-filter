@@ -20,7 +20,7 @@ function replaceAt(word: string, start: number, end: number): string {
   return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end + 1)}`
 }
 
-export default class Mint extends Tree {
+class Mint extends Tree {
   constructor (keywordsPath?: string) {
     if (instance) return instance
 
@@ -94,6 +94,8 @@ export default class Mint extends Tree {
     return Promise.resolve(this._filterFn(word))
   }
 }
+
+export = Mint
 
 if (require.main === module) {
   (async function f() {

@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
@@ -90,7 +89,6 @@ class Mint extends tree_1.default {
         });
     }
 }
-exports.default = Mint;
 if (require.main === module) {
     (function f() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -99,4 +97,5 @@ if (require.main === module) {
         });
     }());
 }
+module.exports = Mint;
 //# sourceMappingURL=index.js.map
