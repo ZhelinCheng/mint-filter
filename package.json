@@ -1,5 +1,5 @@
 {
-  "name": "mint",
+  "name": "mint-filter",
   "version": "1.0.0",
   "description": "🚀更轻巧的Node.js敏感词过滤库。",
   "main": "dist/index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZhelinCheng/mint.git"
+    "url": "git+https://github.com/ZhelinCheng/mint-filter.git"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
@@ -36,7 +36,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ZhelinCheng/mint/issues"
+    "url": "https://github.com/ZhelinCheng/mint-filter/issues"
   },
-  "homepage": "https://github.com/ZhelinCheng/mint#readme"
+  "homepage": "https://github.com/ZhelinCheng/mint-filter#readme"
 }

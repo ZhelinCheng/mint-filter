@@ -11,8 +11,3 @@ export declare function readFile(path: string): string;
  * 获取所有敏感词
  */
 export declare function getAllKeywords(selfPath?: string): any;
-/**
- * 创建Trie树
- * @param keywords
- */
-export declare function createTrieTree(keywords: string[]): {};

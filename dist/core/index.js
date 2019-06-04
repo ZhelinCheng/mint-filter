@@ -32,25 +32,9 @@ function getAllKeywords(selfPath) {
         for (let file of files) {
             results = `${results}\r\n${readFile(file)}`;
         }
+        results = results.toLocaleUpperCase();
         return [...new Set(results.split(/\r\n|\n|\r/))];
     }
 }
 exports.getAllKeywords = getAllKeywords;
-/**
- * 创建Trie树
- * @param keywords
- */
-function createTrieTree(keywords) {
-    let trie = {
-        root: true,
-        children: {}
-    };
-    for (let item of keywords) {
-        for (let str of item.split('')) {
-            // trie[str]
-        }
-    }
-    return {};
-}
-exports.createTrieTree = createTrieTree;
 //# sourceMappingURL=index.js.map

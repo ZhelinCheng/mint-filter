@@ -6,7 +6,7 @@
     ".git",
     "node_modules"
   ],
-  "exec": "node dist/index.js",
+  "exec": "node --inspect dist/index.js",
   "env": {
     "NODE_ENV": "development"
   }

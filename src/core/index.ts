@@ -7,6 +7,8 @@
 import glob from 'glob'
 import path from 'path'
 import fs from 'fs'
+import Node from './node'
+import Tree from './tree'
 
 /**
  * 读取文件内容
@@ -29,25 +31,7 @@ export function getAllKeywords(selfPath?: string): any {
     for (let file of files) {
       results = `${results}\r\n${readFile(file)}`
     }
+    results = results.toLocaleUpperCase()
     return [...new Set(results.split(/\r\n|\n|\r/))]
   }
-}
-
-/**
- * 创建Trie树
- * @param keywords
- */
-export function createTrieTree (keywords: string[]) {
-  let trie = {
-    root: true,
-    children: {}
-  }
-
-  for (let item of keywords) {
-    for (let str of item.split('')) {
-      // trie[str]
-    }
-  }
-
-  return {}
 }
