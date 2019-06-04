@@ -15,7 +15,8 @@
     "debug": "npm run build && npm run watch-debug",
     "build": "node ./clear.js && npm run build-ts && npm run tslint -s && echo Building success...",
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
-    "serve-debug": "nodemon --inspect dist/index.js"
+    "serve-debug": "nodemon --inspect dist/index.js",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.11",
     "concurrently": "^4.1.0",
+    "coveralls": "^3.0.3",
     "jest": "^24.7.1",
     "nodemon": "^1.18.10",
     "ts-jest": "^24.0.2",
@@ -33,7 +35,11 @@
   "dependencies": {
     "glob": "^7.1.4"
   },
-  "keywords": [],
+  "keywords": [
+    "sensitive word filter",
+    "sensitive",
+    "filter"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {

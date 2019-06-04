@@ -1,5 +1,6 @@
 # Mint-filter
 🚀更轻巧的Node.js敏感词过滤库。
+
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
 [![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D3.0-green.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D7.6.0-green.svg)](https://nodejs.org/en/)
@@ -7,6 +8,7 @@
 
 ## 说明
 基于Trie树实现的敏感词过滤方案，Trie树也称为字典树、单词查找树，其最大的特点就是共享字符串的公共前缀来达到节省空间的目的。
+更加轻巧的Nodejs敏感词过滤库，20字以内1-2ms，5000字8ms。
 
 ## 安装
 ```
@@ -46,4 +48,12 @@ mint.filter('word')
 
 // 同步方法
 mint.filterSync('word')
+```
+
+#### 返回内容
+```json
+{
+  "text": "替换后的文本***",
+  "filter": ["被过滤的词"]
+}
 ```
