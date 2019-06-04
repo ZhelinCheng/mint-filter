@@ -1,6 +1,6 @@
 {
   "name": "mint-filter",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "🚀更轻巧的Node.js敏感词过滤库。",
   "main": "./dist/index.js",
   "scripts": {
