@@ -8,7 +8,9 @@ interface Children {
 export default class Node {
     key: string;
     word: boolean;
+    parent: Node | undefined;
     children: Children;
-    constructor(key: string, word?: boolean);
+    failure: any;
+    constructor(key: string, failure: any, parent?: Node | undefined, word?: boolean);
 }
 export {};

@@ -19,11 +19,17 @@ export default class Tree {
    */
   insert (key: string): boolean {
     if (!key) return false
+    let keyArr = key.split('')
+    let firstKey = keyArr.shift()
 
-    if (key.length > 1) {
-      this.insertNode(this.root, key.split(''))
-    } else if (!this.root[key]) {
-      this.root[key] = new Node(key)
+    // 第一个key
+    if (!this.root[firstKey]) {
+      this.root[firstKey] = new Node(firstKey, this.root)
+    }
+
+    // 其他多余的key
+    if (keyArr.length >= 1) {
+      this.insertNode(this.root[firstKey], keyArr)
     }
 
     return true
@@ -34,15 +40,62 @@ export default class Tree {
    * @param node
    * @param word
    */
-  insertNode (node: Children, word: string[]) {
+  insertNode (node: Node, word: string[]) {
     let len = word.length
+
     if (len) {
-      let key = word.shift()
-      if (!node[key]) {
-        node[key] = new Node(key, len === 1)
+      let children: Children
+      children = node.children
+
+      const key = word.shift()
+      let item = children[key]
+      const isWord = len === 1
+
+      if (!item) {
+        if (key === 'B') {
+          console.log(node, key)
+        }
+        let failure = this.createFailureTable(node, key)
+        item = new Node(key, failure, node, isWord)
+      } else {
+        item.word = isWord
       }
-      this.insertNode(node[key].children, word)
+
+      children[key] = item
+      this.insertNode(children[key], word)
     }
+  }
+
+  /**
+   * 创建Failure表
+   */
+  createFailureTable (node: Node | Children, key: string): Node | Children {
+    const failure = node.failure
+    let children
+    const isFailNode = failure instanceof Node
+    const isNode = node instanceof Node
+
+
+
+    /*if (isNode) {
+      children = failure.children
+    } else {
+      children = node.children
+    }
+
+    if (key === 'B') {
+      console.log(node)
+    }*/
+
+    /*if (children[key]) {
+      return failure
+    } else if (isNode) {
+      this.createFailureTable(failure, key)
+    } else {
+      return children
+    }*/
+
+    return
   }
 
   /**

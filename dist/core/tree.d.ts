@@ -19,7 +19,11 @@ export default class Tree {
      * @param node
      * @param word
      */
-    insertNode(node: Children, word: string[]): void;
+    insertNode(node: Node, word: string[]): void;
+    /**
+     * 创建Failure表
+     */
+    createFailureTable(node: Node | Children, key: string): Node | Children;
     /**
      * 搜索节点
      * @param key

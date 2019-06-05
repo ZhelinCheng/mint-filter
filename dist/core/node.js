@@ -5,11 +5,13 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 class Node {
-    constructor(key, word = false) {
-        // 子节点的引用
+    constructor(key, failure, parent = undefined, word = false) {
+        // 子节点的引用（goto表）
         this.children = {};
         this.key = key;
+        this.parent = parent;
         this.word = word;
+        this.failure = failure;
     }
 }
 exports.default = Node;

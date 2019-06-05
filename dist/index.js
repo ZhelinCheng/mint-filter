@@ -61,10 +61,12 @@ class Mint extends tree_1.default {
                 continue;
             }
             if (node) {
+                // console.log(word[i])
                 startIndex = i;
                 isJudge = true;
             }
             else {
+                // console.log(startIndex, endIndex)
                 if (startIndex !== endIndex && prevNode.word) {
                     filterText = replaceAt(filterText, startIndex, endIndex);
                     filterKeywords.push(word.slice(startIndex, endIndex + 1));
@@ -93,7 +95,14 @@ if (require.main === module) {
     (function f() {
         return __awaiter(this, void 0, void 0, function* () {
             let m = new Mint();
-            console.log(m.filterSync('测试'));
+            // console.log(m.root['A'].children['B'].children['C'])
+            // console.log(m.root['A'])
+            // console.log(m.filterSync(`ABCCCCAB`))
+            /*setInterval(function () {
+              console.time('时间：')
+              console.log(m.filterSync(`一法轮功测试法轮功${new Date().getTime()}`))
+              console.timeEnd('时间：')
+            }, 1000)*/
         });
     }());
 }

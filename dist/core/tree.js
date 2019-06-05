@@ -19,11 +19,15 @@ class Tree {
     insert(key) {
         if (!key)
             return false;
-        if (key.length > 1) {
-            this.insertNode(this.root, key.split(''));
+        let keyArr = key.split('');
+        let firstKey = keyArr.shift();
+        // 第一个key
+        if (!this.root[firstKey]) {
+            this.root[firstKey] = new node_1.default(firstKey, this.root);
         }
-        else if (!this.root[key]) {
-            this.root[key] = new node_1.default(key);
+        // 其他多余的key
+        if (keyArr.length >= 1) {
+            this.insertNode(this.root[firstKey], keyArr);
         }
         return true;
     }
@@ -35,12 +39,50 @@ class Tree {
     insertNode(node, word) {
         let len = word.length;
         if (len) {
-            let key = word.shift();
-            if (!node[key]) {
-                node[key] = new node_1.default(key, len === 1);
+            let children;
+            children = node.children;
+            const key = word.shift();
+            let item = children[key];
+            const isWord = len === 1;
+            if (!item) {
+                if (key === 'B') {
+                    console.log(node, key);
+                }
+                let failure = this.createFailureTable(node, key);
+                item = new node_1.default(key, failure, node, isWord);
             }
-            this.insertNode(node[key].children, word);
+            else {
+                item.word = isWord;
+            }
+            children[key] = item;
+            this.insertNode(children[key], word);
         }
+    }
+    /**
+     * 创建Failure表
+     */
+    createFailureTable(node, key) {
+        const failure = node.failure;
+        let children;
+        const isFailNode = failure instanceof node_1.default;
+        const isNode = node instanceof node_1.default;
+        /*if (isNode) {
+          children = failure.children
+        } else {
+          children = node.children
+        }
+    
+        if (key === 'B') {
+          console.log(node)
+        }*/
+        /*if (children[key]) {
+          return failure
+        } else if (isNode) {
+          this.createFailureTable(failure, key)
+        } else {
+          return children
+        }*/
+        return;
     }
     /**
      * 搜索节点
