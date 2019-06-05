@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = __importDefault(require("./node"));
 class Tree {
     constructor() {
-        this.root = {};
+        this.root = new node_1.default('root');
     }
     /**
      * 插入数据
@@ -21,13 +21,14 @@ class Tree {
             return false;
         let keyArr = key.split('');
         let firstKey = keyArr.shift();
+        let children = this.root.children;
         // 第一个key
-        if (!this.root[firstKey]) {
-            this.root[firstKey] = new node_1.default(firstKey);
+        if (!children[firstKey]) {
+            children[firstKey] = new node_1.default(firstKey);
         }
         // 其他多余的key
         if (keyArr.length >= 1) {
-            this.insertNode(this.root[firstKey], keyArr);
+            this.insertNode(children[firstKey], keyArr);
         }
         return true;
     }
@@ -58,36 +59,49 @@ class Tree {
     /**
      * 创建Failure表
      */
-    createFailureTable(node, key) {
-        let fail = node.failure;
-        let isNode = fail instanceof node_1.default;
-        let children = fail.children;
-        // fail是否是Node类型，如果不是则指向了根
-        if (isNode) {
-            if (children[key]) {
-                return fail;
+    _createFailureTable() {
+        // 获取树第一层
+        let currQueue = Object.values(this.root.children);
+        while (currQueue.length > 0) {
+            let nextQueue = [];
+            for (let i = 0; i < currQueue.length; i++) {
+                let node = currQueue[i];
+                let key = node.key;
+                let parent = node.parent;
+                // 获取树下一层
+                for (let k in node.children) {
+                    nextQueue.push(node.children[k]);
+                }
+                if (parent) {
+                    let failure = parent.failure;
+                    while (failure) {
+                        let children = failure.children[key];
+                        // 判断是否到了根节点
+                        if (children) {
+                            node.failure = children;
+                            break;
+                        }
+                        failure = failure.failure;
+                    }
+                }
+                else {
+                    node.failure = this.root;
+                }
             }
-            this.createFailureTable(fail, key);
+            currQueue = nextQueue;
         }
-        else {
-            if (fail[key]) {
-                return fail[key];
-            }
-            console.log(11);
-        }
-        return this.root;
     }
     /**
      * 搜索节点
      * @param key
      * @param node
      */
-    search(key, node = this.root) {
+    search(key, node = this.root.children) {
         const val = node[key];
         if (val)
             return val;
         else
-            return false;
+            return;
     }
 }
 exports.default = Tree;

@@ -5,7 +5,6 @@ interface FilterValue {
 }
 declare class Mint extends Tree {
     constructor(keywordsPath?: string);
-    _createFailureTable(): void;
     _filterFn(word: string): FilterValue;
     filterSync(word: string): FilterValue;
     filter(word: string): Promise<FilterValue>;

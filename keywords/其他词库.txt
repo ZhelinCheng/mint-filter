@@ -1,2 +1,2 @@
-﻿AB
-BD
+﻿ABC
+BC

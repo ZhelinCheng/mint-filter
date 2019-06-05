@@ -4,15 +4,13 @@
  */
 
 import Node from './node'
-
-interface Children {
-  [key: string]: Node
-}
+import { Children } from './index'
 
 export default class Tree {
-  public root: Children = {}
+  public root: Node
 
   constructor() {
+    this.root = new Node('root')
   }
 
   /**
@@ -23,15 +21,16 @@ export default class Tree {
     if (!key) return false
     let keyArr = key.split('')
     let firstKey = keyArr.shift()
+    let children = this.root.children
 
     // 第一个key
-    if (!this.root[firstKey]) {
-      this.root[firstKey] = new Node(firstKey)
+    if (!children[firstKey]) {
+      children[firstKey] = new Node(firstKey)
     }
 
     // 其他多余的key
     if (keyArr.length >= 1) {
-      this.insertNode(this.root[firstKey], keyArr)
+      this.insertNode(children[firstKey], keyArr)
     }
 
     return true
@@ -68,26 +67,43 @@ export default class Tree {
   /**
    * 创建Failure表
    */
-  createFailureTable(node: Node, key: string): Children | Node {
-    let fail: any = node.failure
-    let isNode = fail instanceof Node
-    let children = fail.children
+  _createFailureTable () {
+    // 获取树第一层
+    let currQueue: Array<Node> = Object.values(this.root.children)
 
-    // fail是否是Node类型，如果不是则指向了根
-    if (isNode) {
-      if (children[key]) {
-        return fail
-      }
-      this.createFailureTable(fail, key)
-    } else {
-      if (fail[key]) {
-        return fail[key]
+    while (currQueue.length > 0) {
+      let nextQueue: Array<Node> = []
+
+      for (let i = 0; i < currQueue.length; i++) {
+        let node: Node = currQueue[i]
+        let key = node.key
+        let parent = node.parent
+        // 获取树下一层
+        for (let k in node.children) {
+          nextQueue.push(node.children[k])
+        }
+
+        if (parent) {
+          let failure: any = parent.failure
+          while (failure) {
+            let children: any = failure.children[key]
+
+            // 判断是否到了根节点
+            if (children) {
+              node.failure = children
+              break
+            }
+
+            failure = failure.failure
+          }
+
+        } else {
+          node.failure = this.root
+        }
       }
 
-      console.log(11)
+      currQueue = nextQueue
     }
-
-    return this.root
   }
 
   /**
@@ -95,9 +111,9 @@ export default class Tree {
    * @param key
    * @param node
    */
-  search(key: string, node: Children = this.root): Node | boolean {
+  search(key: string, node: Children = this.root.children): Node | undefined {
     const val: Node | undefined = node[key]
     if (val) return val
-    else return false
+    else return
   }
 }

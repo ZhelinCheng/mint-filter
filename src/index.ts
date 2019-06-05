@@ -3,6 +3,7 @@
  * Features: index
  */
 import {
+  Children,
   getAllKeywords
 } from './core'
 import Tree from './core/tree'
@@ -16,14 +17,13 @@ interface FilterValue {
 }
 
 function replaceAt(word: string, start: number, end: number): string {
-  let len = end - start + 1
-  return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end + 1)}`
+  let len = end - start
+  return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end)}`
 }
 
 class Mint extends Tree {
   constructor(keywordsPath?: string) {
     if (instance) return instance
-
     super()
 
     // 创建Trie树
@@ -39,75 +39,59 @@ class Mint extends Tree {
     instance = this
   }
 
-  _createFailureTable () {
-    // 获取树第一层
-    let currQueue: Array<Node> = Object.values(this.root)
-
-    while (currQueue.length > 0) {
-      let nextQueue: Array<Node> = []
-
-      for (let i = 0; i < currQueue.length; i++) {
-        let node: Node = currQueue[i]
-        let key = node.key
-        let parent = node.parent
-        // 获取树下一层
-        for (let k in node.children) {
-          nextQueue.push(node.children[k])
-        }
-
-        if (parent) {
-          let failure = parent.failure
-          console.log(key, failure)
-
-          /*let child = failure.next[node.val]
-          if (child) {
-            node.back = child
-            break
-          }*/
-          // back = back.back
-
-
-          /*// 如果有父节点
-          // 获取父节点的fail节点
-          let parentFail = parent.failure
-
-          // 获取父节点Fail的子节点
-          let parentFailChild: any = parentFail.children
-
-          // 当parentFail指向树第一层时，指向的是root
-          if (!parentFailChild) {
-            parentFailChild = parentFail
-          }
-
-          if (parentFailChild[key]) {
-            return parentFail
-          } else {
-            console.log(key)
-          }*/
-        } else {
-          node.failure = this.root
-        }
-      }
-
-      currQueue = nextQueue
-    }
-  }
-
   _filterFn(word: string): FilterValue {
     let startIndex = 0
     let endIndex = startIndex
-    const wordLen = word.length + 1
+    const wordLen = word.length
+    let filterText: string = word
+    let filterKeywords: Array<string> = []
+    word = word.toLocaleUpperCase()
 
     // 正在进行划词判断
     let isJudge: boolean = false
-    let node: Node | boolean = false
-    let prevNode: Node
-    let filterText: string = word
-    let filterKeywords: Array<string> = []
+    let currNode: Node = this.root
+    let nextNode: Node | boolean
 
-    word = word.toLocaleUpperCase()
+    for (endIndex; endIndex <= wordLen; endIndex++) {
+      let key: string = word[endIndex]
+      // if (key) continue
 
-    for (let i = 0; i < wordLen; i++) {
+      nextNode = this.search(key, currNode.children)
+
+      if (isJudge && nextNode) {
+        currNode = nextNode
+        continue
+      }
+
+      if (!nextNode) {
+        // 直接在分支上找不到，需要走failure
+        let failure: Node = currNode.failure
+        while (failure) {
+          nextNode = this.search(key, failure.children)
+          if (nextNode) { break }
+          failure = failure.failure
+        }
+      }
+
+
+      if (nextNode) {
+        currNode = nextNode
+        isJudge = true
+      } else {
+        if (startIndex !== endIndex && currNode.word) {
+          filterText = replaceAt(filterText, startIndex, endIndex)
+          filterKeywords.push(word.slice(startIndex, endIndex))
+        }
+        isJudge = false
+        currNode = this.root
+      }
+
+
+      startIndex = endIndex
+    }
+
+
+    /*for (let i = 0; i < wordLen; i++) {
       if (node instanceof Node) {
         prevNode = node
         node = this.search(word[i], node.children)
@@ -122,11 +106,17 @@ class Mint extends Tree {
       }
 
       if (node) {
-        // console.log(word[i])
+        // 有子节点
         startIndex = i
         isJudge = true
       } else {
-        // console.log(startIndex, endIndex)
+        // 没有子节点
+
+        if () {
+
+        }
+
+
         if (startIndex !== endIndex && prevNode.word) {
           filterText = replaceAt(filterText, startIndex, endIndex)
           filterKeywords.push(word.slice(startIndex, endIndex + 1))
@@ -134,11 +124,11 @@ class Mint extends Tree {
         startIndex = endIndex = i
         isJudge = false
       }
-    }
+    }*/
 
     return {
       text: filterText,
-      filter: filterKeywords
+      filter: [...new Set(filterKeywords)]
     }
   }
 
@@ -153,31 +143,17 @@ class Mint extends Tree {
   }
 }
 
-
-setInterval(() => {
-  // console.log(111)
-}, 1000000000)
-
-let m = new Mint()
-// console.log(m)
-// console.log(m)
-
 export = Mint
 
 if (require.main === module) {
   (async function f() {
-    // let m = new Mint()
-
-    // console.log(m.root['A'].children['B'].children['C'])
-
-    // console.log(m.root['A'])
-
-    // console.log(m.filterSync(`ABCCCCAB`))
+    let m = new Mint()
 
     /*setInterval(function () {
-      console.time('时间：')
-      console.log(m.filterSync(`一法轮功测试法轮功${new Date().getTime()}`))
-      console.timeEnd('时间：')
+      console.time('1')
+      console.log(m.filterSync(`1AABC2SBCSBC${new Date()}`))
+      console.timeEnd('1')
     }, 1000)*/
+
   }())
 }

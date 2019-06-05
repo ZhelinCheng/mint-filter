@@ -7,6 +7,11 @@
 import glob from 'glob'
 import path from 'path'
 import fs from 'fs'
+import Node from "./node"
+
+export interface Children {
+  [key: string]: Node
+}
 
 /**
  * 读取文件内容

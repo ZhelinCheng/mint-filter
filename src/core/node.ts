@@ -3,9 +3,7 @@
  * Features: node
  */
 
-interface Children {
-  [key: string]: Node
-}
+import { Children } from './index'
 
 export default class Node {
   // 节点值
@@ -17,7 +15,7 @@ export default class Node {
   // 子节点的引用（goto表）
   public children: Children = {}
   // failure表，用于匹配失败后的跳转
-  public failure: Node | Children | undefined = undefined
+  public failure: Node | undefined = undefined
 
   constructor (key: string, parent: Node | undefined = undefined, word: boolean = false) {
     this.key = key

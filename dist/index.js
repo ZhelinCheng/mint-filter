@@ -16,11 +16,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
  */
 const core_1 = require("./core");
 const tree_1 = __importDefault(require("./core/tree"));
-const node_1 = __importDefault(require("./core/node"));
 let instance = undefined;
 function replaceAt(word, start, end) {
-    let len = end - start + 1;
-    return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end + 1)}`;
+    let len = end - start;
+    return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end)}`;
 }
 class Mint extends tree_1.default {
     constructor(keywordsPath) {
@@ -37,95 +36,87 @@ class Mint extends tree_1.default {
         this._createFailureTable();
         instance = this;
     }
-    _createFailureTable() {
-        // 获取树第一层
-        let currQueue = Object.values(this.root);
-        while (currQueue.length > 0) {
-            let nextQueue = [];
-            for (let i = 0; i < currQueue.length; i++) {
-                let node = currQueue[i];
-                let key = node.key;
-                let parent = node.parent;
-                // 获取树下一层
-                for (let k in node.children) {
-                    nextQueue.push(node.children[k]);
-                }
-                if (parent) {
-                    let failure = parent.failure;
-                    console.log(key, failure);
-                    /*let child = failure.next[node.val]
-                    if (child) {
-                      node.back = child
-                      break
-                    }*/
-                    // back = back.back
-                    /*// 如果有父节点
-                    // 获取父节点的fail节点
-                    let parentFail = parent.failure
-          
-                    // 获取父节点Fail的子节点
-                    let parentFailChild: any = parentFail.children
-          
-                    // 当parentFail指向树第一层时，指向的是root
-                    if (!parentFailChild) {
-                      parentFailChild = parentFail
-                    }
-          
-                    if (parentFailChild[key]) {
-                      return parentFail
-                    } else {
-                      console.log(key)
-                    }*/
-                }
-                else {
-                    node.failure = this.root;
-                }
-            }
-            currQueue = nextQueue;
-        }
-    }
     _filterFn(word) {
         let startIndex = 0;
         let endIndex = startIndex;
-        const wordLen = word.length + 1;
-        // 正在进行划词判断
-        let isJudge = false;
-        let node = false;
-        let prevNode;
+        const wordLen = word.length;
         let filterText = word;
         let filterKeywords = [];
         word = word.toLocaleUpperCase();
-        for (let i = 0; i < wordLen; i++) {
-            if (node instanceof node_1.default) {
-                prevNode = node;
-                node = this.search(word[i], node.children);
-            }
-            else {
-                node = this.search(word[i]);
-            }
-            // 正在划词判断且当前字也属于敏感字
-            if (isJudge && node) {
-                endIndex = i;
+        // 正在进行划词判断
+        let isJudge = false;
+        let currNode = this.root;
+        let nextNode;
+        for (endIndex; endIndex <= wordLen; endIndex++) {
+            let key = word[endIndex];
+            // if (key) continue
+            nextNode = this.search(key, currNode.children);
+            if (isJudge && nextNode) {
+                currNode = nextNode;
                 continue;
             }
-            if (node) {
-                // console.log(word[i])
-                startIndex = i;
+            if (!nextNode) {
+                // 直接在分支上找不到，需要走failure
+                let failure = currNode.failure;
+                while (failure) {
+                    nextNode = this.search(key, failure.children);
+                    if (nextNode) {
+                        break;
+                    }
+                    failure = failure.failure;
+                }
+            }
+            if (nextNode) {
+                currNode = nextNode;
                 isJudge = true;
             }
             else {
-                // console.log(startIndex, endIndex)
-                if (startIndex !== endIndex && prevNode.word) {
+                if (startIndex !== endIndex && currNode.word) {
                     filterText = replaceAt(filterText, startIndex, endIndex);
-                    filterKeywords.push(word.slice(startIndex, endIndex + 1));
+                    filterKeywords.push(word.slice(startIndex, endIndex));
                 }
-                startIndex = endIndex = i;
                 isJudge = false;
+                currNode = this.root;
             }
+            startIndex = endIndex;
         }
+        /*for (let i = 0; i < wordLen; i++) {
+          if (node instanceof Node) {
+            prevNode = node
+            node = this.search(word[i], node.children)
+          } else {
+            node = this.search(word[i])
+          }
+    
+          // 正在划词判断且当前字也属于敏感字
+          if (isJudge && node) {
+            endIndex = i
+            continue
+          }
+    
+          if (node) {
+            // 有子节点
+            startIndex = i
+            isJudge = true
+          } else {
+            // 没有子节点
+    
+            if () {
+    
+            }
+    
+    
+            if (startIndex !== endIndex && prevNode.word) {
+              filterText = replaceAt(filterText, startIndex, endIndex)
+              filterKeywords.push(word.slice(startIndex, endIndex + 1))
+            }
+            startIndex = endIndex = i
+            isJudge = false
+          }
+        }*/
         return {
             text: filterText,
-            filter: filterKeywords
+            filter: [...new Set(filterKeywords)]
         };
     }
     // 过滤同步
@@ -139,21 +130,14 @@ class Mint extends tree_1.default {
         });
     }
 }
-setInterval(() => {
-    // console.log(111)
-}, 1000000000);
-let m = new Mint();
 if (require.main === module) {
     (function f() {
         return __awaiter(this, void 0, void 0, function* () {
-            // let m = new Mint()
-            // console.log(m.root['A'].children['B'].children['C'])
-            // console.log(m.root['A'])
-            // console.log(m.filterSync(`ABCCCCAB`))
+            let m = new Mint();
             /*setInterval(function () {
-              console.time('时间：')
-              console.log(m.filterSync(`一法轮功测试法轮功${new Date().getTime()}`))
-              console.timeEnd('时间：')
+              console.time('1')
+              console.log(m.filterSync(`1AABC2SBCSBC${new Date()}`))
+              console.timeEnd('1')
             }, 1000)*/
         });
     }());
