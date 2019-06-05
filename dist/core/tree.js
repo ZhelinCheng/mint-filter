@@ -23,7 +23,7 @@ class Tree {
         let firstKey = keyArr.shift();
         // 第一个key
         if (!this.root[firstKey]) {
-            this.root[firstKey] = new node_1.default(firstKey, this.root);
+            this.root[firstKey] = new node_1.default(firstKey);
         }
         // 其他多余的key
         if (keyArr.length >= 1) {
@@ -45,11 +45,8 @@ class Tree {
             let item = children[key];
             const isWord = len === 1;
             if (!item) {
-                if (key === 'B') {
-                    console.log(node, key);
-                }
-                let failure = this.createFailureTable(node, key);
-                item = new node_1.default(key, failure, node, isWord);
+                // let failure = this.createFailureTable(node, key)
+                item = new node_1.default(key, node, isWord);
             }
             else {
                 item.word = isWord;
@@ -62,27 +59,23 @@ class Tree {
      * 创建Failure表
      */
     createFailureTable(node, key) {
-        const failure = node.failure;
-        let children;
-        const isFailNode = failure instanceof node_1.default;
-        const isNode = node instanceof node_1.default;
-        /*if (isNode) {
-          children = failure.children
-        } else {
-          children = node.children
+        let fail = node.failure;
+        let isNode = fail instanceof node_1.default;
+        let children = fail.children;
+        // fail是否是Node类型，如果不是则指向了根
+        if (isNode) {
+            if (children[key]) {
+                return fail;
+            }
+            this.createFailureTable(fail, key);
         }
-    
-        if (key === 'B') {
-          console.log(node)
-        }*/
-        /*if (children[key]) {
-          return failure
-        } else if (isNode) {
-          this.createFailureTable(failure, key)
-        } else {
-          return children
-        }*/
-        return;
+        else {
+            if (fail[key]) {
+                return fail[key];
+            }
+            console.log(11);
+        }
+        return this.root;
     }
     /**
      * 搜索节点

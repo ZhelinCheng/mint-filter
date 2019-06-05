@@ -11,20 +11,22 @@ interface Children {
 
 export default class Tree {
   public root: Children = {}
-  constructor () {}
+
+  constructor() {
+  }
 
   /**
    * 插入数据
    * @param key
    */
-  insert (key: string): boolean {
+  insert(key: string): boolean {
     if (!key) return false
     let keyArr = key.split('')
     let firstKey = keyArr.shift()
 
     // 第一个key
     if (!this.root[firstKey]) {
-      this.root[firstKey] = new Node(firstKey, this.root)
+      this.root[firstKey] = new Node(firstKey)
     }
 
     // 其他多余的key
@@ -40,7 +42,7 @@ export default class Tree {
    * @param node
    * @param word
    */
-  insertNode (node: Node, word: string[]) {
+  insertNode(node: Node, word: string[]) {
     let len = word.length
 
     if (len) {
@@ -52,11 +54,8 @@ export default class Tree {
       const isWord = len === 1
 
       if (!item) {
-        if (key === 'B') {
-          console.log(node, key)
-        }
-        let failure = this.createFailureTable(node, key)
-        item = new Node(key, failure, node, isWord)
+        // let failure = this.createFailureTable(node, key)
+        item = new Node(key, node, isWord)
       } else {
         item.word = isWord
       }
@@ -69,33 +68,26 @@ export default class Tree {
   /**
    * 创建Failure表
    */
-  createFailureTable (node: Node | Children, key: string): Node | Children {
-    const failure = node.failure
-    let children
-    const isFailNode = failure instanceof Node
-    const isNode = node instanceof Node
+  createFailureTable(node: Node, key: string): Children | Node {
+    let fail: any = node.failure
+    let isNode = fail instanceof Node
+    let children = fail.children
 
-
-
-    /*if (isNode) {
-      children = failure.children
+    // fail是否是Node类型，如果不是则指向了根
+    if (isNode) {
+      if (children[key]) {
+        return fail
+      }
+      this.createFailureTable(fail, key)
     } else {
-      children = node.children
+      if (fail[key]) {
+        return fail[key]
+      }
+
+      console.log(11)
     }
 
-    if (key === 'B') {
-      console.log(node)
-    }*/
-
-    /*if (children[key]) {
-      return failure
-    } else if (isNode) {
-      this.createFailureTable(failure, key)
-    } else {
-      return children
-    }*/
-
-    return
+    return this.root
   }
 
   /**
@@ -103,7 +95,7 @@ export default class Tree {
    * @param key
    * @param node
    */
-  search (key: string, node: Children = this.root): Node | boolean {
+  search(key: string, node: Children = this.root): Node | boolean {
     const val: Node | undefined = node[key]
     if (val) return val
     else return false

@@ -23,7 +23,7 @@ export default class Tree {
     /**
      * 创建Failure表
      */
-    createFailureTable(node: Node | Children, key: string): Node | Children;
+    createFailureTable(node: Node, key: string): Children | Node;
     /**
      * 搜索节点
      * @param key

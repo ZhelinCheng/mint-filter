@@ -21,7 +21,7 @@ function replaceAt(word: string, start: number, end: number): string {
 }
 
 class Mint extends Tree {
-  constructor (keywordsPath?: string) {
+  constructor(keywordsPath?: string) {
     if (instance) return instance
 
     super()
@@ -34,10 +34,66 @@ class Mint extends Tree {
       this.insert(item)
     }
 
+    this._createFailureTable()
+
     instance = this
   }
 
-  _filterFn (word: string): FilterValue {
+  _createFailureTable () {
+    // 获取树第一层
+    let currQueue: Array<Node> = Object.values(this.root)
+
+    while (currQueue.length > 0) {
+      let nextQueue: Array<Node> = []
+
+      for (let i = 0; i < currQueue.length; i++) {
+        let node: Node = currQueue[i]
+        let key = node.key
+        let parent = node.parent
+        // 获取树下一层
+        for (let k in node.children) {
+          nextQueue.push(node.children[k])
+        }
+
+        if (parent) {
+          let failure = parent.failure
+          console.log(key, failure)
+
+          /*let child = failure.next[node.val]
+          if (child) {
+            node.back = child
+            break
+          }*/
+          // back = back.back
+
+
+          /*// 如果有父节点
+          // 获取父节点的fail节点
+          let parentFail = parent.failure
+
+          // 获取父节点Fail的子节点
+          let parentFailChild: any = parentFail.children
+
+          // 当parentFail指向树第一层时，指向的是root
+          if (!parentFailChild) {
+            parentFailChild = parentFail
+          }
+
+          if (parentFailChild[key]) {
+            return parentFail
+          } else {
+            console.log(key)
+          }*/
+        } else {
+          node.failure = this.root
+        }
+      }
+
+      currQueue = nextQueue
+    }
+  }
+
+  _filterFn(word: string): FilterValue {
     let startIndex = 0
     let endIndex = startIndex
     const wordLen = word.length + 1
@@ -87,21 +143,30 @@ class Mint extends Tree {
   }
 
   // 过滤同步
-  filterSync (word: string): FilterValue {
+  filterSync(word: string): FilterValue {
     return this._filterFn(word)
   }
 
   // 过滤
-  async filter (word: string): Promise<FilterValue> {
+  async filter(word: string): Promise<FilterValue> {
     return Promise.resolve(this._filterFn(word))
   }
 }
+
+
+setInterval(() => {
+  // console.log(111)
+}, 1000000000)
+
+let m = new Mint()
+// console.log(m)
+// console.log(m)
 
 export = Mint
 
 if (require.main === module) {
   (async function f() {
-    let m = new Mint()
+    // let m = new Mint()
 
     // console.log(m.root['A'].children['B'].children['C'])
 

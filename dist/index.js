@@ -34,7 +34,55 @@ class Mint extends tree_1.default {
                 continue;
             this.insert(item);
         }
+        this._createFailureTable();
         instance = this;
+    }
+    _createFailureTable() {
+        // 获取树第一层
+        let currQueue = Object.values(this.root);
+        while (currQueue.length > 0) {
+            let nextQueue = [];
+            for (let i = 0; i < currQueue.length; i++) {
+                let node = currQueue[i];
+                let key = node.key;
+                let parent = node.parent;
+                // 获取树下一层
+                for (let k in node.children) {
+                    nextQueue.push(node.children[k]);
+                }
+                if (parent) {
+                    let failure = parent.failure;
+                    console.log(key, failure);
+                    /*let child = failure.next[node.val]
+                    if (child) {
+                      node.back = child
+                      break
+                    }*/
+                    // back = back.back
+                    /*// 如果有父节点
+                    // 获取父节点的fail节点
+                    let parentFail = parent.failure
+          
+                    // 获取父节点Fail的子节点
+                    let parentFailChild: any = parentFail.children
+          
+                    // 当parentFail指向树第一层时，指向的是root
+                    if (!parentFailChild) {
+                      parentFailChild = parentFail
+                    }
+          
+                    if (parentFailChild[key]) {
+                      return parentFail
+                    } else {
+                      console.log(key)
+                    }*/
+                }
+                else {
+                    node.failure = this.root;
+                }
+            }
+            currQueue = nextQueue;
+        }
     }
     _filterFn(word) {
         let startIndex = 0;
@@ -91,10 +139,14 @@ class Mint extends tree_1.default {
         });
     }
 }
+setInterval(() => {
+    // console.log(111)
+}, 1000000000);
+let m = new Mint();
 if (require.main === module) {
     (function f() {
         return __awaiter(this, void 0, void 0, function* () {
-            let m = new Mint();
+            // let m = new Mint()
             // console.log(m.root['A'].children['B'].children['C'])
             // console.log(m.root['A'])
             // console.log(m.filterSync(`ABCCCCAB`))

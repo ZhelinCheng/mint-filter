@@ -17,12 +17,11 @@ export default class Node {
   // 子节点的引用（goto表）
   public children: Children = {}
   // failure表，用于匹配失败后的跳转
-  public failure: any
+  public failure: Node | Children | undefined = undefined
 
-  constructor (key: string, failure: any, parent: Node | undefined = undefined, word: boolean = false) {
+  constructor (key: string, parent: Node | undefined = undefined, word: boolean = false) {
     this.key = key
     this.parent = parent
     this.word = word
-    this.failure = failure
   }
 }

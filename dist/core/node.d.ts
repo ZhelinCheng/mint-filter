@@ -10,7 +10,7 @@ export default class Node {
     word: boolean;
     parent: Node | undefined;
     children: Children;
-    failure: any;
-    constructor(key: string, failure: any, parent?: Node | undefined, word?: boolean);
+    failure: Node | Children | undefined;
+    constructor(key: string, parent?: Node | undefined, word?: boolean);
 }
 export {};
