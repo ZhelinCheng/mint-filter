@@ -5,6 +5,8 @@
 
 import path from 'path'
 import { getAllKeywords, readFile } from '../src/core'
+import Node from '../src/core/node'
+import Tree from '../src/core/tree'
 
 describe('Core test.', () => {
   it('Function readFile:', () => {
@@ -13,5 +15,21 @@ describe('Core test.', () => {
 
   it('Function getAllKeywords:', () => {
     expect(getAllKeywords(path.resolve(__dirname, './test.txt'))).toEqual(expect.arrayContaining(['TEST']))
+  })
+
+  it('Class Node:', () => {
+    const node = new Node('test', true)
+    expect(node).toEqual(expect.objectContaining({
+      key: "test",
+      children: {},
+      word: true
+    }))
+  })
+
+  it('Class Tree:', () => {
+    const tree = new Tree()
+    expect(tree.root).toEqual(expect.objectContaining({}))
+    expect(tree.insert('t')).toBeTruthy()
+    expect(tree.search('a')).toBeFalsy()
   })
 })

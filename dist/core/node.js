@@ -8,7 +8,7 @@ class Node {
     constructor(key, word = false) {
         // 子节点的引用
         this.children = {};
-        // this.key = key
+        this.key = key;
         this.word = word;
     }
 }

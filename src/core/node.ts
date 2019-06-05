@@ -16,7 +16,7 @@ export default class Node {
   public children: Children = {}
 
   constructor (key: string, word: boolean = false) {
-    // this.key = key
+    this.key = key
     this.word = word
   }
 }
