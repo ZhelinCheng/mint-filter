@@ -71,7 +71,7 @@ mint.filterSync('word')
 所有方法都提供同步/异步两种。英文字母会全部转换成大写比较。
 
 #### filter(word)
-- `word`<[string]> 需要过滤的字符串。
+- `word`<[string]>：需要过滤的字符串。
 - returns: <[Promise]<[FilterValue]>>
 
 该方法将返回过滤文本和被过滤的敏感词。
@@ -87,11 +87,11 @@ mint.filter('这是一个敏感词字符串')
 ```
 
 #### filterSync(word)
-- `word`<[string]> filter的同步方法。
+- `word`<[string]>：filter的同步方法。
 - returns: <[FilterValue]>
 
 #### every(word)
-- `word`: 需要验证的字符串文本。
+- `word`<[string]>：需要验证的字符串文本。
 - returns: <[Promise]<[boolean]>>
 
 判断文本是否通过敏感词验证，发现敏感词立即返回`false`，为`true`表示通过验证，没有敏感词。该方法是一个异步方法，将会返回一个Promise对象。
@@ -107,5 +107,5 @@ mint.every('这是一个敏感词字符串')
 ```
 
 #### everySync(word)
-- `word`: 需要验证的字符串文本。
+- `word`<[string]>：需要验证的字符串文本。
 - returns: <[boolean]>
