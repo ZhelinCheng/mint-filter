@@ -74,3 +74,5 @@ typings/
 # Other
 package-lock.json
 yarn-lock.json
+kwd.txt
+word.txt

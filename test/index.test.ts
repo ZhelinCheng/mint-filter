@@ -17,17 +17,34 @@ describe('Index test.', () => {
       'pass': false,
       'text': '1t****2**'
     }))
+
+    expect(mint.filterSync('1ttest2bd', false)).toEqual(expect.objectContaining({
+      'filter': [
+        'TEST',
+        'BD',
+      ],
+      'pass': false,
+      'text': '1ttest2bd'
+    }))
   })
 
   it('Function filter:', async () => {
-    let data = await mint.filter('1ttest2bd')
-    expect(data).toEqual(expect.objectContaining({
+    expect(await mint.filter('1ttest2bd')).toEqual(expect.objectContaining({
       'filter': [
         'TEST',
         'BD',
       ],
       'pass': false,
       'text': '1t****2**'
+    }))
+
+    expect(await mint.filter('1ttest2bd', false)).toEqual(expect.objectContaining({
+      'filter': [
+        'TEST',
+        'BD',
+      ],
+      'pass': false,
+      'text': '1ttest2bd'
     }))
   })
 

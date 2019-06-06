@@ -10,7 +10,7 @@ interface FilterValue {
 }
 declare class Mint extends Tree {
     constructor(keywords: Array<string>);
-    _filterFn(word: string, every?: boolean): FilterValue;
+    _filterFn(word: string, every?: boolean, replace?: boolean): FilterValue;
     /**
      * 异步快速检测字符串是否无敏感词
      * @param word
@@ -24,12 +24,14 @@ declare class Mint extends Tree {
     /**
      * 同步过滤方法
      * @param word
+     * @param replace
      */
-    filterSync(word: string): FilterValue;
+    filterSync(word: string, replace?: boolean): FilterValue;
     /**
      * 异步过滤方法
      * @param word
+     * @param replace
      */
-    filter(word: string): Promise<FilterValue>;
+    filter(word: string, replace?: boolean): Promise<FilterValue>;
 }
 export = Mint;
