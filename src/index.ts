@@ -2,18 +2,14 @@
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
-import {
-  Children,
-  getAllKeywords
-} from './core'
 import Tree from './core/tree'
 import Node from './core/node'
 
 let instance: Mint | undefined = undefined
-
 interface FilterValue {
-  text: string
-  filter: Array<string>
+  text?: string | boolean
+  filter: Array<string>,
+  pass?: boolean
 }
 
 function replaceAt(word: string, start: number, end: number): string {
@@ -22,12 +18,17 @@ function replaceAt(word: string, start: number, end: number): string {
 }
 
 class Mint extends Tree {
-  constructor(keywordsPath?: string) {
+  constructor(keywords: Array<string>) {
     if (instance) return instance
     super()
 
     // 创建Trie树
-    let keywords: Array<string> = getAllKeywords(keywordsPath)
+    // let keywords: Array<string> = getAllKeywords(keywordsPath)
+
+    if (!(keywords instanceof Array)) {
+      throw Error('实例参数必须是一个数组')
+    }
+
 
     for (let item of keywords) {
       if (!item) continue
@@ -39,13 +40,16 @@ class Mint extends Tree {
     instance = this
   }
 
-  _filterFn(word: string): FilterValue {
+  _filterFn(word: string, every?: boolean): FilterValue {
     let startIndex = 0
     let endIndex = startIndex
     const wordLen = word.length
     let filterText: string = word
     let filterKeywords: Array<string> = []
     word = word.toLocaleUpperCase()
+
+    // 是否通过，无敏感词
+    let isPass = true
 
     // 正在进行划词判断
     let isJudge: boolean = false
@@ -54,8 +58,7 @@ class Mint extends Tree {
 
     for (endIndex; endIndex <= wordLen; endIndex++) {
       let key: string = word[endIndex]
-      // if (key) continue
-
+      // if (!key) continue
       nextNode = this.search(key, currNode.children)
 
       if (isJudge && nextNode) {
@@ -73,7 +76,6 @@ class Mint extends Tree {
         }
       }
 
-
       if (nextNode) {
         currNode = nextNode
         isJudge = true
@@ -81,63 +83,51 @@ class Mint extends Tree {
         if (startIndex !== endIndex && currNode.word) {
           filterText = replaceAt(filterText, startIndex, endIndex)
           filterKeywords.push(word.slice(startIndex, endIndex))
+          isPass = false
+          if (every) break
         }
         isJudge = false
         currNode = this.root
       }
 
-
       startIndex = endIndex
     }
 
-
-    /*for (let i = 0; i < wordLen; i++) {
-      if (node instanceof Node) {
-        prevNode = node
-        node = this.search(word[i], node.children)
-      } else {
-        node = this.search(word[i])
-      }
-
-      // 正在划词判断且当前字也属于敏感字
-      if (isJudge && node) {
-        endIndex = i
-        continue
-      }
-
-      if (node) {
-        // 有子节点
-        startIndex = i
-        isJudge = true
-      } else {
-        // 没有子节点
-
-        if () {
-
-        }
-
-
-        if (startIndex !== endIndex && prevNode.word) {
-          filterText = replaceAt(filterText, startIndex, endIndex)
-          filterKeywords.push(word.slice(startIndex, endIndex + 1))
-        }
-        startIndex = endIndex = i
-        isJudge = false
-      }
-    }*/
-
     return {
       text: filterText,
-      filter: [...new Set(filterKeywords)]
+      filter: [...new Set(filterKeywords)],
+      pass: isPass
     }
   }
 
-  // 过滤同步
+  /**
+   * 异步快速检测字符串是否无敏感词
+   * @param word
+   */
+  every (word: string): Promise<boolean> {
+    return Promise.resolve(this._filterFn(word, true).pass)
+  }
+
+  /**
+   * 同步快速检测字符串是否无敏感词
+   * @param word
+   */
+  everySync (word: string): boolean {
+    return this._filterFn(word, true).pass
+  }
+
+  /**
+   * 同步过滤方法
+   * @param word
+   */
   filterSync(word: string): FilterValue {
     return this._filterFn(word)
   }
 
-  // 过滤
+  /**
+   * 异步过滤方法
+   * @param word
+   */
   async filter(word: string): Promise<FilterValue> {
     return Promise.resolve(this._filterFn(word))
   }
@@ -146,14 +136,7 @@ class Mint extends Tree {
 export = Mint
 
 if (require.main === module) {
-  (async function f() {
-    let m = new Mint()
-
-    /*setInterval(function () {
-      console.time('1')
-      console.log(m.filterSync(`1AABC2SBCSBC${new Date()}`))
-      console.timeEnd('1')
-    }, 1000)*/
-
-  }())
+  let m = new Mint(['TEST'])
+  console.log(m.everySync('TEST'))
 }
+

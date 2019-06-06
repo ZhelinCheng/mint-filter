@@ -1,8 +1,4 @@
-/**
- * Created by ChengZheLin on 2019/6/3.
- * Features: index
- */
-import Node from "./node";
+import Node from './node';
 export interface Children {
     [key: string]: Node;
 }
@@ -14,4 +10,4 @@ export declare function readFile(path: string): string;
 /**
  * 获取所有敏感词
  */
-export declare function getAllKeywords(selfPath?: string): any;
+export declare function getAllKeywords(selfPath?: string): Array<string>;

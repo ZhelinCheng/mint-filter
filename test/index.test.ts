@@ -3,17 +3,25 @@
  * Features: index.test
  */
 
-import path from 'path'
 import Mint from '../src/index'
 
 describe('Index test.', () => {
-  const mint = new Mint(path.resolve(__dirname, './test.txt'))
+  const mint = new Mint(['TEST'])
   it('Function filterSync:', () => {
-    expect(mint.filterSync('TEST').text).toBe('****')
+    expect(mint.filterSync('test').text).toBe('****')
   })
 
   it('Function filter:', async () => {
     let data = await mint.filter('TEST')
     expect(await data.text).toBe('****')
+  })
+
+  it('Function everySync:', () => {
+    expect(mint.everySync('test')).toBeFalsy()
+  })
+
+  it('Function every:', async () => {
+    let data = await mint.every('TES')
+    expect(data).toBeTruthy()
   })
 })

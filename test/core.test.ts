@@ -18,11 +18,13 @@ describe('Core test.', () => {
   })
 
   it('Class Node:', () => {
-    const node = new Node('test', true)
+    const node = new Node('test')
     expect(node).toEqual(expect.objectContaining({
-      key: "test",
+      key: 'test',
       children: {},
-      word: true
+      word: false,
+      failure: undefined,
+      parent: undefined
     }))
   })
 
@@ -30,6 +32,6 @@ describe('Core test.', () => {
     const tree = new Tree()
     expect(tree.root).toEqual(expect.objectContaining({}))
     expect(tree.insert('t')).toBeTruthy()
-    expect(tree.search('a')).toBeFalsy()
+    expect(tree.search('a')).toBeUndefined()
   })
 })

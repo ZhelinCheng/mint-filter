@@ -22,10 +22,13 @@ export default class Tree {
     let keyArr = key.split('')
     let firstKey = keyArr.shift()
     let children = this.root.children
+    let len = keyArr.length
 
     // 第一个key
     if (!children[firstKey]) {
-      children[firstKey] = new Node(firstKey)
+      children[firstKey] = len
+        ? new Node(firstKey)
+        : new Node(firstKey, undefined, true)
     }
 
     // 其他多余的key
