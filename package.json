@@ -1,7 +1,7 @@
 {
   "name": "mint-filter",
-  "version": "1.0.11",
-  "description": "🚀更轻巧的Node.js敏感词过滤库。",
+  "version": "1.1.0",
+  "description": "🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。",
   "main": "./dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
@@ -23,7 +23,6 @@
     "url": "git+https://github.com/ZhelinCheng/mint-filter.git"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.11",
     "concurrently": "^4.1.0",
     "coveralls": "^3.0.3",
@@ -33,6 +32,7 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
+    "@types/glob": "^7.1.1",
     "glob": "^7.1.4"
   },
   "keywords": [

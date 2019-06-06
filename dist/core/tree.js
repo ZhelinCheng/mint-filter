@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = __importDefault(require("./node"));
 class Tree {
     constructor() {
-        this.root = {};
+        this.root = new node_1.default('root');
     }
     /**
      * 插入数据
@@ -19,11 +19,19 @@ class Tree {
     insert(key) {
         if (!key)
             return false;
-        if (key.length > 1) {
-            this.insertNode(this.root, key.split(''));
+        let keyArr = key.split('');
+        let firstKey = keyArr.shift();
+        let children = this.root.children;
+        let len = keyArr.length;
+        // 第一个key
+        if (!children[firstKey]) {
+            children[firstKey] = len
+                ? new node_1.default(firstKey)
+                : new node_1.default(firstKey, undefined, true);
         }
-        else if (!this.root[key]) {
-            this.root[key] = new node_1.default(key);
+        // 其他多余的key
+        if (keyArr.length >= 1) {
+            this.insertNode(children[firstKey], keyArr);
         }
         return true;
     }
@@ -35,11 +43,55 @@ class Tree {
     insertNode(node, word) {
         let len = word.length;
         if (len) {
-            let key = word.shift();
-            if (!node[key]) {
-                node[key] = new node_1.default(key, len === 1);
+            let children;
+            children = node.children;
+            const key = word.shift();
+            let item = children[key];
+            const isWord = len === 1;
+            if (!item) {
+                // let failure = this.createFailureTable(node, key)
+                item = new node_1.default(key, node, isWord);
             }
-            this.insertNode(node[key].children, word);
+            else {
+                item.word = isWord;
+            }
+            children[key] = item;
+            this.insertNode(children[key], word);
+        }
+    }
+    /**
+     * 创建Failure表
+     */
+    _createFailureTable() {
+        // 获取树第一层
+        let currQueue = Object.values(this.root.children);
+        while (currQueue.length > 0) {
+            let nextQueue = [];
+            for (let i = 0; i < currQueue.length; i++) {
+                let node = currQueue[i];
+                let key = node.key;
+                let parent = node.parent;
+                // 获取树下一层
+                for (let k in node.children) {
+                    nextQueue.push(node.children[k]);
+                }
+                if (parent) {
+                    let failure = parent.failure;
+                    while (failure) {
+                        let children = failure.children[key];
+                        // 判断是否到了根节点
+                        if (children) {
+                            node.failure = children;
+                            break;
+                        }
+                        failure = failure.failure;
+                    }
+                }
+                else {
+                    node.failure = this.root;
+                }
+            }
+            currQueue = nextQueue;
         }
     }
     /**
@@ -47,12 +99,12 @@ class Tree {
      * @param key
      * @param node
      */
-    search(key, node = this.root) {
+    search(key, node = this.root.children) {
         const val = node[key];
         if (val)
             return val;
         else
-            return false;
+            return;
     }
 }
 exports.default = Tree;

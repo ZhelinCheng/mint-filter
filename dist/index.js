@@ -14,75 +14,110 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
-const core_1 = require("./core");
 const tree_1 = __importDefault(require("./core/tree"));
-const node_1 = __importDefault(require("./core/node"));
 let instance = undefined;
 function replaceAt(word, start, end) {
-    let len = end - start + 1;
-    return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end + 1)}`;
+    let len = end - start;
+    return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end)}`;
 }
 class Mint extends tree_1.default {
-    constructor(keywordsPath) {
+    constructor(keywords) {
         if (instance)
             return instance;
         super();
         // 创建Trie树
-        let keywords = core_1.getAllKeywords(keywordsPath);
+        // let keywords: Array<string> = getAllKeywords(keywordsPath)
+        if (!(keywords instanceof Array)) {
+            throw Error('实例参数必须是一个数组');
+        }
         for (let item of keywords) {
             if (!item)
                 continue;
             this.insert(item);
         }
+        this._createFailureTable();
         instance = this;
     }
-    _filterFn(word) {
+    _filterFn(word, every) {
         let startIndex = 0;
         let endIndex = startIndex;
-        const wordLen = word.length + 1;
-        // 正在进行划词判断
-        let isJudge = false;
-        let node = false;
-        let prevNode;
+        const wordLen = word.length;
         let filterText = word;
         let filterKeywords = [];
         word = word.toLocaleUpperCase();
-        for (let i = 0; i < wordLen; i++) {
-            if (node instanceof node_1.default) {
-                prevNode = node;
-                node = this.search(word[i], node.children);
-            }
-            else {
-                node = this.search(word[i]);
-            }
-            // 正在划词判断且当前字也属于敏感字
-            if (isJudge && node) {
-                endIndex = i;
+        // 是否通过，无敏感词
+        let isPass = true;
+        // 正在进行划词判断
+        let isJudge = false;
+        let currNode = this.root;
+        let nextNode;
+        for (endIndex; endIndex <= wordLen; endIndex++) {
+            let key = word[endIndex];
+            // if (!key) continue
+            nextNode = this.search(key, currNode.children);
+            if (isJudge && nextNode) {
+                currNode = nextNode;
                 continue;
             }
-            if (node) {
-                startIndex = i;
+            if (!nextNode) {
+                // 直接在分支上找不到，需要走failure
+                let failure = currNode.failure;
+                while (failure) {
+                    nextNode = this.search(key, failure.children);
+                    if (nextNode) {
+                        break;
+                    }
+                    failure = failure.failure;
+                }
+            }
+            if (nextNode) {
+                currNode = nextNode;
                 isJudge = true;
             }
             else {
-                if (startIndex !== endIndex && prevNode.word) {
+                if (startIndex !== endIndex && currNode.word) {
                     filterText = replaceAt(filterText, startIndex, endIndex);
-                    filterKeywords.push(word.slice(startIndex, endIndex + 1));
+                    filterKeywords.push(word.slice(startIndex, endIndex));
+                    isPass = false;
+                    if (every)
+                        break;
                 }
-                startIndex = endIndex = i;
                 isJudge = false;
+                currNode = this.root;
             }
+            startIndex = endIndex;
         }
         return {
             text: filterText,
-            filter: filterKeywords
+            filter: [...new Set(filterKeywords)],
+            pass: isPass
         };
     }
-    // 过滤同步
+    /**
+     * 异步快速检测字符串是否无敏感词
+     * @param word
+     */
+    every(word) {
+        return Promise.resolve(this._filterFn(word, true).pass);
+    }
+    /**
+     * 同步快速检测字符串是否无敏感词
+     * @param word
+     */
+    everySync(word) {
+        return this._filterFn(word, true).pass;
+    }
+    /**
+     * 同步过滤方法
+     * @param word
+     */
     filterSync(word) {
         return this._filterFn(word);
     }
-    // 过滤
+    /**
+     * 异步过滤方法
+     * @param word
+     */
     filter(word) {
         return __awaiter(this, void 0, void 0, function* () {
             return Promise.resolve(this._filterFn(word));
@@ -90,12 +125,11 @@ class Mint extends tree_1.default {
     }
 }
 if (require.main === module) {
-    (function f() {
-        return __awaiter(this, void 0, void 0, function* () {
-            let m = new Mint();
-            console.log(m.filterSync('测试'));
-        });
-    }());
+    let m = new Mint(['敏感词']);
+    m.filter('这是一个敏感词字符串')
+        .then(data => {
+        console.log(data);
+    });
 }
 module.exports = Mint;
 //# sourceMappingURL=index.js.map
