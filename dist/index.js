@@ -27,13 +27,14 @@ class Mint extends tree_1.default {
         super();
         // 创建Trie树
         // let keywords: Array<string> = getAllKeywords(keywordsPath)
-        if (!(keywords instanceof Array)) {
-            throw Error('实例参数必须是一个数组');
+        if (!(keywords instanceof Array && keywords.length >= 1)) {
+            console.error('mint-filter：未将过滤词数组传入！');
+            return;
         }
         for (let item of keywords) {
             if (!item)
                 continue;
-            this.insert(item);
+            this.insert(item.toLocaleUpperCase());
         }
         this._createFailureTable();
         instance = this;
@@ -125,11 +126,9 @@ class Mint extends tree_1.default {
     }
 }
 if (require.main === module) {
-    let m = new Mint(['敏感词']);
-    m.filter('这是一个敏感词字符串')
-        .then(data => {
-        console.log(data);
-    });
+    let m = new Mint(['test', 'bd', 'st']);
+    console.log(m.everySync('2test1'));
+    console.log(m.filterSync('2test1'));
 }
 module.exports = Mint;
 //# sourceMappingURL=index.js.map
