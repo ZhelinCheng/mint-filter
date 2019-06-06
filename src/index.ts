@@ -136,7 +136,10 @@ class Mint extends Tree {
 export = Mint
 
 if (require.main === module) {
-  let m = new Mint(['TEST'])
-  console.log(m.everySync('TEST'))
+  let m = new Mint(['敏感词'])
+  m.filter('这是一个敏感词字符串')
+    .then(data => {
+      console.log(data)
+    })
 }
 

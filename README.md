@@ -66,17 +66,46 @@ mint.filter('word')
 mint.filterSync('word')
 ```
 
-#### 方法
+### 方法
 
-- `.filter(word: string): Promise<FilterValue>`：过滤字符串，将返回过滤文本和被过滤的敏感词。该方法是一个异步方法，将会返回一个Promise对象。
-- `.filterSync(word: string): FilterValue`：filter的同步方法。
-- `.every(word: string): boolean`：判断文本是否通过敏感词验证，发现敏感词立即返回`false`，为`true`表示通过验证，没有敏感词。该方法是一个异步方法，将会返回一个Promise对象。
-- `.everySync(word: string): boolean`：every的同步方法。
+所有方法都提供同步/异步两种。
 
-#### 返回内容
-```json
-{
-  "text": "替换后的文本***",
-  "filter": ["被过滤的词"]
-}
+#### filter(word)
+- `word`<[string]> 需要过滤的字符串。
+- returns: <[Promise]<[FilterValue]>>
+
+该方法将返回过滤文本和被过滤的敏感词。
+
+```typescript
+import Mint from 'mint-filter'
+const mint = new Mint(['敏感词'])
+
+mint.filter('这是一个敏感词字符串')
+    .then(data => {
+      console.log(data) // { text: '这是一个***字符串', filter: [ '敏感词' ], pass: false }
+    })
 ```
+
+#### filterSync(word)
+- `word`<[string]> filter的同步方法。
+- returns: <[FilterValue]>
+
+#### every(word)
+- `word`: 需要验证的字符串文本。
+- returns: <[Promise]<[boolean]>>
+
+判断文本是否通过敏感词验证，发现敏感词立即返回`false`，为`true`表示通过验证，没有敏感词。该方法是一个异步方法，将会返回一个Promise对象。
+
+```typescript
+import Mint from 'mint-filter'
+const mint = new Mint(['敏感词'])
+
+mint.every('这是一个敏感词字符串')
+    .then(data => {
+      console.log(data) // true
+    })
+```
+
+#### everySync(word)
+- `word`: 需要验证的字符串文本。
+- returns: <[boolean]>
