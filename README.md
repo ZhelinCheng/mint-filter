@@ -1,5 +1,5 @@
 # Mint-filter
-🚀更轻巧的Node.js敏感词过滤库。
+🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
 [![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D3.0-green.svg)](https://www.typescriptlang.org/)
