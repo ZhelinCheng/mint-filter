@@ -8,14 +8,13 @@
 [![npm](https://img.shields.io/npm/dw/mint-filter.svg)](https://www.npmjs.com/package/mint-filter)
 [![Coverage Status](https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master)](https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master)
 
-## 🎇说明
+## 🎇 说明
 基于Aho–Corasick算法实现的敏感词过滤方案，Aho–Corasick算法是由Alfred V. Aho和Margaret J.Corasick 发明的字符串搜索算法，用于在输入的一串字符串中匹配有限组“字典”中的子串。它与普通字符串匹配的不同点在于同时与所有字典串进行匹配。算法均摊情况下具有近似于线性的时间复杂度，约为字符串的长度加所有匹配的数量。
 
 ### 测试数据
 
 测试字符串包含汉字、标点、字母、数字（字符串实际长度会大于表格显示长度）。
-以下测试均在15000个敏感词构建的树下进行测试，每组测试6次取平均值（全部使用filterSync方法）：
-
+以下测试均在15000个敏感词构建的树下进行测试，每组测试6次取平均值（使用版本1.1.0的filterSync方法）：
 
 | 编号         | 字符串长度        |  不替换敏感词  | 替换敏感词 |
 | :--------:   | :-----:          | :----:        | :----:    |
@@ -26,7 +25,8 @@
 | 5            | 50000            |   <= 19ms     | <= 25ms   |
 | 6            | 100000           |   <= 32ms     | <= 52ms   |
 
-## 📦安装
+## 📦 安装
+
 ```
 npm i -S mint-filter
 ```
@@ -35,7 +35,7 @@ npm i -S mint-filter
 yarn add mint-filter
 ```
 
-## 🎉使用
+## 🎉 使用
 
 ### NodeJS
 ```javascript
@@ -68,6 +68,10 @@ mint.filter('word')
 // 同步方法
 mint.filterSync('word')
 ```
+
+### 特殊匹配
+一般的过滤情况，如`['AB', 'CD', 'EF']`匹配`1AB2CD3EF`会直接完整正常匹配。
+但有一种特殊情况，如`['BD', 'DB']`匹配`BBDB`，在这种情况下，BDB可以划分成BD和DB两种情况，但在这里会直接合并匹配BDB。最终结果会变成`B***`。
 
 ### 方法
 

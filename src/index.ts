@@ -9,6 +9,7 @@ import Node from './core/node'
 import { getAllKeywords, readFile } from './core'*/
 
 let instance: Mint | undefined = undefined
+
 interface FilterValue {
   text?: string | boolean
   filter: Array<string>,
@@ -58,46 +59,50 @@ class Mint extends Tree {
 
     // 正在进行划词判断
     let isJudge: boolean = false
-    let currNode: Node = this.root
-    let nextNode: Node | boolean
+    let judgeText: string = ''
+
+    // 上一个Node与下一个Node
+    let prevNode: Node = this.root
+    let currNode: Node | boolean
 
     for (endIndex; endIndex <= wordLen; endIndex++) {
       let key: string = word[endIndex]
       let originalKey: string = originalWord[endIndex]
-      // if (!key) continue
-      nextNode = this.search(key, currNode.children)
+      currNode = this.search(key, prevNode.children)
 
-      if (isJudge && nextNode) {
-        currNode = nextNode
+      if (isJudge && currNode) {
+        judgeText += originalKey
+        prevNode = currNode
         continue
+      } else if (isJudge && prevNode.word) {
+        isPass = false
+        if (every) break
+
+        if (isReplace) filterText += '*'.repeat(endIndex - startIndex)
+        filterKeywords.push(word.slice(startIndex, endIndex))
+      } else {
+        filterText += judgeText
       }
 
-      if (!nextNode) {
+      if (!currNode) {
         // 直接在分支上找不到，需要走failure
-        let failure: Node = currNode.failure
+        let failure: Node = prevNode.failure
+
         while (failure) {
-          nextNode = this.search(key, failure.children)
-          if (nextNode) {
-            if (isReplace) filterText += originalKey
-            break
-          }
+          currNode = this.search(key, failure.children)
+          if (currNode) break
           failure = failure.failure
         }
       }
 
-      if (nextNode) {
-        currNode = nextNode
+      if (currNode) {
+        judgeText = originalKey
         isJudge = true
+        prevNode = currNode
       } else {
-        if (startIndex !== endIndex && currNode.word) {
-          isPass = false
-          if (every) break
-
-          if (isReplace) filterText += '*'.repeat(endIndex - startIndex)
-          filterKeywords.push(word.slice(startIndex, endIndex))
-        }
+        judgeText = ''
         isJudge = false
-        currNode = this.root
+        prevNode = this.root
         if (isReplace && key !== undefined) filterText += originalKey
       }
       startIndex = endIndex
@@ -114,7 +119,7 @@ class Mint extends Tree {
    * 异步快速检测字符串是否无敏感词
    * @param word
    */
-  every (word: string): Promise<boolean> {
+  every(word: string): Promise<boolean> {
     return Promise.resolve(this._filterFn(word, true).pass)
   }
 
@@ -122,7 +127,7 @@ class Mint extends Tree {
    * 同步快速检测字符串是否无敏感词
    * @param word
    */
-  everySync (word: string): boolean {
+  everySync(word: string): boolean {
     return this._filterFn(word, true).pass
   }
 
@@ -148,11 +153,8 @@ class Mint extends Tree {
 export = Mint
 
 if (require.main === module) {
-  let m = new Mint(['test', 'bd'])
-  console.log(m.filterSync('1atest23ttestssssbbd'))
-/*  let m = new Mint(getAllKeywords(path.resolve(__dirname, '../kwd.txt')), false)
-  let data = readFile(path.resolve(__dirname, '../word.txt'))
-  console.time('测试：')
-  m.filterSync(data)
-  console.timeEnd('测试：')*/
+  // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2
+  // ['bd', 'db'] 1bddb2
+  let m = new Mint(['test'])
+  console.log(m.filterSync('ttes'))
 }

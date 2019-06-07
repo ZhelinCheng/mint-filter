@@ -23,11 +23,15 @@ class Tree {
         let firstKey = keyArr.shift();
         let children = this.root.children;
         let len = keyArr.length;
+        let firstNode = children[firstKey];
         // 第一个key
-        if (!children[firstKey]) {
+        if (!firstNode) {
             children[firstKey] = len
                 ? new node_1.default(firstKey)
                 : new node_1.default(firstKey, undefined, true);
+        }
+        else if (!len) {
+            firstNode.word = true;
         }
         // 其他多余的key
         if (keyArr.length >= 1) {
@@ -49,7 +53,6 @@ class Tree {
             let item = children[key];
             const isWord = len === 1;
             if (!item) {
-                // let failure = this.createFailureTable(node, key)
                 item = new node_1.default(key, node, isWord);
             }
             else {
@@ -71,6 +74,7 @@ class Tree {
                 let node = currQueue[i];
                 let key = node.key;
                 let parent = node.parent;
+                node.failure = this.root;
                 // 获取树下一层
                 for (let k in node.children) {
                     nextQueue.push(node.children[k]);
@@ -86,9 +90,6 @@ class Tree {
                         }
                         failure = failure.failure;
                     }
-                }
-                else {
-                    node.failure = this.root;
                 }
             }
             currQueue = nextQueue;

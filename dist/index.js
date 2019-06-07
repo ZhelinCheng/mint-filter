@@ -55,45 +55,49 @@ class Mint extends tree_1.default {
         let isPass = true;
         // 正在进行划词判断
         let isJudge = false;
-        let currNode = this.root;
-        let nextNode;
+        let judgeText = '';
+        // 上一个Node与下一个Node
+        let prevNode = this.root;
+        let currNode;
         for (endIndex; endIndex <= wordLen; endIndex++) {
             let key = word[endIndex];
             let originalKey = originalWord[endIndex];
-            // if (!key) continue
-            nextNode = this.search(key, currNode.children);
-            if (isJudge && nextNode) {
-                currNode = nextNode;
+            currNode = this.search(key, prevNode.children);
+            if (isJudge && currNode) {
+                judgeText += originalKey;
+                prevNode = currNode;
                 continue;
             }
-            if (!nextNode) {
+            else if (isJudge && prevNode.word) {
+                isPass = false;
+                if (every)
+                    break;
+                if (isReplace)
+                    filterText += '*'.repeat(endIndex - startIndex);
+                filterKeywords.push(word.slice(startIndex, endIndex));
+            }
+            else {
+                filterText += judgeText;
+            }
+            if (!currNode) {
                 // 直接在分支上找不到，需要走failure
-                let failure = currNode.failure;
+                let failure = prevNode.failure;
                 while (failure) {
-                    nextNode = this.search(key, failure.children);
-                    if (nextNode) {
-                        if (isReplace)
-                            filterText += originalKey;
+                    currNode = this.search(key, failure.children);
+                    if (currNode)
                         break;
-                    }
                     failure = failure.failure;
                 }
             }
-            if (nextNode) {
-                currNode = nextNode;
+            if (currNode) {
+                judgeText = originalKey;
                 isJudge = true;
+                prevNode = currNode;
             }
             else {
-                if (startIndex !== endIndex && currNode.word) {
-                    isPass = false;
-                    if (every)
-                        break;
-                    if (isReplace)
-                        filterText += '*'.repeat(endIndex - startIndex);
-                    filterKeywords.push(word.slice(startIndex, endIndex));
-                }
+                judgeText = '';
                 isJudge = false;
-                currNode = this.root;
+                prevNode = this.root;
                 if (isReplace && key !== undefined)
                     filterText += originalKey;
             }
@@ -139,13 +143,10 @@ class Mint extends tree_1.default {
     }
 }
 if (require.main === module) {
-    let m = new Mint(['test', 'bd']);
-    console.log(m.filterSync('1atest23ttestssssbbd'));
-    /*  let m = new Mint(getAllKeywords(path.resolve(__dirname, '../kwd.txt')), false)
-      let data = readFile(path.resolve(__dirname, '../word.txt'))
-      console.time('测试：')
-      m.filterSync(data)
-      console.timeEnd('测试：')*/
+    // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2
+    // ['bd', 'db'] 1bddb2
+    let m = new Mint(['test']);
+    console.log(m.filterSync('ttes'));
 }
 module.exports = Mint;
 //# sourceMappingURL=index.js.map

@@ -23,12 +23,15 @@ export default class Tree {
     let firstKey = keyArr.shift()
     let children = this.root.children
     let len = keyArr.length
+    let firstNode = children[firstKey]
 
     // 第一个key
-    if (!children[firstKey]) {
+    if (!firstNode) {
       children[firstKey] = len
         ? new Node(firstKey)
         : new Node(firstKey, undefined, true)
+    } else if (!len) {
+      firstNode.word = true
     }
 
     // 其他多余的key
@@ -56,7 +59,6 @@ export default class Tree {
       const isWord = len === 1
 
       if (!item) {
-        // let failure = this.createFailureTable(node, key)
         item = new Node(key, node, isWord)
       } else {
         item.word = isWord
@@ -70,7 +72,7 @@ export default class Tree {
   /**
    * 创建Failure表
    */
-  _createFailureTable () {
+  _createFailureTable() {
     // 获取树第一层
     let currQueue: Array<Node> = Object.values(this.root.children)
 
@@ -81,6 +83,7 @@ export default class Tree {
         let node: Node = currQueue[i]
         let key = node.key
         let parent = node.parent
+        node.failure = this.root
         // 获取树下一层
         for (let k in node.children) {
           nextQueue.push(node.children[k])
@@ -96,12 +99,8 @@ export default class Tree {
               node.failure = children
               break
             }
-
             failure = failure.failure
           }
-
-        } else {
-          node.failure = this.root
         }
       }
 
