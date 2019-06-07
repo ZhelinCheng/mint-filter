@@ -65,7 +65,7 @@ export default class Tree {
       }
 
       children[key] = item
-      this.insertNode(children[key], word)
+      this.insertNode(item, word)
     }
   }
 
@@ -114,8 +114,6 @@ export default class Tree {
    * @param node
    */
   search(key: string, node: Children = this.root.children): Node | undefined {
-    const val: Node | undefined = node[key]
-    if (val) return val
-    else return
+    return node[key]
   }
 }

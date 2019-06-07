@@ -59,7 +59,7 @@ class Tree {
                 item.word = isWord;
             }
             children[key] = item;
-            this.insertNode(children[key], word);
+            this.insertNode(item, word);
         }
     }
     /**
@@ -101,11 +101,7 @@ class Tree {
      * @param node
      */
     search(key, node = this.root.children) {
-        const val = node[key];
-        if (val)
-            return val;
-        else
-            return;
+        return node[key];
     }
 }
 exports.default = Tree;

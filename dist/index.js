@@ -146,7 +146,7 @@ if (require.main === module) {
     // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2
     // ['bd', 'db'] 1bddb2
     let m = new Mint(['test']);
-    console.log(m.filterSync('ttes'));
+    console.log(m.filterSync('test11111test'));
 }
 module.exports = Mint;
 //# sourceMappingURL=index.js.map
