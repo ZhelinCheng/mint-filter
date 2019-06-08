@@ -15,13 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
  * Features: index
  */
 const tree_1 = __importDefault(require("./core/tree"));
-/*import path from 'path'
-import { getAllKeywords, readFile } from './core'*/
 let instance = undefined;
-/*function replaceAt(word: string, start: number, end: number): string {
-  let len = end - start
-  return `${word.substring(0, start)}${'*'.repeat(len)}${word.substring(end)}`
-}*/
 class Mint extends tree_1.default {
     // 是否替换原文本敏感词
     constructor(keywords) {
@@ -49,7 +43,6 @@ class Mint extends tree_1.default {
         let filterKeywords = [];
         word = word.toLocaleUpperCase();
         // 保存过滤文本
-        let isReplace = replace;
         let filterText = '';
         // 是否通过，无敏感词
         let isPass = true;
@@ -64,7 +57,8 @@ class Mint extends tree_1.default {
             let originalKey = originalWord[endIndex];
             currNode = this.search(key, prevNode.children);
             if (isJudge && currNode) {
-                judgeText += originalKey;
+                if (replace)
+                    judgeText += originalKey;
                 prevNode = currNode;
                 continue;
             }
@@ -72,11 +66,11 @@ class Mint extends tree_1.default {
                 isPass = false;
                 if (every)
                     break;
-                if (isReplace)
+                if (replace)
                     filterText += '*'.repeat(endIndex - startIndex);
                 filterKeywords.push(word.slice(startIndex, endIndex));
             }
-            else {
+            else if (replace) {
                 filterText += judgeText;
             }
             if (!currNode) {
@@ -98,13 +92,13 @@ class Mint extends tree_1.default {
                 judgeText = '';
                 isJudge = false;
                 prevNode = this.root;
-                if (isReplace && key !== undefined)
+                if (replace && key !== undefined)
                     filterText += originalKey;
             }
             startIndex = endIndex;
         }
         return {
-            text: isReplace ? filterText : originalWord,
+            text: replace ? filterText : originalWord,
             filter: [...new Set(filterKeywords)],
             pass: isPass
         };
@@ -145,8 +139,9 @@ class Mint extends tree_1.default {
 if (require.main === module) {
     // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2
     // ['bd', 'db'] 1bddb2
-    let m = new Mint(['test']);
-    console.log(m.filterSync('test11111test'));
+    let m = new Mint(['淘宝', '拼多多', '京东']);
+    console.log(m.filterSync('双十一在淘宝买东西，618在京东买东西，当然你也可以在拼多多买东西。'));
+    console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'));
 }
 module.exports = Mint;
 //# sourceMappingURL=index.js.map
