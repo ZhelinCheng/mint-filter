@@ -33,7 +33,7 @@
 | 5            | 50000            |   15.741ms    | 23.606ms  |
 | 6            | 100000           |   31.072ms    | 46.681ms  |
 
-需要注意的是，生产实际运行速度会比上面测试数据更快。
+需要注意的是，实际生产环境运行速度会比上面测试数据更快。
 
 ## 📦 安装
 
@@ -49,9 +49,9 @@ yarn add mint-filter
 
 ### NodeJS
 ```javascript
-// 包提供了一个获取敏感词文件的方法getAllKeywords('path')
+// 提供了一个获取敏感词文件的方法getAllKeywords('path')
 // 该方法将返回一个敏感词数组，支持正则匹配
-// const { getAllKeywords } = require('./node_modules/mint-filter/dist/core')
+// const { getAllKeywords } = require('mint-filter/dist/core')
 
 const Mint = require('mint-filter')
 const mint = new Mint(['敏感词数组'])
@@ -65,9 +65,9 @@ mint.filterSync('word')
 
 ### TypeScript
 ```typescript
-// 包提供了一个获取敏感词文件的方法getAllKeywords('path')
+// 提供了一个获取敏感词文件的方法getAllKeywords('path')
 // 该方法将返回一个敏感词数组，支持正则匹配
-// import { getAllKeywords } from ('./node_modules/mint-filter/dist/core')
+// import { getAllKeywords } from ('mint-filter/dist/core')
 
 import Mint from 'mint-filter'
 const mint = new Mint(['敏感词数组'])
