@@ -13,7 +13,7 @@
 
 实现详细说明：
 
-个人博客：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://zhelin.me/47627553bd09576fbdeafc11dc93bfbf/)  
+个人博客：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://zhelin.me/post/47627553bd09576fbdeafc11dc93bfbf/)  
 
 掘金社区：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://juejin.im/post/5cfa6bb6f265da1b8a4f0ed8)
 
