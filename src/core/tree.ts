@@ -75,10 +75,8 @@ export default class Tree {
   _createFailureTable() {
     // 获取树第一层
     let currQueue: Array<Node> = Object.values(this.root.children)
-
     while (currQueue.length > 0) {
       let nextQueue: Array<Node> = []
-
       for (let i = 0; i < currQueue.length; i++) {
         let node: Node = currQueue[i]
         let key = node.key
