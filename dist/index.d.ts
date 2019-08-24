@@ -2,13 +2,13 @@
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
-import Tree from './core/tree';
+import { Tree } from './core';
 interface FilterValue {
     text?: string | boolean;
     filter: Array<string>;
     pass?: boolean;
 }
-declare class Mint extends Tree {
+export default class Mint extends Tree {
     constructor(keywords: Array<string>);
     _filterFn(word: string, every?: boolean, replace?: boolean): FilterValue;
     /**
@@ -34,4 +34,4 @@ declare class Mint extends Tree {
      */
     filter(word: string, replace?: boolean): Promise<FilterValue>;
 }
-export = Mint;
+export {};

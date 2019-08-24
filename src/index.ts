@@ -2,8 +2,7 @@
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
-import Tree from './core/tree'
-import Node from './core/node'
+import { Node, Tree } from './core'
 
 let instance: Mint | undefined = undefined
 
@@ -13,7 +12,7 @@ interface FilterValue {
   pass?: boolean
 }
 
-class Mint extends Tree {
+export default class Mint extends Tree {
   // 是否替换原文本敏感词
   constructor(keywords: Array<string>) {
     if (instance) return instance
@@ -140,8 +139,6 @@ class Mint extends Tree {
     return Promise.resolve(this._filterFn(word, false, replace))
   }
 }
-
-export = Mint
 
 if (require.main === module) {
   // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2

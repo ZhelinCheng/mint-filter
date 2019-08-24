@@ -3,20 +3,9 @@
  * Features: core.test
  */
 
-import path from 'path'
-import { getAllKeywords, readFile } from '../src/core'
-import Node from '../src/core/node'
-import Tree from '../src/core/tree'
+import { Node, Tree } from '../src/core'
 
 describe('Core test.', () => {
-  it('Function readFile:', () => {
-    expect(readFile(path.resolve(__dirname, './test.txt'))).toBe('TEST')
-  })
-
-  it('Function getAllKeywords:', () => {
-    expect(getAllKeywords(path.resolve(__dirname, './test.txt'))).toEqual(expect.arrayContaining(['TEST']))
-  })
-
   it('Class Node:', () => {
     const node = new Node('test')
     expect(node).toEqual(expect.objectContaining({

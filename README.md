@@ -53,11 +53,11 @@ yarn add mint-filter
 // 该方法将返回一个敏感词数组，支持正则匹配
 // const { getAllKeywords } = require('mint-filter/dist/core')
 
-const Mint = require('mint-filter')
+const Mint = require('mint-filter').default
 const mint = new Mint(['敏感词数组'])
 
 // 异步方法，该方法返回的是一个Promise对象
-mint.filter('word')
+mint.filter('word').then((res) => {})
 
 // 同步方法
 mint.filterSync('word')
@@ -73,7 +73,7 @@ import Mint from 'mint-filter'
 const mint = new Mint(['敏感词数组'])
 
 // 异步方法，该方法返回的是一个Promise对象
-mint.filter('word')
+mint.filter('word').then((res) => {})
 
 // 同步方法
 mint.filterSync('word')
