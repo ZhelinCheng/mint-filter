@@ -49,10 +49,6 @@ yarn add mint-filter
 
 ### NodeJS
 ```javascript
-// 提供了一个获取敏感词文件的方法getAllKeywords('path')
-// 该方法将返回一个敏感词数组，支持正则匹配
-// const { getAllKeywords } = require('mint-filter/dist/core')
-
 const Mint = require('mint-filter').default
 const mint = new Mint(['敏感词数组'])
 
@@ -65,10 +61,6 @@ mint.filterSync('word')
 
 ### TypeScript
 ```typescript
-// 提供了一个获取敏感词文件的方法getAllKeywords('path')
-// 该方法将返回一个敏感词数组，支持正则匹配
-// import { getAllKeywords } from ('mint-filter/dist/core')
-
 import Mint from 'mint-filter'
 const mint = new Mint(['敏感词数组'])
 
