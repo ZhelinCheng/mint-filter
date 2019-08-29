@@ -7,13 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Created by ChengZheLin on 2019/6/3.
  * Features: index
  */
 const core_1 = require("./core");
-let instance = undefined;
+let instance;
 class Mint extends core_1.Tree {
     // 是否替换原文本敏感词
     constructor(keywords) {
@@ -134,7 +133,7 @@ class Mint extends core_1.Tree {
         });
     }
 }
-exports.default = Mint;
+Mint.default = Mint;
 if (require.main === module) {
     // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2
     // ['bd', 'db'] 1bddb2
@@ -143,4 +142,5 @@ if (require.main === module) {
     console.log(m.filterSync('这是另外的TEST字符串'));
     console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'));
 }
+module.exports = Mint;
 //# sourceMappingURL=index.js.map

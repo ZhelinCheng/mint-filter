@@ -4,7 +4,7 @@
  */
 import { Node, Tree } from './core'
 
-let instance: Mint | undefined = undefined
+let instance: any
 
 interface FilterValue {
   text?: string | boolean
@@ -12,7 +12,11 @@ interface FilterValue {
   pass?: boolean
 }
 
-export default class Mint extends Tree {
+class Mint extends Tree {
+  /**
+   * 兼容1.1.6
+   */
+  static default: any
   // 是否替换原文本敏感词
   constructor(keywords: Array<string>) {
     if (instance) return instance
@@ -139,6 +143,10 @@ export default class Mint extends Tree {
     return Promise.resolve(this._filterFn(word, false, replace))
   }
 }
+
+Mint.default = Mint
+
+export = Mint
 
 if (require.main === module) {
   // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2

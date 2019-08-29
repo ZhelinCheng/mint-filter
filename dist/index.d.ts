@@ -8,7 +8,11 @@ interface FilterValue {
     filter: Array<string>;
     pass?: boolean;
 }
-export default class Mint extends Tree {
+declare class Mint extends Tree {
+    /**
+     * 兼容1.1.6
+     */
+    static default: any;
     constructor(keywords: Array<string>);
     _filterFn(word: string, every?: boolean, replace?: boolean): FilterValue;
     /**
@@ -34,4 +38,4 @@ export default class Mint extends Tree {
      */
     filter(word: string, replace?: boolean): Promise<FilterValue>;
 }
-export {};
+export = Mint;

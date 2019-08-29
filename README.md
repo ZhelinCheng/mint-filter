@@ -50,7 +50,7 @@ yarn add mint-filter
 
 ### NodeJS
 ```javascript
-const Mint = require('mint-filter').default
+const Mint = require('mint-filter')
 const mint = new Mint(['敏感词数组'])
 
 // 异步方法，该方法返回的是一个Promise对象
