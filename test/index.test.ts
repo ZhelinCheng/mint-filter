@@ -7,7 +7,6 @@ import Mint from '../src/index'
 
 describe('Index test.', () => {
   let mint = new Mint(['test', 't', 'bd', 'd', 'st', 'ac'])
-  let mint2 = new Mint([])
   const str1 = 'ttest1stest2stes3bbddstt4est5esd6'
   const str2 = 'bbdsst1sstt2acc'
 
@@ -30,7 +29,7 @@ describe('Index test.', () => {
       'text': '*****1*****2**es3b******4e**5es*6'
     }))
 
-    expect(mint2.filterSync(str2, false)).toEqual(expect.objectContaining({
+    expect(mint.filterSync(str2, false)).toEqual(expect.objectContaining({
       'filter': [ 'BD', 'ST', 'T', 'AC' ],
       'pass': false,
       'text': str2
@@ -44,7 +43,7 @@ describe('Index test.', () => {
       'text': '*****1*****2**es3b******4e**5es*6'
     }))
 
-    expect(await mint2.filter(str2, false)).toEqual(expect.objectContaining({
+    expect(await mint.filter(str2, false)).toEqual(expect.objectContaining({
       'filter': [ 'BD', 'ST', 'T', 'AC' ],
       'pass': false,
       'text': str2

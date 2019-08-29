@@ -4,8 +4,6 @@
  */
 import { Node, Tree } from './core'
 
-let instance: any
-
 interface FilterValue {
   text?: string | boolean
   filter: Array<string>,
@@ -19,7 +17,6 @@ class Mint extends Tree {
   static default: any
   // 是否替换原文本敏感词
   constructor(keywords: Array<string>) {
-    if (instance) return instance
     super()
     if (!(keywords instanceof Array && keywords.length >= 1)) {
       console.error('mint-filter：未将过滤词数组传入！')
@@ -33,8 +30,6 @@ class Mint extends Tree {
     }
 
     this._createFailureTable()
-
-    instance = this
   }
 
   _filterFn(word: string, every: boolean = false, replace: boolean = true): FilterValue {

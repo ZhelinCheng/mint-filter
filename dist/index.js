@@ -12,12 +12,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
  * Features: index
  */
 const core_1 = require("./core");
-let instance;
 class Mint extends core_1.Tree {
     // 是否替换原文本敏感词
     constructor(keywords) {
-        if (instance)
-            return instance;
         super();
         if (!(keywords instanceof Array && keywords.length >= 1)) {
             console.error('mint-filter：未将过滤词数组传入！');
@@ -30,7 +27,6 @@ class Mint extends core_1.Tree {
             this.insert(item.toLocaleUpperCase());
         }
         this._createFailureTable();
-        instance = this;
     }
     _filterFn(word, every = false, replace = true) {
         let startIndex = 0;
