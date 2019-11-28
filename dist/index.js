@@ -24,7 +24,13 @@ class Mint extends core_1.Tree {
         for (let item of keywords) {
             if (!item)
                 continue;
-            this.insert(item.toLocaleUpperCase());
+            if (/[a-z]/i.test(item)) {
+                // 有字母
+                this.insert(item.toLocaleUpperCase());
+            }
+            else {
+                this.insert(item);
+            }
         }
         this.createFailureTable();
     }
@@ -134,9 +140,10 @@ class Mint extends core_1.Tree {
 }
 module.exports = Mint;
 /* if (require.main === module) {
-  let m = new Mint(['淘宝', '拼多多', '京东', 'TEST'])
+  let m = new Mint(['拼多多', '淘宝', '京东', 'TEST', 'aaaa'])
   console.log(m.filterSync('双十一在淘宝买东西，618在京东买东西，当然你也可以在拼多多买东西。'))
-  console.log(m.filterSync('这是另外的TEST字符串'))
+  console.log(m.filterSync('这是另外的TEST字符串，aaaa也是敏感词'))
   console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'))
+  console.log(m.includes('测试这条语句是否能通过，加上任意一个关键词京东'))
 } */
 //# sourceMappingURL=index.js.map
