@@ -67,19 +67,27 @@ class Mint extends core_1.Tree {
                     isStart = true;
                 }
                 if (isStart && currNode.word) {
-                    console.log(startIndex, endIndex);
+                    console.log(startIndex, endIndex, key);
                     isStart = false;
                 }
-                searchNode = currNode;
             }
             else {
                 // 如果没有匹配到
                 currNode = searchNode.failure;
-                if (currNode && currNode.key !== 'root') {
-                    startIndex = endIndex;
-                    isStart = true;
+                if (currNode) {
+                    const { key, word } = currNode;
+                    isStart = false;
+                    if (key !== 'root') {
+                        startIndex = endIndex - 1;
+                        isStart = true;
+                    }
+                    if (word) {
+                        console.log(startIndex, endIndex);
+                        isStart = false;
+                    }
                 }
             }
+            searchNode = currNode || this.root;
             // searchNode = currNode ? currNode : (searchNode.failure || this.root)
             endIndex++;
         }
@@ -126,8 +134,13 @@ class Mint extends core_1.Tree {
     }
 }
 if (require.main === module) {
-    let m = new Mint(['的', '我的天']);
-    console.log(m.filterSync('开我的地，哈哈哈'));
+    /* let m = new Mint(['的', '我的天'])
+    console.log(m.filterSync('开我的地，哈哈哈我的天')) */
+    let m = new Mint(['拼多多', '淘宝', '京东', 'TEST', 'aaaa', 12345, '大龄哥吃饭', '大龄哥']);
+    console.log(m.filterSync('双十一在买东西，618在京东买东西，当然你也可以在拼多多买东西。大龄哥买东西，大龄哥吃饭'));
+    // console.log(m.filterSync('这是另外的TEST字符串，aaaa也是敏感词，123456中也有敏感词'))
+    // console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'))
+    // console.log(m.includes('测试这条语句是否能通过，加上任意一个关键词京东')
 }
 module.exports = Mint;
 //# sourceMappingURL=index.js.map
