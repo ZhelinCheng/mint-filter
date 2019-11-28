@@ -1,6 +1,6 @@
 {
   "name": "mint-filter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。",
   "main": "./dist/index.js",
   "scripts": {
