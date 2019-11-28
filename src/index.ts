@@ -29,10 +29,10 @@ class Mint extends Tree {
       this.insert(item.toLocaleUpperCase())
     }
 
-    this._createFailureTable()
+    this.createFailureTable()
   }
 
-  _filterFn(word: string, every: boolean = false, replace: boolean = true): FilterValue {
+  private filterFunc(word: string, every: boolean = false, replace: boolean = true): FilterValue {
     let startIndex = 0
     let endIndex = startIndex
     const wordLen = word.length
@@ -109,15 +109,19 @@ class Mint extends Tree {
    * @param word
    */
   every(word: string): Promise<boolean> {
-    return Promise.resolve(this._filterFn(word, true).pass)
+    return Promise.resolve(this.filterFunc(word, true).pass)
   }
 
   /**
    * 同步快速检测字符串是否无敏感词
    * @param word
    */
+  includes(word: string): boolean {
+    return !this.filterFunc(word, true).pass
+  }
+
   everySync(word: string): boolean {
-    return this._filterFn(word, true).pass
+    return this.filterFunc(word, true).pass
   }
 
   /**
@@ -126,7 +130,7 @@ class Mint extends Tree {
    * @param replace
    */
   filterSync(word: string, replace: boolean = true): FilterValue {
-    return this._filterFn(word, false, replace)
+    return this.filterFunc(word, false, replace)
   }
 
   /**
@@ -135,19 +139,17 @@ class Mint extends Tree {
    * @param replace
    */
   async filter(word: string, replace: boolean = true): Promise<FilterValue> {
-    return Promise.resolve(this._filterFn(word, false, replace))
+    return Promise.resolve(this.filterFunc(word, false, replace))
   }
 }
 
-Mint.default = Mint
+// Mint.default = Mint
 
 export = Mint
 
-if (require.main === module) {
-  // ['bd', 'b'] 1bbd2 1bdb2 1bbdb2
-  // ['bd', 'db'] 1bddb2
+/* if (require.main === module) {
   let m = new Mint(['淘宝', '拼多多', '京东', 'TEST'])
   console.log(m.filterSync('双十一在淘宝买东西，618在京东买东西，当然你也可以在拼多多买东西。'))
   console.log(m.filterSync('这是另外的TEST字符串'))
   console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'))
-}
+} */

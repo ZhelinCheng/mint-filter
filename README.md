@@ -1,4 +1,3 @@
-# Mint Filter
 🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
@@ -14,7 +13,7 @@
 
 实现详细说明：
 
-个人博客：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://zhelin.me/post/47627553bd09576fbdeafc11dc93bfbf/)  
+个人博客：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://zhelin.me/post/47627553bd09576fbdeafc11dc93bfbf/)
 
 掘金社区：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://juejin.im/post/5cfa6bb6f265da1b8a4f0ed8)
 
@@ -107,7 +106,7 @@ mint.filter('这是一个敏感词字符串', false)
 - `replace`<[boolean]>：是否需要替换敏感词（替换成*，默认开启）。
 - returns: <[FilterValue]>
 
-#### every(word)
+<!-- #### every(word)
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[Promise]<[boolean]>>
 
@@ -121,8 +120,10 @@ mint.every('这是一个敏感词字符串')
     .then(data => {
       console.log(data) // true
     })
-```
+``` -->
 
-#### everySync(word)
+#### includes(word)
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[boolean]>
+
+判断文本是否通过敏感词验证，发现敏感词立即返回`true`，为`false`表示通过验证，没有敏感词。

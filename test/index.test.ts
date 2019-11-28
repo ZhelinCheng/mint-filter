@@ -54,6 +54,10 @@ describe('Index test.', () => {
     expect(mint.everySync('test')).toBeFalsy()
   })
 
+  it('Function includes:', () => {
+    expect(mint.includes('test')).toBeTruthy()
+  })
+
   it('Function every:', async () => {
     let data = await mint.every('TES')
     expect(data).toBeTruthy()

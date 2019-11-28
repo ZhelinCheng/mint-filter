@@ -14,7 +14,7 @@ declare class Mint extends Tree {
      */
     static default: any;
     constructor(keywords: Array<string>);
-    _filterFn(word: string, every?: boolean, replace?: boolean): FilterValue;
+    private filterFunc;
     /**
      * 异步快速检测字符串是否无敏感词
      * @param word
@@ -24,6 +24,7 @@ declare class Mint extends Tree {
      * 同步快速检测字符串是否无敏感词
      * @param word
      */
+    includes(word: string): boolean;
     everySync(word: string): boolean;
     /**
      * 同步过滤方法

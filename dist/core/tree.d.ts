@@ -21,7 +21,7 @@ export default class Tree {
     /**
      * 创建Failure表
      */
-    _createFailureTable(): void;
+    createFailureTable(): void;
     /**
      * 搜索节点
      * @param key

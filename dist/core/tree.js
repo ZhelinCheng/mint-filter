@@ -68,7 +68,7 @@ class Tree {
     /**
      * 创建Failure表
      */
-    _createFailureTable() {
+    createFailureTable() {
         // 获取树第一层
         let currQueue = Object.values(this.root.children);
         while (currQueue.length > 0) {
