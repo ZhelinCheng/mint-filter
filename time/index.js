@@ -25,7 +25,7 @@ console.log('========性能测试：实例化（包含构建树过程）========
 console.time('20k关键词耗时：')
 const m = new Mint(keywords)
 console.timeEnd('20k关键词耗时：')
-let strBox = {}
+const strBox = {}
 
 strBox['1k'] = readFile(resolve('./1000'))
 strBox['5k'] = readFile(resolve('./5000'))
@@ -34,8 +34,8 @@ strBox['20k'] = readFile(resolve('./20000'))
 strBox['50k'] = readFile(resolve('./50000'))
 strBox['100k'] = readFile(resolve('./100000'))
 
-let key = argv[2]
-let replace = argv[3] > 0
+const key = argv[2]
+const replace = argv[3] > 0
 
 console.log(`===== 性能测试，${replace ? '替换' : '不替换'}关键词 =====`)
 console.time('耗时：')

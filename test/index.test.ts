@@ -6,8 +6,8 @@
 import Mint from '../src/index'
 
 describe('Index test.', () => {
-  let mint = new Mint(['test', 't', 'bd', 'd', 'st', 'ac'])
-  const str1 = 'ttest1stest2stes3bbddstt4est5esd6'
+  let mint = new Mint(['test', 't', 'bd', 'd', 'st', 'ac', 33])
+  const str1 = 'ttest1stest2stes3bbddstt4est5esd6a33b'
   const str2 = 'bbdsst1sstt2acc'
 
   it('Class Mint:', () => {
@@ -24,9 +24,9 @@ describe('Index test.', () => {
 
   it('Function filterSync:', () => {
     expect(mint.filterSync(str1)).toEqual(expect.objectContaining({
-      'filter': [ 'T', 'TEST', 'ST', 'EST', 'BD', 'D' ],
+      'filter': [ 'T', 'TEST', 'ST', 'EST', 'BD', 'D' , '33'],
       'pass': false,
-      'text': '*****1*****2**es3b******4e**5es*6'
+      'text': '*****1*****2**es3b******4e**5es*6a**b'
     }))
 
     expect(mint.filterSync(str2, false)).toEqual(expect.objectContaining({
@@ -38,9 +38,9 @@ describe('Index test.', () => {
 
   it('Function filter:', async () => {
     expect(await mint.filter(str1)).toEqual(expect.objectContaining({
-      'filter': [ 'T', 'TEST', 'ST', 'EST', 'BD', 'D' ],
+      'filter': [ 'T', 'TEST', 'ST', 'EST', 'BD', 'D', '33' ],
       'pass': false,
-      'text': '*****1*****2**es3b******4e**5es*6'
+      'text': '*****1*****2**es3b******4e**5es*6a**b'
     }))
 
     expect(await mint.filter(str2, false)).toEqual(expect.objectContaining({

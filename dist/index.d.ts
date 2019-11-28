@@ -13,7 +13,7 @@ declare class Mint extends Tree {
      * 兼容1.1.6
      */
     static default: any;
-    constructor(keywords: Array<string>);
+    constructor(keywords: Array<string | number>);
     private filterFunc;
     /**
      * 异步快速检测字符串是否无敏感词
