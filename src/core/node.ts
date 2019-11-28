@@ -1,6 +1,9 @@
-/**
- * Created by ChengZheLin on 2019/6/4.
- * Features: node
+/*
+ * @Author: Zhelin Cheng
+ * @Date: 2019-08-24 12:19:20
+ * @LastEditTime: 2019-11-28 12:36:58
+ * @LastEditors: Zhelin Cheng
+ * @Description: Node
  */
 
 import { Children } from './index'

@@ -106,7 +106,7 @@ mint.filter('这是一个敏感词字符串', false)
 - `replace`<[boolean]>：是否需要替换敏感词（替换成*，默认开启）。
 - returns: <[FilterValue]>
 
-<!-- #### every(word)
+#### every(word)
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[Promise]<[boolean]>>
 
@@ -120,10 +120,8 @@ mint.every('这是一个敏感词字符串')
     .then(data => {
       console.log(data) // true
     })
-``` -->
+```
 
-#### includes(word)
+#### everySync(word)
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[boolean]>
-
-判断文本是否通过敏感词验证，发现敏感词立即返回`true`，为`false`表示通过验证，没有敏感词。

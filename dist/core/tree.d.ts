@@ -1,7 +1,3 @@
-/**
- * Created by ChengZheLin on 2019/6/4.
- * Features: tree
- */
 import Node from './node';
 import { Children } from './index';
 export default class Tree {

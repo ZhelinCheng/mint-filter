@@ -1,6 +1,9 @@
-/**
- * Created by ChengZheLin on 2019/6/4.
- * Features: tree
+/*
+ * @Author: Zhelin Cheng
+ * @Date: 2019-08-24 12:19:20
+ * @LastEditTime: 2019-11-28 12:37:12
+ * @LastEditors: Zhelin Cheng
+ * @Description: Tree
  */
 
 import Node from './node'
@@ -63,7 +66,7 @@ export default class Tree {
 
       if (!item) {
         item = new Node(key, node, isWord)
-      } else {
+      } else if (!item.word) {
         item.word = isWord
       }
 
