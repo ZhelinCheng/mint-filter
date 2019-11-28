@@ -35,6 +35,8 @@ class Mint extends core_1.Tree {
         }
         this.createFailureTable();
     }
+    searchKey() {
+    }
     filterFunc(word, every = false, replace = true) {
         let startIndex = 0;
         let endIndex = startIndex;
@@ -46,56 +48,40 @@ class Mint extends core_1.Tree {
         let filterText = '';
         // 是否通过，无敏感词
         let isPass = true;
-        // 正在进行划词判断
-        let isJudge = false;
-        let judgeText = '';
-        // 上一个Node与下一个Node
-        let prevNode = this.root;
+        // 下一个Node与当前Node
+        let searchNode = this.root;
         let currNode;
-        for (endIndex; endIndex <= wordLen; endIndex++) {
+        /* for (endIndex; endIndex <= wordLen; endIndex++) {
+          let key: string = word[endIndex]
+          currNode = this.search(key, prevNode.children)
+        } */
+        // 开始匹配
+        let isStart = false;
+        while (endIndex < wordLen) {
             let key = word[endIndex];
-            let originalKey = originalWord[endIndex];
-            currNode = this.search(key, prevNode.children);
-            if (isJudge && currNode) {
-                if (replace)
-                    judgeText += originalKey;
-                prevNode = currNode;
-                continue;
-            }
-            else if (isJudge && prevNode.word) {
-                isPass = false;
-                if (every)
-                    break;
-                if (replace)
-                    filterText += '*'.repeat(endIndex - startIndex);
-                filterKeywords.push(word.slice(startIndex, endIndex));
-            }
-            else if (replace) {
-                filterText += judgeText;
-            }
-            if (!currNode) {
-                // 直接在分支上找不到，需要走failure
-                let failure = prevNode.failure;
-                while (failure) {
-                    currNode = this.search(key, failure.children);
-                    if (currNode)
-                        break;
-                    failure = failure.failure;
-                }
-            }
+            currNode = this.search(key, searchNode.children);
+            // 判断是否找到
             if (currNode) {
-                judgeText = originalKey;
-                isJudge = true;
-                prevNode = currNode;
+                if (!isStart) {
+                    startIndex = endIndex;
+                    isStart = true;
+                }
+                if (isStart && currNode.word) {
+                    console.log(startIndex, endIndex);
+                    isStart = false;
+                }
+                searchNode = currNode;
             }
             else {
-                judgeText = '';
-                isJudge = false;
-                prevNode = this.root;
-                if (replace && key !== undefined)
-                    filterText += originalKey;
+                // 如果没有匹配到
+                currNode = searchNode.failure;
+                if (currNode && currNode.key !== 'root') {
+                    startIndex = endIndex;
+                    isStart = true;
+                }
             }
-            startIndex = endIndex;
+            // searchNode = currNode ? currNode : (searchNode.failure || this.root)
+            endIndex++;
         }
         return {
             text: replace ? filterText : originalWord,
@@ -139,12 +125,9 @@ class Mint extends core_1.Tree {
         });
     }
 }
+if (require.main === module) {
+    let m = new Mint(['的', '我的天']);
+    console.log(m.filterSync('开我的地，哈哈哈'));
+}
 module.exports = Mint;
-/* if (require.main === module) {
-  let m = new Mint(['拼多多', '淘宝', '京东', 'TEST', 'aaaa', 12345, '大龄哥吃饭', '大龄哥'])
-  console.log(m.filterSync('双十一在淘宝买东西，618在京东买东西，当然你也可以在拼多多买东西。大龄哥买东西，大龄哥吃饭'))
-  console.log(m.filterSync('这是另外的TEST字符串，aaaa也是敏感词，123456中也有敏感词'))
-  console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'))
-  console.log(m.includes('测试这条语句是否能通过，加上任意一个关键词京东'))
-} */
 //# sourceMappingURL=index.js.map

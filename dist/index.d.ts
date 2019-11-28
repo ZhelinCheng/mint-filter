@@ -14,6 +14,7 @@ declare class Mint extends Tree {
      */
     static default: any;
     constructor(keywords: Array<string | number>);
+    private searchKey;
     private filterFunc;
     /**
      * 异步快速检测字符串是否无敏感词

@@ -38,6 +38,10 @@ class Mint extends Tree {
     this.createFailureTable()
   }
 
+  private searchKey () {
+
+  }
+
   private filterFunc(word: string, every: boolean = false, replace: boolean = true): FilterValue {
     let startIndex = 0
     let endIndex = startIndex
@@ -52,55 +56,45 @@ class Mint extends Tree {
     // 是否通过，无敏感词
     let isPass = true
 
-    // 正在进行划词判断
-    let isJudge: boolean = false
-    let judgeText: string = ''
-
-    // 上一个Node与下一个Node
-    let prevNode: Node = this.root
+    // 下一个Node与当前Node
+    let searchNode: Node = this.root
     let currNode: Node | boolean
 
-    for (endIndex; endIndex <= wordLen; endIndex++) {
+    /* for (endIndex; endIndex <= wordLen; endIndex++) {
       let key: string = word[endIndex]
-      let originalKey: string = originalWord[endIndex]
       currNode = this.search(key, prevNode.children)
+    } */
 
-      if (isJudge && currNode) {
-        if (replace) judgeText += originalKey
-        prevNode = currNode
-        continue
-      } else if (isJudge && prevNode.word) {
-        isPass = false
-        if (every) break
+    // 开始匹配
+    let isStart = false
 
-        if (replace) filterText += '*'.repeat(endIndex - startIndex)
-        filterKeywords.push(word.slice(startIndex, endIndex))
-      } else if (replace) {
-        filterText += judgeText
-      }
+    while (endIndex < wordLen) {
+      let key: string = word[endIndex]
+      currNode = this.search(key, searchNode.children)
+      // 判断是否找到
+      if (currNode) {
+        if (!isStart) {
+          startIndex = endIndex
+          isStart = true
+        }
 
-      if (!currNode) {
-        // 直接在分支上找不到，需要走failure
-        let failure: Node = prevNode.failure
+        if (isStart && currNode.word) {
+          console.log(startIndex, endIndex)
+          isStart = false
+        }
 
-        while (failure) {
-          currNode = this.search(key, failure.children)
-          if (currNode) break
-          failure = failure.failure
+        searchNode = currNode
+      } else {
+        // 如果没有匹配到
+        currNode = searchNode.failure
+        if (currNode && currNode.key !== 'root') {
+          startIndex = endIndex
+          isStart = true
         }
       }
 
-      if (currNode) {
-        judgeText = originalKey
-        isJudge = true
-        prevNode = currNode
-      } else {
-        judgeText = ''
-        isJudge = false
-        prevNode = this.root
-        if (replace && key !== undefined) filterText += originalKey
-      }
-      startIndex = endIndex
+      // searchNode = currNode ? currNode : (searchNode.failure || this.root)
+      endIndex++
     }
 
     return {
@@ -153,10 +147,7 @@ class Mint extends Tree {
 
 export = Mint
 
-/* if (require.main === module) {
-  let m = new Mint(['拼多多', '淘宝', '京东', 'TEST', 'aaaa', 12345, '大龄哥吃饭', '大龄哥'])
-  console.log(m.filterSync('双十一在淘宝买东西，618在京东买东西，当然你也可以在拼多多买东西。大龄哥买东西，大龄哥吃饭'))
-  console.log(m.filterSync('这是另外的TEST字符串，aaaa也是敏感词，123456中也有敏感词'))
-  console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'))
-  console.log(m.includes('测试这条语句是否能通过，加上任意一个关键词京东'))
-} */
+if (require.main === module) {
+  let m = new Mint(['的', '我的天'])
+  console.log(m.filterSync('开我的地，哈哈哈'))
+}
