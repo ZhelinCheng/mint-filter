@@ -1,4 +1,11 @@
 "use strict";
+/*
+ * @Author: Zhelin Cheng
+ * @Date: 2019-08-24 12:19:20
+ * @LastEditTime: 2019-11-29 17:07:51
+ * @LastEditors: Zhelin Cheng
+ * @Description: 主文件
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -7,10 +14,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-/**
- * Created by ChengZheLin on 2019/6/3.
- * Features: index
- */
 const core_1 = require("./core");
 class Mint extends core_1.Tree {
     // 是否替换原文本敏感词

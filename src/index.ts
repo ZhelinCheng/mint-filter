@@ -1,7 +1,11 @@
-/**
- * Created by ChengZheLin on 2019/6/3.
- * Features: index
+/*
+ * @Author: Zhelin Cheng
+ * @Date: 2019-08-24 12:19:20
+ * @LastEditTime: 2019-11-29 17:07:51
+ * @LastEditors: Zhelin Cheng
+ * @Description: 主文件
  */
+
 import { Node, Tree } from './core'
 
 interface FilterValue {
