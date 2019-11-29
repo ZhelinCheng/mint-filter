@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-11-29 17:07:51
+ * @LastEditTime: 2019-11-29 17:25:02
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -85,7 +85,7 @@ class Mint extends Tree {
         if (isStart && currNode.word) {
           isStart = isPass = false
           keywords += key
-          console.log(startIndex, endIndex, key, filterText)
+          console.log(startIndex, endIndex, key)
           // console.log('*'.repeat(keywords.length))
           filterKeywords.push(keywords)
         }
@@ -103,7 +103,7 @@ class Mint extends Tree {
 
         // 是否匹配成功
         if (currNode.word) {
-          console.log(startIndex, endIndex - 1, key, filterText)
+          console.log(startIndex, endIndex - 1, key)
           isStart = isPass = false
           keywords += key
           // console.log('*'.repeat(keywords.length))
@@ -169,11 +169,15 @@ class Mint extends Tree {
 export = Mint
 
 if (require.main === module) {
-  /* let m = new Mint(['的', '我的天'])
-  console.log(m.filterSync('开我的地，哈哈哈我的天')) */
-  let m = new Mint(['我的天', '的', '大龄哥', '大龄哥你好', 33])
-  console.log(m.filterSync('我的地啊，我的天啊，我的大龄哥啊，大龄哥你好啊33。'))
-  // console.log(m.filterSync('这是另外的TEST字符串，aaaa也是敏感词，123456中也有敏感词'))
-  // console.log(m.everySync('测试这条语句是否能通过，加上任意一个关键词京东'))
-  // console.log(m.includes('测试这条语句是否能通过，加上任意一个关键词京东')
+  let m = new Mint(['京东', '东京', '淘宝', '拼多多', '双十一', 1111, '优惠券', '京东优惠券', '多多'])
+  console.log(m.filterSync(`
+  这是简单的测试文字：
+  1：
+  这里的【京东京】是一段测试文字
+  2：
+  马上就要到双十一了，今年1111我屯了很多优惠券，
+  有京东的，有淘宝的，也有拼多多的，
+  但我最多的是京东优惠券。
+  看来这个双十一我又要买很多东西了，毕竟多多益善。
+  `))
 }
