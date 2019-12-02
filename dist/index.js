@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-12-02 14:12:18
+ * @LastEditTime: 2019-12-02 15:09:35
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -48,9 +48,8 @@ class Mint extends core_1.Tree {
         let filterKeywords = [];
         word = word.toLocaleUpperCase();
         // 保存过滤文本
-        let filterText = '';
         let filterTextArr = [];
-        let keywords = '';
+        let keyword = [];
         // 是否通过，无敏感词
         let isPass = true;
         // 下一个Node与当前Node
@@ -65,17 +64,18 @@ class Mint extends core_1.Tree {
             // console.log(endIndex, key)
             // 判断是否找到
             if (nextNode) {
-                // if (endIndex >= 17) console.log(isStart)
+                // keywords += nextNode.key
                 if (!isStart) {
                     isStart = true;
                     startIndex = endIndex;
                 }
                 if (nextNode.word) {
                     // console.log('==>', key, startIndex, endIndex)
+                    const keywordLen = endIndex - startIndex + 1;
                     isStart = isPass = false;
-                    keywords += key;
-                    replace && filterTextArr.splice(startIndex, keywords.length, '*'.repeat(keywords.length));
-                    filterKeywords.push(keywords);
+                    keyword = filterTextArr.splice(startIndex, keywordLen, '*'.repeat(keywordLen));
+                    filterKeywords.push(keyword.join(''));
+                    nextNode = false;
                     if (every)
                         break;
                 }
@@ -85,23 +85,18 @@ class Mint extends core_1.Tree {
                 // 在失配路线上找到子元素
                 searchNode = searchNode.failure;
                 nextNode = this.search(key, searchNode.children);
-                if (nextNode) {
+                if (nextNode && searchNode.key !== 'root') {
                     startIndex = endIndex - 1;
                     isStart = isPass = true;
-                    keywords = '';
                     nextNode = searchNode;
+                }
+                else {
+                    nextNode = false;
                 }
                 endIndex--;
             }
             else {
                 isStart = false;
-            }
-            // 判断是否在进行匹配，将关键字拼接起来
-            if (isStart) {
-                keywords += key;
-            }
-            else {
-                keywords = '';
             }
             searchNode = nextNode || searchNode.failure || this.root;
             endIndex++;
@@ -150,8 +145,9 @@ class Mint extends core_1.Tree {
 }
 exports.default = Mint;
 if (require.main === module) {
-    // let m = new Mint(['拼多多', '多少', '多多', '爆', '少多', 1111, 'abc'])
-    // console.log(m.filterSync(`爆，这是简单的测试文字：这里的【京东京】是一段测试文字马上就要到双十一了，今年1111我屯了很多优惠券，有京东的，有淘宝的，也有拼多多的，但我最多的是京东优惠券。看来这个双十一我又要买很多东西了，毕竟多多益善。`))
-    // console.log(m.filterSync(`0、爆，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC`))
+    let m = new Mint(['多', '多少']);
+    console.log(m.filterSync(`多多少`));
+    // let m = new Mint(['多少', '少'])
+    // console.log(m.filterSync(`多少少`))
 }
 //# sourceMappingURL=index.js.map

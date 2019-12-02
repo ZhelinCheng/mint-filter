@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-12-02 14:07:28
+ * @LastEditTime: 2019-12-02 15:15:05
  * @LastEditors: Zhelin Cheng
  * @Description: Test Index
  */
@@ -9,13 +9,14 @@
 
 import Mint, { FilterValue } from '../src/index'
 
-describe('Index test.', () => {
-  let mint = new Mint(['拼多多', '多少', '多多', '爆', '少多', 1111, 'abc'])
-  const falsyStr = `0、爆，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC`
-  const truthyStr = `这是一段没有敏感词的字符串，我在这里写了很多，十一月一日有很多优惠，我们要多购买。`
+const falsyStr = `0、爆，拼拼多多，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC`
+const truthyStr = `这是一段没有敏感词的字符串，我在这里写了很多，十一月一日有很多优惠，我们要多购买。`
+
+describe('Index test one.', () => {
+  let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'abc'])
   const returnContentFalsy: FilterValue = {
-    text: '0、*，***；1、拼多*；2、拼**；3、**多；4、****大促；5、智能***',
-    filter: ['爆', '拼多多', '少少', '多少', '1111', 'ABC'],
+    text: '0、*，****，***；1、*多*；2、***；3、**多；4、****大促；5、智能***',
+    filter: ['爆', '拼', '多多', '多少', '1111', 'ABC'],
     pass: false
   }
   const returnContentTruthy: FilterValue = {
@@ -90,5 +91,22 @@ describe('Index test.', () => {
 
   it('Function includes:', async () => {
     expect(mint.validator(truthyStr)).toBeFalsy()
+  })
+})
+
+
+describe('Index test two.', () => {
+  it('Function filterSync 1:', () => {
+    const mint = new Mint(['拼多多', '多少'])
+    expect(mint.filterSync('拼多少，多少多').text).toEqual('拼**，**多')
+  })
+
+  it('Function filterSync 2:', () => {
+    const mint = new Mint(['多', '多少'])
+    expect(mint.filterSync('多多少')).toEqual(expect.objectContaining({
+      text: '**少',
+      filter: ['多'],
+      pass: false
+    }))
   })
 })
