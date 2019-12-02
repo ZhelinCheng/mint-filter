@@ -174,7 +174,7 @@ class Mint extends Tree {
 
 // Mint.default = Mint
 
-export = Mint
+export default Mint
 
 if (require.main === module) {
   let m = new Mint(['京东', '东京', '淘宝', '拼多多', '双十一', 1111, '优惠券', '京东优惠券', '多多'])
