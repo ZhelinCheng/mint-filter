@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-12-02 15:09:35
+ * @LastEditTime: 2019-12-02 15:35:20
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -156,9 +156,9 @@ class Mint extends Tree {
 
 export default Mint
 
-if (require.main === module) {
-  let m = new Mint(['多', '多少'])
-  console.log(m.filterSync(`多多少`))
+/* if (require.main === module) {
+  let m = new Mint(['B', 'BA'])
+  console.log(m.filterSync(`ABA`))
   // let m = new Mint(['多少', '少'])
   // console.log(m.filterSync(`多少少`))
-}
+} */
