@@ -1,30 +1,25 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-11-29 17:59:47
+ * @LastEditTime: 2019-12-02 14:12:18
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
 
 import { Node, Tree } from './core'
 
-interface FilterValue {
+export interface FilterValue {
   text?: string | boolean
-  filter: Array<string>,
+  filter: Array<string | undefined>,
   pass?: boolean
 }
 
 class Mint extends Tree {
-  /**
-   * 兼容1.1.6
-   */
-  static default: any
   // 是否替换原文本敏感词
   constructor(keywords: Array<string | number>) {
     super()
     if (!(keywords instanceof Array && keywords.length >= 1)) {
-      console.error('mint-filter：未将过滤词数组传入！')
-      return
+      throw Error('Mint：敏感词keywords应该是一个数组！')
     }
 
     // 创建Trie树
@@ -69,60 +64,52 @@ class Mint extends Tree {
     // 是否开始匹配
     let isStart = false
 
-
     while (endIndex < wordLen) {
       let key: string = word[endIndex]
-      let currNode: Node | boolean = this.search(key, searchNode.children)
+      let nextNode: Node | boolean = this.search(key, searchNode.children)
       filterTextArr[endIndex] = key
+
+      // console.log(endIndex, key)
       // 判断是否找到
-      if (currNode) {
+      if (nextNode) {
+        // if (endIndex >= 17) console.log(isStart)
         if (!isStart) {
-          startIndex = endIndex
           isStart = true
-          keywords = ''
+          startIndex = endIndex
         }
 
-        // 是否匹配成功
-        if (isStart && currNode.word) {
+        if (nextNode.word) {
+          // console.log('==>', key, startIndex, endIndex)
           isStart = isPass = false
           keywords += key
-          // console.log(startIndex, endIndex, key)
           replace && filterTextArr.splice(startIndex, keywords.length, '*'.repeat(keywords.length))
           filterKeywords.push(keywords)
+          if (every) break
         }
       } else if (isStart) {
-        // 如果没有匹配到，走失配流程
-        const saveKey = key
-        currNode = searchNode.failure
-        key = currNode.key
         isStart = false
-        keywords = ''
 
-        if (key !== 'root') {
+        // 在失配路线上找到子元素
+        searchNode = searchNode.failure
+        nextNode = this.search(key, searchNode.children)
+        if (nextNode) {
           startIndex = endIndex - 1
-          isStart = true
-        } else {
-          currNode = this.search(saveKey, this.root.children)
-          if (currNode) {
-            startIndex = endIndex
-            isStart = true
-            key = saveKey
-          }
+          isStart = isPass = true
+          keywords = ''
+          nextNode = searchNode
         }
-
-        // 是否匹配成功
-        if (currNode && currNode.word) {
-          // console.log(startIndex, endIndex - 1, key)
-          isStart = isPass = false
-          keywords += key
-          filterKeywords.push(keywords)
-          replace && filterTextArr.splice(startIndex, keywords.length, '*'.repeat(keywords.length))
-          endIndex -= 2
-        }
+        endIndex--
+      } else {
+        isStart = false
       }
 
-      if (isStart) keywords += key
-      searchNode = currNode || this.root
+      // 判断是否在进行匹配，将关键字拼接起来
+      if (isStart) {
+        keywords += key
+      } else {
+        keywords = ''
+      }
+      searchNode = nextNode || searchNode.failure || this.root
       endIndex++
     }
 
@@ -145,7 +132,7 @@ class Mint extends Tree {
    * 同步快速检测字符串是否无敏感词
    * @param word
    */
-  includes(word: string): boolean {
+  validator(word: string): boolean {
     return !this.filterFunc(word, true).pass
   }
 
@@ -172,18 +159,10 @@ class Mint extends Tree {
   }
 }
 
-// Mint.default = Mint
-
 export default Mint
 
 if (require.main === module) {
-  let m = new Mint(['京东', '东京', '淘宝', '拼多多', '双十一', 1111, '优惠券', '京东优惠券', '多多'])
-  console.log(m.filterSync(`
-  这是简单的测试文字：
-  这里的【京东京】是一段测试文字
-  马上就要到双十一了，今年1111我屯了很多优惠券，
-  有京东的，有淘宝的，也有拼多多的，
-  但我最多的是京东优惠券。
-  看来这个双十一我又要买很多东西了，毕竟多多益善。
-  `))
+  // let m = new Mint(['拼多多', '多少', '多多', '爆', '少多', 1111, 'abc'])
+  // console.log(m.filterSync(`爆，这是简单的测试文字：这里的【京东京】是一段测试文字马上就要到双十一了，今年1111我屯了很多优惠券，有京东的，有淘宝的，也有拼多多的，但我最多的是京东优惠券。看来这个双十一我又要买很多东西了，毕竟多多益善。`))
+  // console.log(m.filterSync(`0、爆，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC`))
 }

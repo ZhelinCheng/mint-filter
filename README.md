@@ -1,3 +1,7 @@
+#
+
+> 请升级至2.0.0+，低版本存在一种无法判断的情况。
+
 🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
@@ -9,6 +13,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master)](https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master)
 
 ## 🎇 说明
+
 基于Aho–Corasick算法实现的敏感词过滤方案，Aho–Corasick算法是由Alfred V. Aho和Margaret J.Corasick 发明的字符串搜索算法，用于在输入的一串字符串中匹配有限组“字典”中的子串。它与普通字符串匹配的不同点在于同时与所有字典串进行匹配。算法均摊情况下具有近似于线性的时间复杂度，约为字符串的长度加所有匹配的数量。
 
 实现详细说明：
@@ -37,18 +42,23 @@
 
 ## 📦 安装
 
-```
+```javascript
 npm i -S mint-filter
 ```
+
 或
-```
+
+```javascript
 yarn add mint-filter
 ```
 
 ## 🎉 使用
 
 ### NodeJS
+
 ```javascript
+// Mint导出是 export default Mint
+// 所以在使用require引用的时，Mint可能挂载在default下面
 const Mint = require('mint-filter')
 const mint = new Mint(['敏感词数组'])
 
@@ -60,6 +70,7 @@ mint.filterSync('word')
 ```
 
 ### TypeScript
+
 ```typescript
 import Mint from 'mint-filter'
 const mint = new Mint(['敏感词数组'])
@@ -72,14 +83,15 @@ mint.filterSync('word')
 ```
 
 ### 特殊匹配
-一般的过滤情况，如`['AB', 'CD', 'EF']`匹配`1AB2CD3EF`会直接完整正常匹配。
-但有一种特殊情况，如`['BD', 'DB']`匹配`BBDB`，在这种情况下，BDB可以划分成BD和DB两种情况，但在这里会直接合并匹配BDB。最终结果会变成`B***`。
+
+有一种特殊情况，如`['AB', 'BA']`匹配`ABA`，在这种情况下，`ABA`可以划分成AB和BA两种情况，这里只匹配前部，最终结果会变成`**A`。
 
 ### 方法
 
 所有方法都提供同步/异步两种。英文字母会全部转换成大写比较。
 
 #### filter(word， replace)
+
 - `word`<[string]>：需要过滤的字符串。
 - `replace`<[boolean]>：是否需要替换敏感词（替换成*，默认开启）。
 - returns: <[Promise]<[FilterValue]>>
@@ -102,11 +114,13 @@ mint.filter('这是一个敏感词字符串', false)
 ```
 
 #### filterSync(word， replace)
+
 - `word`<[string]>：filter的同步方法。
 - `replace`<[boolean]>：是否需要替换敏感词（替换成*，默认开启）。
 - returns: <[FilterValue]>
 
-#### every(word)
+<!-- #### every(word)
+
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[Promise]<[boolean]>>
 
@@ -120,8 +134,11 @@ mint.every('这是一个敏感词字符串')
     .then(data => {
       console.log(data) // true
     })
-```
+``` -->
 
-#### everySync(word)
+#### validator(word)
+
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[boolean]>
+
+判断文本是否通过敏感词验证，发现一个敏感词会立即返回`true`。

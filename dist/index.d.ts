@@ -1,14 +1,10 @@
 import { Tree } from './core';
-interface FilterValue {
+export interface FilterValue {
     text?: string | boolean;
-    filter: Array<string>;
+    filter: Array<string | undefined>;
     pass?: boolean;
 }
 declare class Mint extends Tree {
-    /**
-     * 兼容1.1.6
-     */
-    static default: any;
     constructor(keywords: Array<string | number>);
     private searchKey;
     private filterFunc;
@@ -21,7 +17,7 @@ declare class Mint extends Tree {
      * 同步快速检测字符串是否无敏感词
      * @param word
      */
-    includes(word: string): boolean;
+    validator(word: string): boolean;
     everySync(word: string): boolean;
     /**
      * 同步过滤方法
@@ -36,4 +32,4 @@ declare class Mint extends Tree {
      */
     filter(word: string, replace?: boolean): Promise<FilterValue>;
 }
-export = Mint;
+export default Mint;
