@@ -61,7 +61,7 @@ yarn add mint-filter
 ```javascript
 // Mint导出是 export default Mint
 // 所以在使用require引用的时，Mint可能挂载在default下面
-const Mint = require('mint-filter')
+const Mint = require('mint-filter').default
 const mint = new Mint(['敏感词数组'])
 
 // 异步方法，该方法返回的是一个Promise对象
@@ -143,4 +143,4 @@ mint.every('这是一个敏感词字符串')
 - `word`<[string]>：需要验证的字符串文本。
 - returns: <[boolean]>
 
-判断文本是否通过敏感词验证，发现一个敏感词会立即返回`true`。
+判断文本是否通过敏感词验证，发现一个敏感词会立即返回`false`。
