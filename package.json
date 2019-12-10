@@ -1,11 +1,11 @@
 {
   "name": "mint-filter",
   "version": "2.0.1",
-  "description": "🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。",
+  "description": "基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库。🚀",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "prebuild": "rimraf dist",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "nodemon",
     "test": "jest --forceExit --verbose --detectOpenHandles --coverage",
@@ -14,7 +14,7 @@
     "watch-ts": "tsc -w",
     "build-ts": "tsc",
     "debug": "npm run build && npm run watch-debug",
-    "build": "node ./clear.js && npm run build-ts && npm run tslint -s && echo Building success...",
+    "build": "npm run prebuild && npm run build-ts && npm run tslint -s && echo Building success...",
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
     "serve-debug": "nodemon --inspect dist/index.js",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
@@ -24,15 +24,16 @@
     "url": "git+https://github.com/ZhelinCheng/mint-filter.git"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "@types/node": "^12.7.2",
-    "concurrently": "^4.1.0",
-    "coveralls": "^3.0.3",
-    "husky": "^3.0.4",
-    "jest": "^24.7.1",
-    "nodemon": "^1.18.10",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.5.1"
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.16",
+    "concurrently": "^5.0.1",
+    "coveralls": "^3.0.9",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.1",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.3"
   },
   "keywords": [
     "sensitive word filter",
