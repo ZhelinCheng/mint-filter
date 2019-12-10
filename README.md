@@ -2,14 +2,14 @@
 
 > 请升级至2.0.0+，低版本存在一种无法判断的情况。
 
-🚀基于Aho–Corasick算法，更轻巧的Node.js敏感词过滤库。
+基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库🚀。支持Node.js、浏览器环境。
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
+[![npm version](https://img.shields.io/npm/v/mint-filter.svg?style=flat-square)](https://www.npmjs.com/package/mint-filter)
 [![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D3.0-green.svg)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D7.6.0-green.svg)](https://nodejs.org/en/)
 [![License](https://img.shields.io/github/license/ZhelinCheng/mint-filter.svg)](https://github.com/ZhelinCheng/mint-filter/blob/master/LICENSE)
 [![npm](https://img.shields.io/npm/dm/mint-filter.svg)](https://www.npmjs.com/package/mint-filter)
-![npm version](https://img.shields.io/npm/v/mint-filter.svg?style=flat-square)
 [![Coverage Status](https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master)](https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master)
 
 ## 🎇 说明
@@ -56,7 +56,7 @@ yarn add mint-filter
 
 ## 🎉 使用
 
-### NodeJS
+### CommonJS 引用
 
 ```javascript
 // Mint导出是 export default Mint
@@ -71,7 +71,7 @@ mint.filter('word').then((res) => {})
 mint.filterSync('word')
 ```
 
-### TypeScript
+### TypeScript / ES Module引用
 
 ```typescript
 import Mint from 'mint-filter'
@@ -144,3 +144,17 @@ mint.every('这是一个敏感词字符串')
 - returns: <[boolean]>
 
 判断文本是否通过敏感词验证，发现一个敏感词会立即返回`false`。
+
+## 📚开发
+
+开发：
+
+```shell
+npm run dev
+```
+
+构建：
+
+```shell
+npm run build
+```
