@@ -2,7 +2,7 @@
 
 > 请升级至2.0.0+，低版本存在一种无法判断的情况。
 
-基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库🚀。支持Node.js、浏览器环境。
+基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库🚀。支持Node.js、浏览器等环境（JavaScript/TypeScript）。
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
 [![npm version](https://img.shields.io/npm/v/mint-filter.svg?style=flat-square)](https://www.npmjs.com/package/mint-filter)
