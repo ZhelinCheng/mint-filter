@@ -24,17 +24,17 @@
     "url": "git+https://github.com/ZhelinCheng/mint-filter.git"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.23",
-    "@types/node": "^12.12.16",
-    "concurrently": "^5.0.1",
-    "coveralls": "^3.0.9",
-    "husky": "^3.1.0",
-    "jest": "^24.9.0",
-    "nodemon": "^2.0.1",
-    "rimraf": "^3.0.0",
-    "ts-jest": "^24.2.0",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.3"
+    "@types/jest": "24.0.23",
+    "@types/node": "12.12.18",
+    "concurrently": "5.0.1",
+    "coveralls": "3.0.9",
+    "husky": "3.1.0",
+    "jest": "24.9.0",
+    "nodemon": "2.0.2",
+    "rimraf": "3.0.0",
+    "ts-jest": "24.2.0",
+    "tslint": "5.20.1",
+    "typescript": "3.7.3"
   },
   "keywords": [
     "sensitive word filter",
