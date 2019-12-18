@@ -1,4 +1,7 @@
 {
+  "automerge": true,
+  "automergeType": "branch",
+  "automergeComment": "bors: r+",
   "extends": [
     "config:base"
   ]
