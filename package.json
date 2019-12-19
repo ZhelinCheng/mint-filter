@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/jest": "24.0.24",
-    "@types/node": "12.12.20",
+    "@types/node": "12.12.21",
     "concurrently": "5.0.2",
     "coveralls": "3.0.9",
     "husky": "3.1.0",
