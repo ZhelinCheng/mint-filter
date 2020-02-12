@@ -29,7 +29,7 @@
     "concurrently": "5.1.0",
     "coveralls": "3.0.9",
     "fs-extra": "8.1.0",
-    "husky": "4.2.2",
+    "husky": "4.2.3",
     "jest": "25.1.0",
     "nodemon": "2.0.2",
     "rimraf": "3.0.2",
