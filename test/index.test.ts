@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-12-02 15:15:05
+ * @LastEditTime: 2020-03-05 16:13:58
  * @LastEditors: Zhelin Cheng
  * @Description: Test Index
  */
@@ -13,7 +13,7 @@ const falsyStr = `0、爆，拼拼多多，拼多多；1、拼多爆；2、拼�
 const truthyStr = `这是一段没有敏感词的字符串，我在这里写了很多，十一月一日有很多优惠，我们要多购买。`
 
 describe('Index test one.', () => {
-  let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'abc'])
+  let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC'])
   const returnContentFalsy: FilterValue = {
     text: '0、*，****，***；1、*多*；2、***；3、**多；4、****大促；5、智能***',
     filter: ['爆', '拼', '多多', '多少', '1111', 'ABC'],
@@ -106,6 +106,27 @@ describe('Index test two.', () => {
     expect(mint.filterSync('多多少')).toEqual(expect.objectContaining({
       text: '**少',
       filter: ['多'],
+      pass: false
+    }))
+  })
+})
+
+
+describe('Index test three.', () => {
+  it('Function filterSync 1:', () => {
+    const mint = new Mint(['拼多多', '多少', 'ABC'], {
+      transform: 'capital'
+    })
+    expect(mint.filterSync('拼多少，多少多，abc也是错误的').text).toEqual('拼**，**多，***也是错误的')
+  })
+
+  it('Function filterSync 2:', () => {
+    const mint = new Mint(['多', '多少', 'ABC'], {
+      transform: 'lower'
+    })
+    expect(mint.filterSync('多多少，abc哈哈')).toEqual(expect.objectContaining({
+      text: '**少，***哈哈',
+      filter: ['多', 'abc'],
       pass: false
     }))
   })

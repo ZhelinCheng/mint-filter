@@ -9,8 +9,6 @@
 import Node from './node'
 import { Children } from './index'
 
-// Object兼容
-if (!Object['values']) Object['values'] = (o: any) => Object.keys(o).map(k => o[k])
 
 export default class Tree {
   public root: Node

@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2019-12-02 15:35:20
+ * @LastEditTime: 2020-03-05 16:10:23
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -14,26 +14,49 @@ export interface FilterValue {
   pass?: boolean
 }
 
+enum English {
+  NONE = 'none',
+  CAPITAL = 'capital',
+  LOWER = 'lower'
+}
+
+// 选项参数
+interface OptionsType {
+  transform: 'none' | 'capital' | 'lower'
+}
+
 class Mint extends Tree {
+  private options: OptionsType = { transform: English.NONE }
+
   // 是否替换原文本敏感词
-  constructor(keywords: Array<string | number>) {
+  constructor(keywords: Array<string | number>, options: OptionsType = { transform: English.NONE }) {
     super()
     if (!(keywords instanceof Array && keywords.length >= 1)) {
       throw Error('Mint：敏感词keywords应该是一个数组！')
     }
 
+    const { transform } = options
+
     // 创建Trie树
     for (let item of keywords) {
       if (!item) continue
       item = item.toString()
+
+      if (transform === English.NONE) {
+        this.insert(item)
+        continue;
+      }
+
       if (/[a-z]/i.test(item)) {
         // 有字母
-        this.insert(item.toLocaleUpperCase())
+        item = transform === English.CAPITAL ? item.toLocaleUpperCase() : item.toLocaleLowerCase()
+        this.insert(item)
       } else {
         this.insert(item)
       }
     }
 
+    this.options = options
     this.createFailureTable()
   }
 
@@ -47,7 +70,12 @@ class Mint extends Tree {
     const wordLen = word.length
     let originalWord: string = word
     let filterKeywords: Array<string> = []
-    word = word.toLocaleUpperCase()
+
+    // 字母是否需要转换判断
+    const { transform } = this.options
+    if (transform !== English.NONE) {
+      word = transform === English.CAPITAL ? word.toLocaleUpperCase() : word.toLocaleLowerCase()
+    }
 
     // 保存过滤文本
     let filterTextArr: string[] = []
@@ -110,7 +138,7 @@ class Mint extends Tree {
 
     return {
       text: replace ? filterTextArr.join('') : originalWord,
-      filter: [...new Set(filterKeywords)],
+      filter: Array.from(new Set(filterKeywords)),
       pass: isPass
     }
   }
