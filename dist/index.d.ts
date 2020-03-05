@@ -4,8 +4,12 @@ export interface FilterValue {
     filter: Array<string | undefined>;
     pass?: boolean;
 }
+interface OptionsType {
+    transform: 'none' | 'capital' | 'lower';
+}
 declare class Mint extends Tree {
-    constructor(keywords: Array<string | number>);
+    private options;
+    constructor(keywords: Array<string | number>, options?: OptionsType);
     private searchKey;
     private filterFunc;
     /**

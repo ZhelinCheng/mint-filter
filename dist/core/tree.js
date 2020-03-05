@@ -10,26 +10,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const node_1 = __importDefault(require("./node"));
-// Object兼容
-if (!Object['values'])
-    Object['values'] = (o) => Object.keys(o).map(k => o[k]);
-class Tree {
-    constructor() {
+var node_1 = __importDefault(require("./node"));
+var Tree = /** @class */ (function () {
+    function Tree() {
         this.root = new node_1.default('root');
     }
     /**
      * 插入数据
      * @param key
      */
-    insert(key) {
+    Tree.prototype.insert = function (key) {
         if (!key)
             return false;
-        let keyArr = key.split('');
-        let firstKey = keyArr.shift();
-        let children = this.root.children;
-        let len = keyArr.length;
-        let firstNode = children[firstKey];
+        var keyArr = key.split('');
+        var firstKey = keyArr.shift();
+        var children = this.root.children;
+        var len = keyArr.length;
+        var firstNode = children[firstKey];
         // 第一个key
         if (!firstNode) {
             children[firstKey] = len
@@ -44,20 +41,20 @@ class Tree {
             this.insertNode(children[firstKey], keyArr);
         }
         return true;
-    }
+    };
     /**
      * 插入节点
      * @param node
      * @param word
      */
-    insertNode(node, word) {
-        let len = word.length;
+    Tree.prototype.insertNode = function (node, word) {
+        var len = word.length;
         if (len) {
-            let children;
+            var children = void 0;
             children = node.children;
-            const key = word.shift();
-            let item = children[key];
-            const isWord = len === 1;
+            var key = word.shift();
+            var item = children[key];
+            var isWord = len === 1;
             if (!item) {
                 item = new node_1.default(key, node, isWord);
             }
@@ -67,28 +64,28 @@ class Tree {
             children[key] = item;
             this.insertNode(item, word);
         }
-    }
+    };
     /**
      * 创建Failure表
      */
-    createFailureTable() {
+    Tree.prototype.createFailureTable = function () {
         // 获取树第一层
-        let currQueue = Object.values(this.root.children);
+        var currQueue = Object.values(this.root.children);
         while (currQueue.length > 0) {
-            let nextQueue = [];
-            for (let i = 0; i < currQueue.length; i++) {
-                let node = currQueue[i];
-                let key = node.key;
-                let parent = node.parent;
+            var nextQueue = [];
+            for (var i = 0; i < currQueue.length; i++) {
+                var node = currQueue[i];
+                var key = node.key;
+                var parent_1 = node.parent;
                 node.failure = this.root;
                 // 获取树下一层
-                for (let k in node.children) {
+                for (var k in node.children) {
                     nextQueue.push(node.children[k]);
                 }
-                if (parent) {
-                    let failure = parent.failure;
+                if (parent_1) {
+                    var failure = parent_1.failure;
                     while (failure) {
-                        let children = failure.children[key];
+                        var children = failure.children[key];
                         // 判断是否到了根节点
                         if (children) {
                             node.failure = children;
@@ -100,15 +97,17 @@ class Tree {
             }
             currQueue = nextQueue;
         }
-    }
+    };
     /**
      * 搜索节点
      * @param key
      * @param node
      */
-    search(key, node = this.root.children) {
+    Tree.prototype.search = function (key, node) {
+        if (node === void 0) { node = this.root.children; }
         return node[key];
-    }
-}
+    };
+    return Tree;
+}());
 exports.default = Tree;
 //# sourceMappingURL=tree.js.map

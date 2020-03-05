@@ -7,8 +7,10 @@
  * @Description: Node
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-class Node {
-    constructor(key, parent = undefined, word = false) {
+var Node = /** @class */ (function () {
+    function Node(key, parent, word) {
+        if (parent === void 0) { parent = undefined; }
+        if (word === void 0) { word = false; }
         // 子节点的引用（goto表）
         this.children = {};
         // failure表，用于匹配失败后的跳转
@@ -17,6 +19,7 @@ class Node {
         this.parent = parent;
         this.word = word;
     }
-}
+    return Node;
+}());
 exports.default = Node;
 //# sourceMappingURL=node.js.map
