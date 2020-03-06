@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 16:56:25
+ * @LastEditTime: 2020-03-06 18:16:00
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -60,6 +60,7 @@ class Mint extends Tree {
 
   }
 
+  // TODO: 该方法整体得修改
   private filterFunc(word: string, every: boolean = false, replace: boolean = true): FilterValue {
     let startIndex = 0
     let endIndex = startIndex
@@ -91,8 +92,6 @@ class Mint extends Tree {
       let key: string = word[endIndex]
       let nextNode: Node | boolean = this.search(key, searchNode.children)
       filterTextArr[endIndex] = key
-
-      // console.log(endIndex, key)
       // 判断是否找到
       if (nextNode) {
         // keywords += nextNode.key
@@ -120,6 +119,9 @@ class Mint extends Tree {
           startIndex = endIndex - 1
           isStart = isPass = true
           nextNode = searchNode
+        } else if (!nextNode && searchNode.word) {
+          endIndex--
+          nextNode = false
         } else {
           nextNode = false
         }
@@ -180,9 +182,10 @@ class Mint extends Tree {
 
 export default Mint
 
-/* if (require.main === module) {
-  let m = new Mint([])
-  console.log(m.filterSync(`ABA`))
-  // let m = new Mint(['多少', '少'])
-  // console.log(m.filterSync(`多少少`))
-} */
+// if (require.main === module) {
+//   let m = new Mint(['操', '我操你'])
+//   console.log(m.filterSync(`我操呀`))
+//   // console.log(m.root.children['我'].children['操'])
+//   // let m = new Mint(['多少', '少'])
+//   // console.log(m.filterSync(`多少少`))
+// }

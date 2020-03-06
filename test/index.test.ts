@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-05 16:13:58
+ * @LastEditTime: 2020-03-06 18:09:27
  * @LastEditors: Zhelin Cheng
  * @Description: Test Index
  */
@@ -9,14 +9,14 @@
 
 import Mint, { FilterValue } from '../src/index'
 
-const falsyStr = `0、爆，拼拼多多，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC`
+const falsyStr = `0、爆，拼拼多多，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC；6、我操呀`
 const truthyStr = `这是一段没有敏感词的字符串，我在这里写了很多，十一月一日有很多优惠，我们要多购买。`
 
 describe('Index test one.', () => {
-  let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC'])
+  let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
   const returnContentFalsy: FilterValue = {
-    text: '0、*，****，***；1、*多*；2、***；3、**多；4、****大促；5、智能***',
-    filter: ['爆', '拼', '多多', '多少', '1111', 'ABC'],
+    text: '0、*，****，***；1、*多*；2、***；3、**多；4、****大促；5、智能***；6、我*呀',
+    filter: ['爆', '拼', '多多', '多少', '1111', 'ABC', '操'],
     pass: false
   }
   const returnContentTruthy: FilterValue = {
