@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-05 16:10:23
+ * @LastEditTime: 2020-03-06 16:56:25
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -29,12 +29,8 @@ class Mint extends Tree {
   private options: OptionsType = { transform: English.NONE }
 
   // 是否替换原文本敏感词
-  constructor(keywords: Array<string | number>, options: OptionsType = { transform: English.NONE }) {
+  constructor(keywords: Array<string | number> = [], options: OptionsType = { transform: English.NONE }) {
     super()
-    if (!(keywords instanceof Array && keywords.length >= 1)) {
-      throw Error('Mint：敏感词keywords应该是一个数组！')
-    }
-
     const { transform } = options
 
     // 创建Trie树
@@ -185,7 +181,7 @@ class Mint extends Tree {
 export default Mint
 
 /* if (require.main === module) {
-  let m = new Mint(['B', 'BA'])
+  let m = new Mint([])
   console.log(m.filterSync(`ABA`))
   // let m = new Mint(['多少', '少'])
   // console.log(m.filterSync(`多少少`))

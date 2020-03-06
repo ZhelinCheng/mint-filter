@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-05 16:10:23
+ * @LastEditTime: 2020-03-06 16:56:25
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -67,12 +67,10 @@ var Mint = /** @class */ (function (_super) {
     __extends(Mint, _super);
     // 是否替换原文本敏感词
     function Mint(keywords, options) {
+        if (keywords === void 0) { keywords = []; }
         if (options === void 0) { options = { transform: English.NONE }; }
         var _this = _super.call(this) || this;
         _this.options = { transform: English.NONE };
-        if (!(keywords instanceof Array && keywords.length >= 1)) {
-            throw Error('Mint：敏感词keywords应该是一个数组！');
-        }
         var transform = options.transform;
         // 创建Trie树
         for (var _i = 0, keywords_1 = keywords; _i < keywords_1.length; _i++) {
@@ -215,7 +213,7 @@ var Mint = /** @class */ (function (_super) {
 }(core_1.Tree));
 exports.default = Mint;
 /* if (require.main === module) {
-  let m = new Mint(['B', 'BA'])
+  let m = new Mint([])
   console.log(m.filterSync(`ABA`))
   // let m = new Mint(['多少', '少'])
   // console.log(m.filterSync(`多少少`))

@@ -9,7 +9,7 @@ interface OptionsType {
 }
 declare class Mint extends Tree {
     private options;
-    constructor(keywords: Array<string | number>, options?: OptionsType);
+    constructor(keywords?: Array<string | number>, options?: OptionsType);
     private searchKey;
     private filterFunc;
     /**
