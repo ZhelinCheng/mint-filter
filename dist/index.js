@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 21:07:33
+ * @LastEditTime: 2020-03-06 23:47:07
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -114,36 +114,41 @@ var Mint = /** @class */ (function (_super) {
         }
         // 过滤后的文字
         var filterText = '';
-        // 文字
-        var key = word[0];
-        var nextKey = '';
         // 当前树位置
-        var currNode = this.search(key, this.root.children);
+        var currNode = this.root;
         var nextNode;
         // 起始位置
         var startIndex = 0;
         var isStart = false;
-        for (var endIndex = 1; endIndex <= wordLen; endIndex++) {
-            console.log(currNode.key, key, endIndex);
-            if (currNode) {
-                if (currNode.word) {
-                    console.log(startIndex, endIndex - 1);
-                    continue;
-                }
-            }
-            key = word[endIndex];
+        var failure;
+        for (var endIndex = 0; endIndex < wordLen; endIndex++) {
+            var key = word[endIndex];
             nextNode = this.search(key, currNode.children);
-            if (nextNode) {
-                currNode = nextNode;
-                if (!isStart) {
-                    isStart = true;
-                    startIndex = endIndex - 1;
+            if (!nextNode) {
+                failure = currNode.failure;
+                while (failure) {
+                    nextNode = this.search(key, currNode.children);
+                    if (nextNode)
+                        break;
+                    failure = failure.failure;
                 }
             }
-            else {
-                currNode = currNode.failure;
+            if (nextNode) {
+                isStart = true;
+                failure = nextNode;
+                do {
+                    if (failure.word) {
+                        console.log('>>', endIndex);
+                    }
+                    else {
+                        // console.log('<<', endIndex)
+                    }
+                    failure = failure.failure;
+                } while (failure.key !== 'root');
+                currNode = nextNode;
+                continue;
             }
-            // currNode = this.search(key, currNode ? currNode.children : this.root.children)
+            currNode = this.root;
         }
         return {
             text: filterText,
@@ -277,7 +282,7 @@ var Mint = /** @class */ (function (_super) {
 exports.default = Mint;
 if (require.main === module) {
     var m = new Mint(['操', '我操你']);
-    console.log(m.filterSync("\u6211\u64CD\u554A"));
+    console.log(m.filterSync("\u6211\u64CD\u4F60,"));
     // console.log(m.root.children['我'].children['操'])
     // let m = new Mint(['多少', '少'])
     // console.log(m.filterSync(`多少少`))

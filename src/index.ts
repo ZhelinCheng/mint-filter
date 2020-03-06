@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 21:07:33
+ * @LastEditTime: 2020-03-06 23:47:07
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -76,39 +76,42 @@ class Mint extends Tree {
     // 过滤后的文字
     let filterText = ''
 
-    // 文字
-    let key = word[0]
-    let nextKey = ''
-
     // 当前树位置
-    let currNode: Node | undefined = this.search(key, this.root.children)
+    let currNode: Node | undefined = this.root
     let nextNode: Node | undefined
 
     // 起始位置
     let startIndex = 0
     let isStart = false
-    for (let endIndex = 1; endIndex <= wordLen; endIndex++) {
-      console.log(currNode.key, key, endIndex)
-      if (currNode) {
-        if (currNode.word) {
-          console.log(startIndex, endIndex - 1)
-          continue
-        }
-      }
+    let failure
 
-      key = word[endIndex]
+    for (let endIndex = 0; endIndex < wordLen; endIndex++) {
+      const key = word[endIndex]
       nextNode = this.search(key, currNode.children)
-      if (nextNode) {
-        currNode = nextNode
-
-        if (!isStart) {
-          isStart = true
-          startIndex = endIndex - 1
+      if (!nextNode) {
+        failure = currNode.failure
+        while (failure) {
+          nextNode = this.search(key, currNode.children)
+          if (nextNode) break
+          failure = failure.failure
         }
-      } else {
-        currNode = currNode.failure
       }
-      // currNode = this.search(key, currNode ? currNode.children : this.root.children)
+
+      if (nextNode) {
+        isStart = true
+        failure = nextNode
+        do {
+          if (failure.word) {
+           console.log('>>', endIndex)
+          } else {
+           // console.log('<<', endIndex)
+          }
+          failure = failure.failure
+        } while (failure.key !== 'root');
+        currNode = nextNode
+        continue
+      }
+      currNode = this.root
     }
 
     return {
@@ -244,7 +247,7 @@ export default Mint
 
 if (require.main === module) {
   let m = new Mint(['操', '我操你'])
-  console.log(m.filterSync(`我操啊`))
+  console.log(m.filterSync(`我操你,`))
   // console.log(m.root.children['我'].children['操'])
   // let m = new Mint(['多少', '少'])
   // console.log(m.filterSync(`多少少`))
