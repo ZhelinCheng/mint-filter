@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 18:16:00
+ * @LastEditTime: 2020-03-06 21:07:33
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -95,85 +95,144 @@ var Mint = /** @class */ (function (_super) {
         _this.createFailureTable();
         return _this;
     }
-    Mint.prototype.searchKey = function () {
-    };
-    // TODO: 该方法整体得修改
     Mint.prototype.filterFunc = function (word, every, replace) {
         if (every === void 0) { every = false; }
         if (replace === void 0) { replace = true; }
-        var startIndex = 0;
-        var endIndex = startIndex;
-        var wordLen = word.length;
-        var originalWord = word;
-        var filterKeywords = [];
-        // 字母是否需要转换判断
+        // 字符大小写转换
         var transform = this.options.transform;
         if (transform !== English.NONE) {
             word = transform === English.CAPITAL ? word.toLocaleUpperCase() : word.toLocaleLowerCase();
         }
-        // 保存过滤文本
-        var filterTextArr = [];
-        var keyword = [];
-        // 是否通过，无敏感词
-        var isPass = true;
-        // 下一个Node与当前Node
-        var searchNode = this.root;
-        // let currNode: Node | boolean
-        // 是否开始匹配
+        // 字符长度
+        var wordLen = word.length;
+        if (wordLen <= 0) {
+            return {
+                text: word,
+                filter: [],
+                pass: true
+            };
+        }
+        // 过滤后的文字
+        var filterText = '';
+        // 文字
+        var key = word[0];
+        var nextKey = '';
+        // 当前树位置
+        var currNode = this.search(key, this.root.children);
+        var nextNode;
+        // 起始位置
+        var startIndex = 0;
         var isStart = false;
-        while (endIndex < wordLen) {
-            var key = word[endIndex];
-            var nextNode = this.search(key, searchNode.children);
-            filterTextArr[endIndex] = key;
-            // 判断是否找到
+        for (var endIndex = 1; endIndex <= wordLen; endIndex++) {
+            console.log(currNode.key, key, endIndex);
+            if (currNode) {
+                if (currNode.word) {
+                    console.log(startIndex, endIndex - 1);
+                    continue;
+                }
+            }
+            key = word[endIndex];
+            nextNode = this.search(key, currNode.children);
             if (nextNode) {
-                // keywords += nextNode.key
+                currNode = nextNode;
                 if (!isStart) {
                     isStart = true;
-                    startIndex = endIndex;
-                }
-                if (nextNode.word) {
-                    // console.log('==>', key, startIndex, endIndex)
-                    var keywordLen = endIndex - startIndex + 1;
-                    isStart = isPass = false;
-                    keyword = filterTextArr.splice(startIndex, keywordLen, '*'.repeat(keywordLen));
-                    filterKeywords.push(keyword.join(''));
-                    nextNode = false;
-                    if (every)
-                        break;
-                }
-            }
-            else if (isStart) {
-                isStart = false;
-                // 在失配路线上找到子元素
-                searchNode = searchNode.failure;
-                nextNode = this.search(key, searchNode.children);
-                if (nextNode && searchNode.key !== 'root') {
                     startIndex = endIndex - 1;
-                    isStart = isPass = true;
-                    nextNode = searchNode;
                 }
-                else if (!nextNode && searchNode.word) {
-                    endIndex--;
-                    nextNode = false;
-                }
-                else {
-                    nextNode = false;
-                }
-                endIndex--;
             }
             else {
-                isStart = false;
+                currNode = currNode.failure;
             }
-            searchNode = nextNode || searchNode.failure || this.root;
-            endIndex++;
+            // currNode = this.search(key, currNode ? currNode.children : this.root.children)
         }
         return {
-            text: replace ? filterTextArr.join('') : originalWord,
-            filter: Array.from(new Set(filterKeywords)),
-            pass: isPass
+            text: filterText,
+            filter: [],
+            pass: true
         };
     };
+    // TODO: 该方法整体得修改
+    /* private filterFunc(word: string, every: boolean = false, replace: boolean = true): FilterValue {
+      let startIndex = 0
+      let endIndex = startIndex
+      const wordLen = word.length
+      let originalWord: string = word
+      let filterKeywords: Array<string> = []
+  
+      // 字母是否需要转换判断
+      const { transform } = this.options
+      if (transform !== English.NONE) {
+        word = transform === English.CAPITAL ? word.toLocaleUpperCase() : word.toLocaleLowerCase()
+      }
+  
+      // 保存过滤文本
+      let filterTextArr: string[] = []
+      let keyword: string[] = []
+  
+      // 是否通过，无敏感词
+      let isPass = true
+  
+      // 下一个Node与当前Node
+      let searchNode: Node = this.root
+      // let currNode: Node | boolean
+  
+      // 是否开始匹配
+      let isStart = false
+  
+      while (endIndex < wordLen) {
+        let key: string = word[endIndex]
+        let nextNode: Node | boolean = this.search(key, searchNode.children)
+        filterTextArr[endIndex] = key
+        // 判断是否找到
+        if (nextNode) {
+          // keywords += nextNode.key
+  
+          if (!isStart) {
+            isStart = true
+            startIndex = endIndex
+          }
+  
+          console.log(nextNode.key)
+  
+          if (nextNode.word) {
+            // console.log('==>', key, startIndex, endIndex)
+            const keywordLen = endIndex - startIndex + 1
+            isStart = isPass = false
+            keyword = filterTextArr.splice(startIndex, keywordLen, '*'.repeat(keywordLen))
+            filterKeywords.push(keyword.join(''))
+            nextNode = false
+            if (every) break
+          }
+        } else if (isStart) {
+          isStart = false
+          // 在失配路线上找到子元素
+          searchNode = searchNode.failure
+          nextNode = this.search(key, searchNode.children)
+          if (nextNode && searchNode.key !== 'root') {
+            startIndex = endIndex - 1
+            isStart = isPass = true
+            nextNode = searchNode
+          } else if (!nextNode && searchNode.word) {
+            endIndex--
+            nextNode = false
+          } else {
+            nextNode = false
+          }
+          endIndex--
+        } else {
+          isStart = false
+        }
+  
+        searchNode = nextNode || searchNode.failure || this.root
+        endIndex++
+      }
+  
+      return {
+        text: replace ? filterTextArr.join('') : originalWord,
+        filter: Array.from(new Set(filterKeywords)),
+        pass: isPass
+      }
+    } */
     /**
      * 异步快速检测字符串是否无敏感词
      * @param word
@@ -216,11 +275,11 @@ var Mint = /** @class */ (function (_super) {
     return Mint;
 }(core_1.Tree));
 exports.default = Mint;
-// if (require.main === module) {
-//   let m = new Mint(['操', '我操你'])
-//   console.log(m.filterSync(`我操呀`))
-//   // console.log(m.root.children['我'].children['操'])
-//   // let m = new Mint(['多少', '少'])
-//   // console.log(m.filterSync(`多少少`))
-// }
+if (require.main === module) {
+    var m = new Mint(['操', '我操你']);
+    console.log(m.filterSync("\u6211\u64CD\u554A"));
+    // console.log(m.root.children['我'].children['操'])
+    // let m = new Mint(['多少', '少'])
+    // console.log(m.filterSync(`多少少`))
+}
 //# sourceMappingURL=index.js.map
