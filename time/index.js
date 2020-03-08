@@ -39,6 +39,8 @@ strBox['100k'] = readFile(resolve('./100000'))
 
 console.log(`===== 性能测试，${replace ? '替换' : '不替换'}关键词 =====`)
 console.time('耗时：')
-m.filterSync(strBox[key], replace)
+m.filterSync(strBox[key], {
+  replace
+})
 console.timeEnd('耗时：')
 console.log(`===== 字符长度，${key} =====`)

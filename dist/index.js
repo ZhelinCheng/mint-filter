@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 23:47:07
+ * @LastEditTime: 2020-03-08 17:49:12
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -65,7 +65,6 @@ var English;
 })(English || (English = {}));
 var Mint = /** @class */ (function (_super) {
     __extends(Mint, _super);
-    // 是否替换原文本敏感词
     function Mint(keywords, options) {
         if (keywords === void 0) { keywords = []; }
         if (options === void 0) { options = { transform: English.NONE }; }
@@ -95,196 +94,136 @@ var Mint = /** @class */ (function (_super) {
         _this.createFailureTable();
         return _this;
     }
-    Mint.prototype.filterFunc = function (word, every, replace) {
-        if (every === void 0) { every = false; }
-        if (replace === void 0) { replace = true; }
+    /**
+     * 收集敏感词
+     * @param node 节点
+     */
+    Mint.prototype.collectWord = function (node) {
+        var arr = [];
+        do {
+            arr.push(node.key);
+            node = node.parent;
+        } while (node);
+        return arr.reverse().join('');
+    };
+    /**
+     * 筛选方法
+     * @param word 文字
+     * @param every 验证全部
+     * @param replace 是否替换
+     */
+    Mint.prototype.filterFunc = function (text, options) {
+        if (options === void 0) { options = {}; }
+        var _a = options.replace, replace = _a === void 0 ? true : _a, _b = options.every, every = _b === void 0 ? true : _b, _c = options.words, words = _c === void 0 ? true : _c;
         // 字符大小写转换
         var transform = this.options.transform;
         if (transform !== English.NONE) {
-            word = transform === English.CAPITAL ? word.toLocaleUpperCase() : word.toLocaleLowerCase();
+            text = transform === English.CAPITAL ? text.toLocaleUpperCase() : text.toLocaleLowerCase();
         }
         // 字符长度
-        var wordLen = word.length;
+        var wordLen = text.length;
         if (wordLen <= 0) {
             return {
-                text: word,
-                filter: [],
+                text: text,
+                wrods: [],
                 pass: true
             };
         }
         // 过滤后的文字
         var filterText = '';
+        var filterWords = new Set([]);
         // 当前树位置
         var currNode = this.root;
         var nextNode;
-        // 起始位置
-        var startIndex = 0;
-        var isStart = false;
+        // 失配路线
         var failure;
+        var isStart = false;
+        // 是否通过验证
+        var isPass = true;
         for (var endIndex = 0; endIndex < wordLen; endIndex++) {
-            var key = word[endIndex];
+            var key = text[endIndex];
+            filterText += key;
             nextNode = this.search(key, currNode.children);
             if (!nextNode) {
                 failure = currNode.failure;
                 while (failure) {
-                    nextNode = this.search(key, currNode.children);
+                    nextNode = this.search(key, failure.children);
                     if (nextNode)
                         break;
                     failure = failure.failure;
                 }
             }
             if (nextNode) {
-                isStart = true;
                 failure = nextNode;
                 do {
                     if (failure.word) {
-                        console.log('>>', endIndex);
-                    }
-                    else {
-                        // console.log('<<', endIndex)
+                        isPass = false;
+                        var len = failure.depth;
+                        if (replace) {
+                            filterText = filterText.slice(0, -len) + '*'.repeat(len);
+                        }
+                        if (words) {
+                            filterWords.add(this.collectWord(failure));
+                        }
                     }
                     failure = failure.failure;
                 } while (failure.key !== 'root');
                 currNode = nextNode;
-                continue;
+                if (every) {
+                    continue;
+                }
+                else {
+                    break;
+                }
             }
+            isStart = false;
             currNode = this.root;
         }
         return {
             text: filterText,
-            filter: [],
-            pass: true
+            wrods: Array.from(filterWords),
+            pass: isPass
         };
     };
-    // TODO: 该方法整体得修改
-    /* private filterFunc(word: string, every: boolean = false, replace: boolean = true): FilterValue {
-      let startIndex = 0
-      let endIndex = startIndex
-      const wordLen = word.length
-      let originalWord: string = word
-      let filterKeywords: Array<string> = []
-  
-      // 字母是否需要转换判断
-      const { transform } = this.options
-      if (transform !== English.NONE) {
-        word = transform === English.CAPITAL ? word.toLocaleUpperCase() : word.toLocaleLowerCase()
-      }
-  
-      // 保存过滤文本
-      let filterTextArr: string[] = []
-      let keyword: string[] = []
-  
-      // 是否通过，无敏感词
-      let isPass = true
-  
-      // 下一个Node与当前Node
-      let searchNode: Node = this.root
-      // let currNode: Node | boolean
-  
-      // 是否开始匹配
-      let isStart = false
-  
-      while (endIndex < wordLen) {
-        let key: string = word[endIndex]
-        let nextNode: Node | boolean = this.search(key, searchNode.children)
-        filterTextArr[endIndex] = key
-        // 判断是否找到
-        if (nextNode) {
-          // keywords += nextNode.key
-  
-          if (!isStart) {
-            isStart = true
-            startIndex = endIndex
-          }
-  
-          console.log(nextNode.key)
-  
-          if (nextNode.word) {
-            // console.log('==>', key, startIndex, endIndex)
-            const keywordLen = endIndex - startIndex + 1
-            isStart = isPass = false
-            keyword = filterTextArr.splice(startIndex, keywordLen, '*'.repeat(keywordLen))
-            filterKeywords.push(keyword.join(''))
-            nextNode = false
-            if (every) break
-          }
-        } else if (isStart) {
-          isStart = false
-          // 在失配路线上找到子元素
-          searchNode = searchNode.failure
-          nextNode = this.search(key, searchNode.children)
-          if (nextNode && searchNode.key !== 'root') {
-            startIndex = endIndex - 1
-            isStart = isPass = true
-            nextNode = searchNode
-          } else if (!nextNode && searchNode.word) {
-            endIndex--
-            nextNode = false
-          } else {
-            nextNode = false
-          }
-          endIndex--
-        } else {
-          isStart = false
-        }
-  
-        searchNode = nextNode || searchNode.failure || this.root
-        endIndex++
-      }
-  
-      return {
-        text: replace ? filterTextArr.join('') : originalWord,
-        filter: Array.from(new Set(filterKeywords)),
-        pass: isPass
-      }
-    } */
     /**
-     * 异步快速检测字符串是否无敏感词
-     * @param word
+     * 快速验证是否存在敏感词
+     * @param text 文本
      */
-    Mint.prototype.every = function (word) {
-        return Promise.resolve(this.filterFunc(word, true).pass);
+    Mint.prototype.validator = function (text) {
+        return this.filterFunc(text, {
+            replace: false,
+            every: false,
+            words: false
+        }).pass;
     };
     /**
-     * 同步快速检测字符串是否无敏感词
-     * @param word
+     * 过滤方法
+     * @param text 文本
+     * @param options 选项
      */
-    Mint.prototype.validator = function (word) {
-        return !this.filterFunc(word, true).pass;
-    };
-    Mint.prototype.everySync = function (word) {
-        return this.filterFunc(word, true).pass;
-    };
-    /**
-     * 同步过滤方法
-     * @param word
-     * @param replace
-     */
-    Mint.prototype.filterSync = function (word, replace) {
-        if (replace === void 0) { replace = true; }
-        return this.filterFunc(word, false, replace);
+    Mint.prototype.filterSync = function (text, options) {
+        return this.filterFunc(text, options);
     };
     /**
      * 异步过滤方法
-     * @param word
-     * @param replace
+     * @param text 文本
+     * @param options 选项
      */
-    Mint.prototype.filter = function (word, replace) {
-        if (replace === void 0) { replace = true; }
+    Mint.prototype.filter = function (text, options) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, Promise.resolve(this.filterFunc(word, false, replace))];
+                return [2 /*return*/, Promise.resolve(this.filterFunc(text, options))];
             });
         });
     };
     return Mint;
 }(core_1.Tree));
 exports.default = Mint;
-if (require.main === module) {
-    var m = new Mint(['操', '我操你']);
-    console.log(m.filterSync("\u6211\u64CD\u4F60,"));
-    // console.log(m.root.children['我'].children['操'])
-    // let m = new Mint(['多少', '少'])
-    // console.log(m.filterSync(`多少少`))
-}
+// if (require.main === module) {
+//   let m = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
+//   console.log(m.validator(`0、爆，拼拼多多，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC；6、我操；7、我操呀`))
+//   // console.log(m.root.children['我'].children['操'])
+//   // let m = new Mint(['多少', '少'])
+//   // console.log(m.filterSync(`多少少`))
+// }
 //# sourceMappingURL=index.js.map

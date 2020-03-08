@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 19:31:09
+ * @LastEditTime: 2020-03-08 15:30:04
  * @LastEditors: Zhelin Cheng
  * @Description: Tree
  */
@@ -14,7 +14,9 @@ export default class Tree {
   public root: Node
 
   constructor() {
-    this.root = new Node('root')
+    this.root = new Node('root', {
+      depth: 0
+    })
   }
 
   /**
@@ -23,24 +25,26 @@ export default class Tree {
    */
   insert(key: string): boolean {
     if (!key) return false
-    let keyArr = key.split('')
-    let firstKey = keyArr.shift()
+    let keyArr = key.split('').reverse()
+    let firstKey = keyArr.pop()
     let children = this.root.children
-    let len = keyArr.length
+    const len = keyArr.length
     let firstNode = children[firstKey]
 
     // 第一个key
     if (!firstNode) {
       children[firstKey] = len
         ? new Node(firstKey)
-        : new Node(firstKey, undefined, true)
+        : new Node(firstKey, {
+          word: true
+        })
     } else if (!len) {
       firstNode.word = true
     }
 
     // 其他多余的key
-    if (keyArr.length >= 1) {
-      this.insertNode(children[firstKey], keyArr)
+    if (len >= 1) {
+      this.insertNode(children[firstKey], keyArr, len + 1)
     }
 
     return true
@@ -51,25 +55,29 @@ export default class Tree {
    * @param node
    * @param word
    */
-  insertNode(node: Node, word: string[]) {
+  insertNode(node: Node, word: string[], starLen: number) {
     let len = word.length
 
     if (len) {
       let children: Children
       children = node.children
 
-      const key = word.shift()
+      const key = word.pop()
       let item = children[key]
       const isWord = len === 1
 
       if (!item) {
-        item = new Node(key, node, isWord)
+        item = new Node(key, {
+          parent: node,
+          word: isWord,
+          depth: starLen - len + 1
+        })
       } else if (!item.word) {
         item.word = isWord
       }
 
       children[key] = item
-      this.insertNode(item, word)
+      this.insertNode(item, word, starLen)
     }
   }
 

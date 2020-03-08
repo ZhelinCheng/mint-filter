@@ -1,11 +1,10 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 18:42:35
+ * @LastEditTime: 2020-03-08 17:47:42
  * @LastEditors: Zhelin Cheng
  * @Description: Test Index
  */
-
 
 import Mint, { FilterValue } from '../src/index'
 
@@ -15,13 +14,13 @@ const truthyStr = `这是一段没有敏感词的字符串，我在这里写了�
 describe('Index test one.', () => {
   let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
   const returnContentFalsy: FilterValue = {
-    text: '0、*，****，***；1、*多*；2、***；3、**多；4、****大促；5、智能***；6、我*；7、我*呀',
-    filter: ['爆', '拼', '多多', '多少', '1111', 'ABC', '操'],
+    text: '0、*，****，***；1、*多*；2、***；3、***；4、****大促；5、智能***；6、我*；7、我*呀',
+    wrods: ['爆', '拼', '拼多多', '多多', '多少', '少多', '1111', 'ABC', '操'],
     pass: false
   }
   const returnContentTruthy: FilterValue = {
     text: truthyStr,
-    filter: [],
+    wrods: [],
     pass: true
   }
 
@@ -32,65 +31,73 @@ describe('Index test one.', () => {
 
     expect(root.children['A'].children['B'].children['C'].failure)
       .toEqual(expect.objectContaining(root))
+
+    expect(root.children['A'].children['B'].children['C'].depth)
+      .toEqual(3)
+
+    expect(root.depth).toEqual(0)
   })
 
   // To be falsy
-  it('Function filterSync:', () => {
+  it('Function filterSync 1:', () => {
     expect(mint.filterSync(falsyStr)).toEqual(expect.objectContaining(returnContentFalsy))
   })
 
-  it('Function filterSync:', () => {
-    expect(mint.filterSync(falsyStr, false)).toEqual(expect.objectContaining({
+  it('Function filterSync 2:', () => {
+    expect(mint.filterSync(falsyStr, {
+      replace: false
+    })).toEqual(expect.objectContaining({
       ...returnContentFalsy,
       text: falsyStr
     }))
-  })
-
-  it('Function filter:', async () => {
-    expect(await mint.filter(falsyStr)).toEqual(expect.objectContaining(returnContentFalsy))
-  })
-
-  it('Function filter:', async () => {
-    expect(await mint.filter(falsyStr, false)).toEqual(expect.objectContaining({
-      ...returnContentFalsy,
-      text: falsyStr
-    }))
-  })
-
-  it('Function everySync:', () => {
-    expect(mint.everySync(falsyStr)).toBeFalsy()
-  })
-
-  it('Function every:', async () => {
-    let data = await mint.every(falsyStr)
-    // expect(data).toBeTruthy()
-    expect(data).toBeFalsy()
-  })
-
-  it('Function includes:', async () => {
-    expect(mint.validator(falsyStr)).toBeTruthy()
   })
 
   // To be truthy
-  it('Function filterSync:', () => {
+  it('Function filterSync 3:', () => {
     expect(mint.filterSync(truthyStr)).toEqual(expect.objectContaining(returnContentTruthy))
   })
 
-  it('Function filter:', async () => {
+  it('Function filterSync 4:', () => {
+    expect(mint.filterSync('')).toEqual(expect.objectContaining({
+      text: '',
+      wrods: [],
+      pass: true
+    }))
+  })
+
+  it('Function filterSync 5:', () => {
+    expect(mint.filterSync(falsyStr, {
+      words: false
+    })).toEqual(expect.objectContaining({
+      ...returnContentFalsy,
+      wrods: []
+    }))
+  })
+
+  it('Function filter 1:', async () => {
+    expect(await mint.filter(falsyStr)).toEqual(expect.objectContaining(returnContentFalsy))
+  })
+
+  it('Function filter 2:', async () => {
+    expect(await mint.filter(falsyStr, {
+      replace: false
+    })).toEqual(expect.objectContaining({
+      ...returnContentFalsy,
+      text: falsyStr
+    }))
+  })
+
+  it('Function filter 3:', async () => {
     expect(await mint.filter(truthyStr)).toEqual(expect.objectContaining(returnContentTruthy))
   })
 
-  it('Function everySync:', () => {
-    expect(mint.everySync(truthyStr)).toBeTruthy()
+
+  it('Function validator falsy:', async () => {
+    expect(mint.validator(falsyStr)).toBeFalsy()
   })
 
-  it('Function every:', async () => {
-    let data = await mint.every(truthyStr)
-    expect(data).toBeTruthy()
-  })
-
-  it('Function includes:', async () => {
-    expect(mint.validator(truthyStr)).toBeFalsy()
+  it('Function validator truthy:', async () => {
+    expect(mint.validator(truthyStr)).toBeTruthy()
   })
 })
 
@@ -104,8 +111,8 @@ describe('Index test two.', () => {
   it('Function filterSync 2:', () => {
     const mint = new Mint(['多', '多少'])
     expect(mint.filterSync('多多少')).toEqual(expect.objectContaining({
-      text: '**少',
-      filter: ['多'],
+      text: '***',
+      wrods: ['多', '多少'],
       pass: false
     }))
   })
@@ -125,8 +132,8 @@ describe('Index test three.', () => {
       transform: 'lower'
     })
     expect(mint.filterSync('多多少，abc哈哈')).toEqual(expect.objectContaining({
-      text: '**少，***哈哈',
-      filter: ['多', 'abc'],
+      text: '***，***哈哈',
+      wrods: ['多', '多少', 'abc'],
       pass: false
     }))
   })

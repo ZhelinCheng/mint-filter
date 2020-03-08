@@ -13,7 +13,7 @@ export default class Tree {
      * @param node
      * @param word
      */
-    insertNode(node: Node, word: string[]): void;
+    insertNode(node: Node, word: string[], starLen: number): void;
     /**
      * 创建Failure表
      */

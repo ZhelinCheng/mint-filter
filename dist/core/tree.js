@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-06 19:31:09
+ * @LastEditTime: 2020-03-08 15:30:04
  * @LastEditors: Zhelin Cheng
  * @Description: Tree
  */
@@ -13,7 +13,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var node_1 = __importDefault(require("./node"));
 var Tree = /** @class */ (function () {
     function Tree() {
-        this.root = new node_1.default('root');
+        this.root = new node_1.default('root', {
+            depth: 0
+        });
     }
     /**
      * 插入数据
@@ -22,8 +24,8 @@ var Tree = /** @class */ (function () {
     Tree.prototype.insert = function (key) {
         if (!key)
             return false;
-        var keyArr = key.split('');
-        var firstKey = keyArr.shift();
+        var keyArr = key.split('').reverse();
+        var firstKey = keyArr.pop();
         var children = this.root.children;
         var len = keyArr.length;
         var firstNode = children[firstKey];
@@ -31,14 +33,16 @@ var Tree = /** @class */ (function () {
         if (!firstNode) {
             children[firstKey] = len
                 ? new node_1.default(firstKey)
-                : new node_1.default(firstKey, undefined, true);
+                : new node_1.default(firstKey, {
+                    word: true
+                });
         }
         else if (!len) {
             firstNode.word = true;
         }
         // 其他多余的key
-        if (keyArr.length >= 1) {
-            this.insertNode(children[firstKey], keyArr);
+        if (len >= 1) {
+            this.insertNode(children[firstKey], keyArr, len + 1);
         }
         return true;
     };
@@ -47,22 +51,26 @@ var Tree = /** @class */ (function () {
      * @param node
      * @param word
      */
-    Tree.prototype.insertNode = function (node, word) {
+    Tree.prototype.insertNode = function (node, word, starLen) {
         var len = word.length;
         if (len) {
             var children = void 0;
             children = node.children;
-            var key = word.shift();
+            var key = word.pop();
             var item = children[key];
             var isWord = len === 1;
             if (!item) {
-                item = new node_1.default(key, node, isWord);
+                item = new node_1.default(key, {
+                    parent: node,
+                    word: isWord,
+                    depth: starLen - len + 1
+                });
             }
             else if (!item.word) {
                 item.word = isWord;
             }
             children[key] = item;
-            this.insertNode(item, word);
+            this.insertNode(item, word, starLen);
         }
     };
     /**
