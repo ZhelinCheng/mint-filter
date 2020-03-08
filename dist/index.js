@@ -2,7 +2,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-08 17:49:12
+ * @LastEditTime: 2020-03-08 18:11:24
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -137,7 +137,6 @@ var Mint = /** @class */ (function (_super) {
         var nextNode;
         // 失配路线
         var failure;
-        var isStart = false;
         // 是否通过验证
         var isPass = true;
         for (var endIndex = 0; endIndex < wordLen; endIndex++) {
@@ -169,14 +168,13 @@ var Mint = /** @class */ (function (_super) {
                     failure = failure.failure;
                 } while (failure.key !== 'root');
                 currNode = nextNode;
-                if (every) {
+                if (every || isPass) {
                     continue;
                 }
                 else {
                     break;
                 }
             }
-            isStart = false;
             currNode = this.root;
         }
         return {
@@ -219,11 +217,12 @@ var Mint = /** @class */ (function (_super) {
     return Mint;
 }(core_1.Tree));
 exports.default = Mint;
-// if (require.main === module) {
-//   let m = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
-//   console.log(m.validator(`0、爆，拼拼多多，拼多多；1、拼多爆；2、拼多少；3、多少多；4、1111大促；5、智能ABC；6、我操；7、我操呀`))
-//   // console.log(m.root.children['我'].children['操'])
-//   // let m = new Mint(['多少', '少'])
-//   // console.log(m.filterSync(`多少少`))
-// }
+/* if (require.main === module) {
+  let m = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
+  console.log(m.validator('哈哈哈哈111操'))
+  // console.log(m.root.children['我'].children['操'])
+  // let m = new Mint(['多少', '少'])
+  // console.log(m.filterSync(`多少少`))
+}
+ */
 //# sourceMappingURL=index.js.map
