@@ -10,7 +10,7 @@
 const nodeResolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
 const { uglify } = require('rollup-plugin-uglify')
-const babel = require('rollup-plugin-babel');
+const babel = require('rollup-plugin-babel')
 const common = require('./rollup.js')
 
 const prod = process.env.NODE_ENV === 'production'
@@ -23,7 +23,7 @@ module.exports = {
     // When export and export default are not used at the same time, set legacy to true.
     // legacy: true,
     name: common.name,
-    banner: common.banner,
+    banner: common.banner
   },
   plugins: [
     nodeResolve({
@@ -31,9 +31,21 @@ module.exports = {
       extensions: ['.ts', '.js']
     }),
     commonjs({
-      include: 'node_modules/**',
+      include: 'node_modules/**'
     }),
-    babel(),
+    babel({
+      exclude: 'node_modules/**',
+      babelrc: false,
+      presets: [['@babel/preset-env', {
+        modules: false,
+        targets: {
+          chrome: 46,
+          ie: 9
+        }
+      }]],
+      runtimeHelpers: true,
+      plugins: ['@babel/plugin-transform-runtime', { corejs: 3 }]
+    }),
     common.getCompiler(),
     (prod && uglify())
   ]

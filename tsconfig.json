@@ -13,7 +13,7 @@
         "paths": {
             "*": [
                 "node_modules/*",
-                "src/types/*"
+                "src1/types/*"
             ]
         }
     },
@@ -24,6 +24,6 @@
         "dist"
     ],
     "include": [
-        "src/**/*"
+        "src1/**/*"
     ]
 }
