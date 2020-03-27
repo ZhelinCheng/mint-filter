@@ -9,9 +9,9 @@
 import { Children } from './index'
 
 interface NodeOptionsType {
-  parent?: Node | undefined
-  word?: boolean
-  depth?: number
+  parent?: Node | undefined;
+  word?: boolean;
+  depth?: number;
 }
 
 export default class Node {
@@ -26,7 +26,7 @@ export default class Node {
   // failure表，用于匹配失败后的跳转
   public failure: Node | undefined = undefined
   // 字符深度
-  public depth: number = 0
+  public depth = 0
 
   constructor (
     key: string,

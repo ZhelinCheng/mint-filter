@@ -23,7 +23,7 @@ jobs:
     - name: npm install, lint, build, and test
       run: |
         npm install
-        npm run tslint
+        npm run lint
         npm run test
         npm run build
       env:

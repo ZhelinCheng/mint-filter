@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-08 15:30:04
+ * @LastEditTime: 2020-03-27 11:48:52
  * @LastEditors: Zhelin Cheng
  * @Description: Tree
  */
@@ -9,11 +9,10 @@
 import Node from './node'
 import { Children } from './index'
 
-
 export default class Tree {
   public root: Node
 
-  constructor() {
+  constructor () {
     this.root = new Node('root', {
       depth: 0
     })
@@ -23,13 +22,13 @@ export default class Tree {
    * 插入数据
    * @param key
    */
-  insert(key: string): boolean {
+  insert (key: string): boolean {
     if (!key) return false
-    let keyArr = key.split('').reverse()
-    let firstKey = keyArr.pop()
-    let children = this.root.children
+    const keyArr = key.split('').reverse()
+    const firstKey = keyArr.pop()
+    const children = this.root.children
     const len = keyArr.length
-    let firstNode = children[firstKey]
+    const firstNode = children[firstKey]
 
     // 第一个key
     if (!firstNode) {
@@ -55,12 +54,11 @@ export default class Tree {
    * @param node
    * @param word
    */
-  insertNode(node: Node, word: string[], starLen: number) {
-    let len = word.length
+  insertNode (node: Node, word: string[], starLen: number): void {
+    const len = word.length
 
     if (len) {
-      let children: Children
-      children = node.children
+      const children: Children = node.children
 
       const key = word.pop()
       let item = children[key]
@@ -84,25 +82,25 @@ export default class Tree {
   /**
    * 创建Failure表
    */
-  createFailureTable() {
+  createFailureTable (): void {
     // 获取树第一层
     let currQueue: Array<Node> = Object.values(this.root.children)
     while (currQueue.length > 0) {
-      let nextQueue: Array<Node> = []
+      const nextQueue: Array<Node> = []
       for (let i = 0; i < currQueue.length; i++) {
-        let node: Node = currQueue[i]
-        let key = node.key
-        let parent = node.parent
+        const node: Node = currQueue[i]
+        const key = node.key
+        const parent = node.parent
         node.failure = this.root
         // 获取树下一层
-        for (let k in node.children) {
+        for (const k in node.children) {
           nextQueue.push(node.children[k])
         }
 
         if (parent) {
-          let failure: any = parent.failure
+          let failure: Node = parent.failure
           while (failure) {
-            let children: any = failure.children[key]
+            const children: Node = failure.children[key]
 
             // 判断是否到了根节点
             if (children) {
@@ -123,7 +121,7 @@ export default class Tree {
    * @param key
    * @param node
    */
-  search(key: string, node: Children = this.root.children): Node | undefined {
+  search (key: string, node: Children = this.root.children): Node | undefined {
     return node[key]
   }
 }

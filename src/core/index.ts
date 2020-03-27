@@ -10,7 +10,7 @@ import Node from './node'
 import Tree from './tree'
 
 export interface Children {
-  [key: string]: Node
+  [key: string]: Node;
 }
 
 export {

@@ -1,7 +1,7 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-08 18:11:24
+ * @LastEditTime: 2020-03-27 11:27:14
  * @LastEditors: Zhelin Cheng
  * @Description: 主文件
  */
@@ -9,15 +9,15 @@
 import { Node, Tree } from './core'
 
 export interface FilterValue {
-  text?: string | boolean
-  wrods: Array<string | undefined>,
-  pass?: boolean
+  text?: string | boolean;
+  wrods: Array<string | undefined>;
+  pass?: boolean;
 }
 
 interface FilterOptions {
-  replace?: boolean
-  words?: boolean
-  every?: boolean
+  replace?: boolean;
+  words?: boolean;
+  every?: boolean;
 }
 
 enum English {
@@ -28,13 +28,13 @@ enum English {
 
 // 选项参数
 interface OptionsType {
-  transform: 'none' | 'capital' | 'lower'
+  transform: 'none' | 'capital' | 'lower';
 }
 
 class Mint extends Tree {
   private options: OptionsType = { transform: English.NONE }
 
-  constructor(keywords: Array<string | number> = [], options: OptionsType = { transform: English.NONE }) {
+  constructor (keywords: Array<string | number> = [], options: OptionsType = { transform: English.NONE }) {
     super()
     const { transform } = options
 
@@ -45,7 +45,7 @@ class Mint extends Tree {
 
       if (transform === English.NONE) {
         this.insert(item)
-        continue;
+        continue
       }
 
       if (/[a-z]/i.test(item)) {
@@ -65,7 +65,7 @@ class Mint extends Tree {
    * 收集敏感词
    * @param node 节点
    */
-  private collectWord(node: Node): string {
+  private collectWord (node: Node): string {
     const arr = []
     do {
       arr.push(node.key)
@@ -80,7 +80,7 @@ class Mint extends Tree {
    * @param every 验证全部
    * @param replace 是否替换
    */
-  private filterFunc(text: string, options: FilterOptions = {}): FilterValue {
+  private filterFunc (text: string, options: FilterOptions = {}): FilterValue {
     const {
       replace = true,
       every = true,
@@ -146,7 +146,7 @@ class Mint extends Tree {
             }
           }
           failure = failure.failure
-        } while (failure.key !== 'root');
+        } while (failure.key !== 'root')
         currNode = nextNode
 
         if (every || isPass) {
@@ -169,7 +169,7 @@ class Mint extends Tree {
    * 快速验证是否存在敏感词
    * @param text 文本
    */
-  validator(text: string): boolean {
+  validator (text: string): boolean {
     return this.filterFunc(text, {
       replace: false,
       every: false,
@@ -182,7 +182,7 @@ class Mint extends Tree {
    * @param text 文本
    * @param options 选项
    */
-  filterSync(text: string, options?: FilterOptions): FilterValue {
+  filterSync (text: string, options?: FilterOptions): FilterValue {
     return this.filterFunc(text, options)
   }
 
@@ -191,7 +191,7 @@ class Mint extends Tree {
    * @param text 文本
    * @param options 选项
    */
-  async filter(text: string, options?: FilterOptions): Promise<FilterValue> {
+  async filter (text: string, options?: FilterOptions): Promise<FilterValue> {
     return Promise.resolve(this.filterFunc(text, options))
   }
 }

@@ -40,7 +40,6 @@ describe('Core test.', () => {
     }))
   })
 
-
   it('Class Tree:', () => {
     const tree = new Tree()
     expect(tree.root).toEqual(expect.objectContaining({}))
@@ -51,7 +50,7 @@ describe('Core test.', () => {
     expect(tree2.insert('test')).toBeTruthy()
     expect(tree2.insert('t')).toBeTruthy()
     expect(tree2.insert('te')).toBeTruthy()
-    expect(tree2.root.children['t'].word).toBeTruthy()
-    expect(tree2.root.children['t'].children['e'].word).toBeTruthy()
+    expect(tree2.root.children.t.word).toBeTruthy()
+    expect(tree2.root.children.t.children.e.word).toBeTruthy()
   })
 })

@@ -4,6 +4,8 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.rpt2_cache
+.nyc_output
 
 # Runtime data
 pids

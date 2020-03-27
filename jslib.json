@@ -1,0 +1,11 @@
+{
+    "name": "mint-filter",
+    "npmname": "mint-filter",
+    "umdname": "mint",
+    "username": "Zhelin Cheng",
+    "type": "ts",
+    "module": "umd,esm,commonjs",
+    "test": null,
+    "lang": "zh",
+    "version": "1.6.0"
+}

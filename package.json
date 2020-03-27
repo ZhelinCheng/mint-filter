@@ -1,11 +1,14 @@
 {
   "name": "mint-filter",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库。🚀",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "jsnext:main": "dist/index.esm.js",
+  "module": "dist/index.esm.js",
+  "types": "./types/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf ./dist && rimraf ./types",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "nodemon",
     "test": "jest --forceExit --verbose --detectOpenHandles --coverage",
@@ -13,29 +16,14 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "watch-ts": "tsc -w",
     "build-ts": "tsc",
-    "debug": "npm run build && npm run watch-debug",
-    "build": "npm run prebuild && npm run build-ts && npm run tslint -s && echo Building success...",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
-    "serve-debug": "nodemon --inspect dist/index.js",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZhelinCheng/mint-filter.git"
-  },
-  "devDependencies": {
-    "@types/jest": "25.1.4",
-    "@types/node": "12.12.31",
-    "concurrently": "5.1.0",
-    "coveralls": "3.0.11",
-    "fs-extra": "9.0.0",
-    "husky": "4.2.3",
-    "jest": "25.2.3",
-    "nodemon": "2.0.2",
-    "rimraf": "3.0.2",
-    "ts-jest": "25.2.1",
-    "tslint": "6.1.0",
-    "typescript": "3.8.3"
+    "release": "npm test && npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags",
+    "lint": "eslint -c .eslintrc.js 'src/**/*.ts' 'src/**/*.ts'",
+    "lint:fix": "eslint -c .eslintrc.js 'src/**/*.ts' 'test/**/*.ts' --fix",
+    "build:self": "rollup -c config/rollup.config.js",
+    "build:esm": "rollup -c config/rollup.config.esm.js",
+    "build:aio": "rollup -c config/rollup.config.aio.js",
+    "build:aio.min": "cross-env NODE_ENV=production npm run build:aio",
+    "build": "npm run prebuild && npm run lint && npm run build:self && npm run build:esm && npm run build:aio && npm run build:aio.min"
   },
   "keywords": [
     "sensitive word filter",
@@ -55,7 +43,43 @@
   "homepage": "https://github.com/ZhelinCheng/mint-filter#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run tslint"
+      "pre-commit": "npm run lint"
     }
-  }
+  },
+  "files": [
+    "/dist",
+    "*.d.ts"
+  ],
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/runtime": "^7.9.2",
+    "@js-lib/cli": "^1.6.0",
+    "@types/jest": "^25.1.4",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "concurrently": "^5.1.0",
+    "coveralls": "^3.0.11",
+    "cross-env": "7.0.2",
+    "eslint": "^6.8.0",
+    "husky": "^4.2.3",
+    "jest": "^25.2.3",
+    "nodemon": "^2.0.2",
+    "rimraf": "3.0.2",
+    "rollup": "2.2.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-typescript2": "0.26.0",
+    "rollup-plugin-uglify": "6.0.4",
+    "standard": "^14.3.3",
+    "ts-jest": "^25.2.1",
+    "ts-node": "8.8.1",
+    "tslib": "1.11.1",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {}
 }
