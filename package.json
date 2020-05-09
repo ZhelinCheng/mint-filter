@@ -33,7 +33,7 @@
     "jest": "26.0.1",
     "nodemon": "2.0.3",
     "rimraf": "3.0.2",
-    "ts-jest": "25.5.0",
+    "ts-jest": "25.5.1",
     "tslint": "6.1.2",
     "typescript": "3.8.3"
   },
