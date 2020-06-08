@@ -2,8 +2,8 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-08 18:11:24
- * @LastEditors: Zhelin Cheng
+ * @LastEditTime : 2020-06-08 15:59:06
+ * @LastEditors  : Zhelin Cheng
  * @Description: 主文件
  */
 var __extends = (this && this.__extends) || (function () {
@@ -125,7 +125,7 @@ var Mint = /** @class */ (function (_super) {
         if (wordLen <= 0) {
             return {
                 text: text,
-                wrods: [],
+                words: [],
                 pass: true
             };
         }
@@ -179,7 +179,7 @@ var Mint = /** @class */ (function (_super) {
         }
         return {
             text: filterText,
-            wrods: Array.from(filterWords),
+            words: Array.from(filterWords),
             pass: isPass
         };
     };

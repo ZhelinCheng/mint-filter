@@ -1,8 +1,8 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-08 18:11:24
- * @LastEditors: Zhelin Cheng
+ * @LastEditTime : 2020-06-08 15:59:06
+ * @LastEditors  : Zhelin Cheng
  * @Description: 主文件
  */
 
@@ -10,7 +10,7 @@ import { Node, Tree } from './core'
 
 export interface FilterValue {
   text?: string | boolean
-  wrods: Array<string | undefined>,
+  words: Array<string | undefined>,
   pass?: boolean
 }
 
@@ -98,7 +98,7 @@ class Mint extends Tree {
     if (wordLen <= 0) {
       return {
         text: text,
-        wrods: [],
+        words: [],
         pass: true
       }
     }
@@ -160,7 +160,7 @@ class Mint extends Tree {
 
     return {
       text: filterText,
-      wrods: Array.from(filterWords),
+      words: Array.from(filterWords),
       pass: isPass
     }
   }

@@ -1,7 +1,7 @@
 import { Tree } from './core';
 export interface FilterValue {
     text?: string | boolean;
-    wrods: Array<string | undefined>;
+    words: Array<string | undefined>;
     pass?: boolean;
 }
 interface FilterOptions {
