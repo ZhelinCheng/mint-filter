@@ -1,8 +1,8 @@
 /*
  * @Author: Zhelin Cheng
  * @Date: 2019-08-24 12:19:20
- * @LastEditTime: 2020-03-08 17:47:42
- * @LastEditors: Zhelin Cheng
+ * @LastEditTime : 2020-06-08 16:11:20
+ * @LastEditors  : Zhelin Cheng
  * @Description: Test Index
  */
 
@@ -15,12 +15,12 @@ describe('Index test one.', () => {
   let mint = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
   const returnContentFalsy: FilterValue = {
     text: '0、*，****，***；1、*多*；2、***；3、***；4、****大促；5、智能***；6、我*；7、我*呀',
-    wrods: ['爆', '拼', '拼多多', '多多', '多少', '少多', '1111', 'ABC', '操'],
+    words: ['爆', '拼', '拼多多', '多多', '多少', '少多', '1111', 'ABC', '操'],
     pass: false
   }
   const returnContentTruthy: FilterValue = {
     text: truthyStr,
-    wrods: [],
+    words: [],
     pass: true
   }
 
@@ -60,7 +60,7 @@ describe('Index test one.', () => {
   it('Function filterSync 4:', () => {
     expect(mint.filterSync('')).toEqual(expect.objectContaining({
       text: '',
-      wrods: [],
+      words: [],
       pass: true
     }))
   })
@@ -70,7 +70,7 @@ describe('Index test one.', () => {
       words: false
     })).toEqual(expect.objectContaining({
       ...returnContentFalsy,
-      wrods: []
+      words: []
     }))
   })
 
@@ -112,7 +112,7 @@ describe('Index test two.', () => {
     const mint = new Mint(['多', '多少'])
     expect(mint.filterSync('多多少')).toEqual(expect.objectContaining({
       text: '***',
-      wrods: ['多', '多少'],
+      words: ['多', '多少'],
       pass: false
     }))
   })
@@ -133,7 +133,7 @@ describe('Index test three.', () => {
     })
     expect(mint.filterSync('多多少，abc哈哈')).toEqual(expect.objectContaining({
       text: '***，***哈哈',
-      wrods: ['多', '多少', 'abc'],
+      words: ['多', '多少', 'abc'],
       pass: false
     }))
   })
