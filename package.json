@@ -24,7 +24,7 @@
     "url": "git+https://github.com/ZhelinCheng/mint-filter.git"
   },
   "devDependencies": {
-    "@types/jest": "26.0.5",
+    "@types/jest": "26.0.6",
     "@types/node": "12.12.31",
     "concurrently": "5.2.0",
     "coveralls": "3.1.0",
