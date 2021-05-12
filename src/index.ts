@@ -18,6 +18,7 @@ interface FilterOptions {
   replace?: boolean
   words?: boolean
   every?: boolean
+  replaceWith?: string
 }
 
 enum English {
@@ -84,7 +85,8 @@ class Mint extends Tree {
     const {
       replace = true,
       every = true,
-      words = true
+      words = true,
+      replaceWith = '*'
     } = options
 
     // 字符大小写转换
@@ -138,7 +140,7 @@ class Mint extends Tree {
             const len = failure.depth
 
             if (replace) {
-              filterText = filterText.slice(0, -len) + '*'.repeat(len)
+              filterText = filterText.slice(0, -len) + replaceWith.repeat(len)
             }
 
             if (words) {
