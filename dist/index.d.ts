@@ -8,6 +8,7 @@ interface FilterOptions {
     replace?: boolean;
     words?: boolean;
     every?: boolean;
+    replaceWith?: string;
 }
 interface OptionsType {
     transform: 'none' | 'capital' | 'lower';

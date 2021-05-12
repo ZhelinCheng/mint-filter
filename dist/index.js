@@ -10,10 +10,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -114,7 +116,7 @@ var Mint = /** @class */ (function (_super) {
      */
     Mint.prototype.filterFunc = function (text, options) {
         if (options === void 0) { options = {}; }
-        var _a = options.replace, replace = _a === void 0 ? true : _a, _b = options.every, every = _b === void 0 ? true : _b, _c = options.words, words = _c === void 0 ? true : _c;
+        var _a = options.replace, replace = _a === void 0 ? true : _a, _b = options.every, every = _b === void 0 ? true : _b, _c = options.words, words = _c === void 0 ? true : _c, _d = options.replaceWith, replaceWith = _d === void 0 ? '*' : _d;
         // 字符大小写转换
         var transform = this.options.transform;
         if (transform !== English.NONE) {
@@ -159,7 +161,7 @@ var Mint = /** @class */ (function (_super) {
                         isPass = false;
                         var len = failure.depth;
                         if (replace) {
-                            filterText = filterText.slice(0, -len) + '*'.repeat(len);
+                            filterText = filterText.slice(0, -len) + replaceWith.repeat(len);
                         }
                         if (words) {
                             filterWords.add(this.collectWord(failure));
