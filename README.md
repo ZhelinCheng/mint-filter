@@ -1,5 +1,3 @@
-#
-
 > 请升级至3.0.0+，低版本存在一种无法判断的情况。
 
 基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库🚀。支持Node.js、浏览器等环境（JavaScript/TypeScript），支持敏感词替换成*号。

@@ -1,9 +1,0 @@
-{
-  "automerge": true,
-  "automergeType": "pr",
-  "automergeComment": "bors: r+",
-  "requiredStatusChecks": null,
-  "extends": [
-    "config:base"
-  ]
-}

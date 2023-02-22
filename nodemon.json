@@ -1,13 +1,11 @@
 {
-  "watch": [
-    "dist/**/*.js"
-  ],
-  "ignore": [
-    ".git",
-    "node_modules"
-  ],
-  "exec": "node --inspect dist/index.js",
-  "env": {
-    "NODE_ENV": "development"
+    "watch": ["src/**/*.ts"],
+    "ignore": [".git", "node_modules", "*.test.ts"],
+    "exec": "ts-node src/index.ts",
+    "execMap": {
+      "ts": "typescript"
+    },
+    "env": {
+      "NODE_ENV": "development"
+    }
   }
-}

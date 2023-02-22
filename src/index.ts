@@ -1,210 +1,122 @@
 /*
- * @Author: Zhelin Cheng
- * @Date: 2019-08-24 12:19:20
- * @LastEditTime : 2020-06-08 15:59:06
- * @LastEditors  : Zhelin Cheng
- * @Description: 主文件
+ * @Author       : 程哲林
+ * @Date         : 2023-02-20 20:03:15
+ * @LastEditors  : 程哲林
+ * @LastEditTime : 2023-02-22 21:57:56
+ * @FilePath     : /mint-filter/src/index.ts
+ * @Description  : 未添加文件描述
  */
 
-import { Node, Tree } from './core'
+import Node from './node';
 
-export interface FilterValue {
-  text?: string | boolean
-  words: Array<string | undefined>,
-  pass?: boolean
+/* public void delete(String key)
+{  root = delete(root, key, 0);  }
+private Node delete(Node x, String key, int d)
+{
+   if (x == null) return null;
+   if (d == key.length())
+      x.val = null;
+   else
+   {
+      char c = key.charAt(d);
+      x.next[c] = delete(x.next[c], key, d+1);
 }
-
-interface FilterOptions {
-  replace?: boolean
-  words?: boolean
-  every?: boolean
-  replaceWith?: string
+   if (x.val != null) return x;
+   for (char c = 0; c < R; c++)
+      if (x.next[c] != null) return x;
+   return null;
 }
+ */
 
-enum English {
-  NONE = 'none',
-  CAPITAL = 'capital',
-  LOWER = 'lower'
-}
+class Mint {
+  root: Node = new Node('root');
 
-// 选项参数
-interface OptionsType {
-  transform: 'none' | 'capital' | 'lower'
-}
-
-class Mint extends Tree {
-  private options: OptionsType = { transform: English.NONE }
-
-  constructor(keywords: Array<string | number> = [], options: OptionsType = { transform: English.NONE }) {
-    super()
-    const { transform } = options
-
-    // 创建Trie树
-    for (let item of keywords) {
-      if (!item) continue
-      item = item.toString()
-
-      if (transform === English.NONE) {
-        this.insert(item)
-        continue;
-      }
-
-      if (/[a-z]/i.test(item)) {
-        // 有字母
-        item = transform === English.CAPITAL ? item.toLocaleUpperCase() : item.toLocaleLowerCase()
-        this.insert(item)
-      } else {
-        this.insert(item)
-      }
+  constructor(keys: string[]) {
+    const len = keys.length;
+    for (let idx = 0; idx < len; idx++) {
+      this.add(keys[idx]);
     }
-
-    this.options = options
-    this.createFailureTable()
   }
 
-  /**
-   * 收集敏感词
-   * @param node 节点
-   */
-  private collectWord(node: Node): string {
-    const arr = []
-    do {
-      arr.push(node.key)
-      node = node.parent
-    } while (node)
-    return arr.reverse().join('')
+  delete(key: string) {
+    this.pop(key, key.length, this.root);
   }
 
-  /**
-   * 筛选方法
-   * @param word 文字
-   * @param every 验证全部
-   * @param replace 是否替换
-   */
-  private filterFunc(text: string, options: FilterOptions = {}): FilterValue {
-    const {
-      replace = true,
-      every = true,
-      words = true,
-      replaceWith = '*'
-    } = options
-
-    // 字符大小写转换
-    const { transform } = this.options
-    if (transform !== English.NONE) {
-      text = transform === English.CAPITAL ? text.toLocaleUpperCase() : text.toLocaleLowerCase()
+  private pop(
+    key: string,
+    len: number,
+    node?: Node,
+    carry: 'update' | 'delete' = 'delete',
+    idx = 0,
+  ): 'update' | 'delete' {
+    if (!node) {
+      return 'delete';
     }
 
-    // 字符长度
-    const wordLen = text.length
-    if (wordLen <= 0) {
-      return {
-        text: text,
-        words: [],
-        pass: true
-      }
-    }
+    if (idx === len) {
+      node.word = false;
 
-    // 过滤后的文字
-    let filterText = ''
-    const filterWords = new Set([])
-
-    // 当前树位置
-    let currNode: Node | undefined = this.root
-    let nextNode: Node | undefined
-
-    // 失配路线
-    let failure
-
-    // 是否通过验证
-    let isPass = true
-
-    for (let endIndex = 0; endIndex < wordLen; endIndex++) {
-      const key = text[endIndex]
-      filterText += key
-      nextNode = this.search(key, currNode.children)
-      if (!nextNode) {
-        failure = currNode.failure
-        while (failure) {
-          nextNode = this.search(key, failure.children)
-          if (nextNode) break
-          failure = failure.failure
+      // 需要删除的情况
+      let isDel = true;
+      for (const k in node.children) {
+        if (k) {
+          isDel = false;
+          break;
         }
       }
 
-      if (nextNode) {
-        failure = nextNode
-        do {
-          if (failure.word) {
-            isPass = false
-            const len = failure.depth
+      return isDel ? carry : 'update';
+    } else {
+      const val = key[idx];
+      const next = node.children[val];
+      const type = this.pop(
+        key,
+        len,
+        next,
+        node.word ? 'update' : carry,
+        idx + 1,
+      );
 
-            if (replace) {
-              filterText = filterText.slice(0, -len) + replaceWith.repeat(len)
-            }
-
-            if (words) {
-              filterWords.add(this.collectWord(failure))
-            }
-          }
-          failure = failure.failure
-        } while (failure.key !== 'root');
-        currNode = nextNode
-
-        if (every || isPass) {
-          continue
-        } else {
-          break
-        }
+      if (type === 'delete') {
+        console.log(node);
+        delete node.children[val];
       }
-      currNode = this.root
-    }
 
-    return {
-      text: filterText,
-      words: Array.from(filterWords),
-      pass: isPass
+      return type;
     }
   }
 
-  /**
-   * 快速验证是否存在敏感词
-   * @param text 文本
-   */
-  validator(text: string): boolean {
-    return this.filterFunc(text, {
-      replace: false,
-      every: false,
-      words: false
-    }).pass
+  add(key: string): Node {
+    const len = key.length;
+    return this.put(key, len);
   }
 
-  /**
-   * 过滤方法
-   * @param text 文本
-   * @param options 选项
-   */
-  filterSync(text: string, options?: FilterOptions): FilterValue {
-    return this.filterFunc(text, options)
-  }
+  private put(key: string, len: number, node?: Node, idx = 0): Node {
+    if (!node) {
+      node = this.root;
+    }
 
-  /**
-   * 异步过滤方法
-   * @param text 文本
-   * @param options 选项
-   */
-  async filter(text: string, options?: FilterOptions): Promise<FilterValue> {
-    return Promise.resolve(this.filterFunc(text, options))
+    // 基线条件
+    if (idx === len) {
+      node.word = true;
+      node.count++;
+      return node;
+    }
+
+    const val = key[idx];
+    const next = node.children[val];
+    node.children[val] = this.put(key, len, next || new Node(val), idx + 1);
+
+    node.count++;
+    return node;
   }
 }
 
-export default Mint
-
-/* if (require.main === module) {
-  let m = new Mint(['拼', '拼多多', '多少', '多多', '爆', '少多', 1111, 'ABC', '操', '我操你'])
-  console.log(m.validator('哈哈哈哈111操'))
-  // console.log(m.root.children['我'].children['操'])
-  // let m = new Mint(['多少', '少'])
-  // console.log(m.filterSync(`多少少`))
-}
+/* const mint = new Mint(['she', 'shes', 'abc', 'sh']);
+console.log(mint.delete('sh'), JSON.stringify(mint.root));
  */
+
+const mint = new Mint(['she', 'shx']);
+console.log(JSON.stringify(mint.root));
+
+export default Mint;
