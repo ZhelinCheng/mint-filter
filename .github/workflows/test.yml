@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     steps:
     - uses: actions/checkout@v1
@@ -23,7 +23,7 @@ jobs:
     - name: npm install, lint, build, and test
       run: |
         npm install
-        npm run tslint
+        npm run lint
         npm run test
         npm run build
       env:
