@@ -55,73 +55,18 @@ yarn add mint-filter
 
 ## 🎉 使用
 
-### CommonJS 引用
-
-```javascript
-// Mint导出是 export default Mint
-// 所以在使用require引用的时，Mint可能挂载在default下面
-const Mint = require('mint-filter').default
-const mint = new Mint(['敏感词数组'])
-
-// 异步方法，该方法返回的是一个Promise对象
-mint.filter('word').then((res) => {})
-
-// 同步方法
-mint.filterSync('word')
-```
-
 ### TypeScript / ES Module引用
 
 ```typescript
 import Mint from 'mint-filter'
 const mint = new Mint(['敏感词数组'])
 
-// 异步方法，该方法返回的是一个Promise对象
-mint.filter('word').then((res) => {})
-
-// 同步方法
-mint.filterSync('word')
+// 基本使用
+mint.filter('需要验证的文本')
 ```
 
 ### 方法
 
-所有方法都提供同步/异步两种。英文字母会全部转换成大写比较。
-
-#### filter(word, options)
-
-- `word`<[string]>：需要过滤的字符串。
-- `options`<[FilterOptions]>：是一个对象，支持的参数`replace`是否将敏感词替换成*、`words`是否提取敏感词，全部为布尔值。
-- returns: <[Promise]<[FilterValue]>>
-
-该方法将返回过滤文本和被过滤的敏感词。
-
-```typescript
-import Mint from 'mint-filter'
-const mint = new Mint(['敏感词'])
-
-mint.filter('这是一个敏感词字符串')
-    .then(data => {
-      console.log(data) // { text: '这是一个***字符串', words: [ '敏感词' ], pass: false }
-    })
-
-mint.filter('这是一个敏感词字符串', { replace: false })
-    .then(data => {
-      console.log(data) // { text: '这是一个敏感词字符串', words: [ '敏感词' ], pass: false }
-    })
-```
-
-#### filterSync(word， replace)
-
-- `word`<[string]>：filter的同步方法。
-- `options`<[FilterOptions]>：是一个对象，支持的参数`replace`是否将敏感词替换成*、`words`是否提取敏感词，全部为布尔值。
-- returns: <[FilterValue]>
-
-#### validator(word) 快速校验文本
-
-- `word`<[string]>：需要验证的字符串文本。
-- returns: <[boolean]>
-
-判断文本是否通过敏感词验证，发现敏感词会立即返回`false`。
 
 ## 📚开发
 

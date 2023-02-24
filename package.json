@@ -64,5 +64,8 @@
   "bugs": {
     "url": "https://github.com/ZhelinCheng/mint-filter/issues"
   },
-  "homepage": "https://github.com/ZhelinCheng/mint-filter#readme"
+  "homepage": "https://github.com/ZhelinCheng/mint-filter#readme",
+  "dependencies": {
+    "typedoc": "^0.23.25"
+  }
 }
