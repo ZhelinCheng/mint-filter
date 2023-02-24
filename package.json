@@ -16,6 +16,7 @@
     "prepare": "husky install",
     "commitlint": "commitlint",
     "lint-staged": "lint-staged",
+    "doc": "typedoc --plugin typedoc-plugin-markdown --out docs src/index.ts",
     "test": "jest --forceExit --verbose --detectOpenHandles --coverage --verbose",
     "watch-test": "npm run test -- --watchAll",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
@@ -36,6 +37,8 @@
     "prettier": "2.8.4",
     "rimraf": "4.1.2",
     "ts-jest": "^29.0.5",
+    "typedoc": "^0.23.25",
+    "typedoc-plugin-markdown": "^3.14.0",
     "typescript": "4.9.5"
   },
   "lint-staged": {
@@ -64,8 +67,5 @@
   "bugs": {
     "url": "https://github.com/ZhelinCheng/mint-filter/issues"
   },
-  "homepage": "https://github.com/ZhelinCheng/mint-filter#readme",
-  "dependencies": {
-    "typedoc": "^0.23.25"
-  }
+  "homepage": "https://github.com/ZhelinCheng/mint-filter#readme"
 }

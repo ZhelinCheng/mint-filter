@@ -2,7 +2,7 @@
  * @Author       : 程哲林
  * @Date         : 2023-02-20 20:03:15
  * @LastEditors  : 程哲林
- * @LastEditTime : 2023-02-24 14:23:27
+ * @LastEditTime : 2023-02-24 21:43:36
  * @FilePath     : /mint-filter/src/index.ts
  * @Description  : 未添加文件描述
  */
@@ -13,6 +13,11 @@ interface FilterOptions {
   // sensitive?: boolean;
   replace?: boolean;
   verify?: boolean;
+}
+
+interface FilterData {
+  words: string[];
+  text: string;
 }
 
 class Mint {
@@ -110,18 +115,39 @@ class Mint {
 
   /**
    * 过滤文本
-   * @param text 需要过滤的文本
-   * @param options 过滤选项
-   * @returns 输出
+   *
+   * @param text 文本内容
+   * @param options.replace 是否替换掉敏感词部位
+   * @returns FilterData
+   *
+   * @example
+   *
+   * ```typescript
+   * mint.add('无法通过')
+   * let status = mint.filter('这是一句无法通过的文本')
+   * console.log(status) // { words: ["无法通过"], text: "这是一句****的文本" }
+   *
+   * status = mint.filter('这是一句无法通过的文本', { replace: false })
+   * console.log(status) // { words: ["无法通过"], text: "这是一句无法通过的文本" }
+   * ```
    */
-  filter(text: string, options?: Pick<FilterOptions, 'replace'>) {
+  filter(text: string, options?: Pick<FilterOptions, 'replace'>): FilterData {
     return this.search(text, options);
   }
 
   /**
-   * 验证文本是否有敏感词
-   * @param text 需要验证的文本
-   * @returns 是否通过
+   * 检测文本是否通过验证
+   *
+   * @param text 文本内容
+   * @returns Boolean
+   *
+   * @example
+   *
+   * ```typescript
+   * mint.add('无法通过')
+   * const status = mint.verify('这是一句无法通过的文本')
+   * console.log(status) // false
+   * ```
    */
   verify(text: string) {
     const { words } = this.search(text, { verify: true });
@@ -130,8 +156,15 @@ class Mint {
 
   /**
    * 删除关键字
-   * @param key 关键字
-   * @returns update ｜ delete
+   *
+   * @param key 关键词
+   * @returns 状态（update ｜ delete），告知用户是删除了树上的节点还是单纯的更新了节点
+   *
+   * @example
+   *
+   * ```typescript
+   * const status = mint.delete('敏感词')
+   * ```
    */
   delete(key: string) {
     const type = this.pop(key.toLowerCase(), key.length, this.root);
@@ -185,9 +218,17 @@ class Mint {
   }
 
   /**
-   * 新增关键字
-   * @param key 关键字
-   * @returns Node
+   * 新增敏感词
+   *
+   * @param key 关键词
+   * @param build 是否构建树，默认不用传递
+   * @returns 状态
+   *
+   * @example
+   *
+   * ```typescript
+   * const status = mint.add('敏感词')
+   * ```
    */
   add(key: string, build = true): boolean {
     const lowKey = key.toLowerCase();
@@ -275,15 +316,5 @@ class Mint {
     }
   }
 }
-
-/* const arr = ['HER', 'SHR'];
-const mint = new Mint(arr); */
-
-// mint.delete('her')
-
-// console.log(mint.root.children['s'].children)
-// console.log(mint.root)
-
-// console.log(mint2.root.children['s'].children['h'])
 
 export default Mint;

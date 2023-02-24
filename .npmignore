@@ -2,6 +2,8 @@ src/
 coverage/
 build/
 test/
+time/
+.github/
 nodemon.json
 .husky/
 .prettierignore
