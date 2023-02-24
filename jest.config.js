@@ -1,29 +1,19 @@
 /*
  * @Author       : Zhelin Cheng
  * @Date         : 2021-08-25 14:29:30
- * @LastEditors  : Zhelin Cheng
- * @LastEditTime : 2021-08-25 19:53:16
- * @FilePath     : /mini-crypto/jest.config.js
+ * @LastEditors  : 程哲林
+ * @LastEditTime : 2023-02-24 11:10:45
+ * @FilePath     : /mint-filter/jest.config.js
  * @Description  : 未添加文件描述
  */
 
-'use strict'
+'use strict';
 
 module.exports = {
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json'
-    }
-  },
-  moduleFileExtensions: [
-    'ts',
-    'js'
-  ],
+  roots: ['<rootDir>/src'],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
   },
-  testMatch: [
-    '**/test/**/*.test.(ts|js)'
-  ],
-  testEnvironment: 'node'
-}
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+};

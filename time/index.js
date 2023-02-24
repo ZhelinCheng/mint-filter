@@ -6,7 +6,7 @@
 
 'use strict'
 const argv = process.argv
-const Mint = require('../dist').default
+const Mint = require('../dist/main/index').default
 const path = require('path')
 const fs = require('fs-extra')
 
@@ -39,7 +39,7 @@ strBox['100k'] = readFile(resolve('./100000'))
 
 console.log(`===== 性能测试，${replace ? '替换' : '不替换'}关键词 =====`)
 console.time('耗时：')
-m.filterSync(strBox[key], {
+m.filter(strBox[key], {
   replace
 })
 console.timeEnd('耗时：')
