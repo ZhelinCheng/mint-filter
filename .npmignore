@@ -16,3 +16,5 @@ tsconfig.umd.json
 jest.config.js
 nodemon.json
 commitlint.config.js
+.coveralls.yml
+tsconfig.module.json
