@@ -2,7 +2,7 @@
  * @Author       : 程哲林
  * @Date         : 2023-02-20 20:03:15
  * @LastEditors  : 程哲林
- * @LastEditTime : 2023-02-24 21:43:36
+ * @LastEditTime : 2023-02-28 15:28:16
  * @FilePath     : /mint-filter/src/index.ts
  * @Description  : 未添加文件描述
  */
@@ -20,7 +20,7 @@ interface FilterData {
   text: string;
 }
 
-class Mint {
+export class Mint {
   root: Node = new Node('root');
 
   constructor(keys: string[]) {
