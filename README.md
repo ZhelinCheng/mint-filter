@@ -57,6 +57,10 @@ yarn add mint-filter
 
 ## 🎉 使用
 
+### CommonJS导入
+```javascript
+const { Mint } = require('mint-filter')
+```
 
 ### TypeScript / ES Module引用
 
