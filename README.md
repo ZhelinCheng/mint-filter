@@ -1,23 +1,40 @@
-基于Aho–Corasick算法，更轻巧的JavaScript敏感词过滤库🚀。支持Node.js、浏览器等环境（JavaScript/TypeScript），支持敏感词替换成*号。
+<h1 align="center">Welcome to mint-filter 👋</h1>
+<center>
+  <a href="https://github.com/ZhelinCheng/mint-filter" target="_blank">
+    <img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg">
+  </a>
 
-> 4.0 版本当前只是通过了我写的单测，并未实际上线使用，有兴趣的小伙伴可以帮忙写test，覆盖更多更复杂的情况。
+  <a href="https://www.npmjs.com/package/mint-filter" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/mint-filter.svg">
+  </a>
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg)
-[![npm version](https://img.shields.io/npm/v/mint-filter.svg?style=flat-square)](https://www.npmjs.com/package/mint-filter)
-[![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D4.0-green.svg)](https://www.typescriptlang.org/)
-[![Node](https://img.shields.io/badge/Node.js-%3E%3D12.0.0-green.svg)](https://nodejs.org/en/)
-[![License](https://img.shields.io/github/license/ZhelinCheng/mint-filter.svg)](https://github.com/ZhelinCheng/mint-filter/blob/master/LICENSE)
-[![npm](https://img.shields.io/npm/dm/mint-filter.svg)](https://www.npmjs.com/package/mint-filter)
-[![Coverage Status](https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master)](https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master)
-![CI](https://github.com/ZhelinCheng/mint-filter/workflows/CI/badge.svg)
+  <a href="https://www.npmjs.com/package/mint-filter" target="_blank">
+    <img alt="Download" src="https://img.shields.io/npm/dm/mint-filter.svg">
+  </a>
 
-## 💪 支持平台
+  <a href="https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master" target="_blank">
+    <img alt="Coverage" src="https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master">
+  </a>
 
-本插件支持Node及浏览器平台；
+  <br/>
 
-## 🎇 说明
+  <a href="https://github.com/ZhelinCheng/mint-filter/actions" target="_blank">
+    <img alt="Coverage" src="https://github.com/ZhelinCheng/mint-filter/workflows/CI/badge.svg">
+  </a>
 
-基于Aho–Corasick算法实现的敏感词过滤方案，Aho–Corasick算法是由Alfred V. Aho和Margaret J.Corasick 发明的字符串搜索算法，用于在输入的一串字符串中匹配有限组“字典”中的子串。它与普通字符串匹配的不同点在于同时与所有字典串进行匹配。算法均摊情况下具有近似于线性的时间复杂度，约为字符串的长度加所有匹配的数量。
+  <a href="https://github.com/ZhelinCheng/mint-filter#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/ZhelinCheng/mint-filter/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+  <a href="https://github.com/ZhelinCheng/mint-filter/blob/master/LICENSE" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/ZhelinCheng/mint-filter" />
+  </a>
+</center>
+
+
+> 基于Aho–Corasick算法实现的敏感词过滤方案，Aho–Corasick算法是由Alfred V. Aho和Margaret J.Corasick 发明的字符串搜索算法，用于在输入的一串字符串中匹配有限组“字典”中的子串。它与普通字符串匹配的不同点在于同时与所有字典串进行匹配。算法均摊情况下具有近似于线性的时间复杂度，约为字符串的长度加所有匹配的数量。
 
 实现详细说明（搜索算法未更新，请查看代码）：
 
@@ -25,7 +42,13 @@
 
 掘金社区：[《TypeScript：Aho–Corasick算法实现敏感词过滤》](https://juejin.im/post/5cfa6bb6f265da1b8a4f0ed8)
 
-### 性能
+### 🏠 [Homepage](https://github.com/ZhelinCheng/mint-filter#readme)
+
+## 1. 性能
+
+### 运行性能
+
+**需要注意的是，实际生产环境运行速度会比下面测试数据更快。**
 
 使用20000个随机敏感词实例化的平均时间：< 96ms
 
@@ -41,21 +64,27 @@
 | 5            | 50000            |   < 20.83ms    | < 21.18ms  |
 | 6            | 100000           |   < 29.02ms    | < 34.45ms  |
 
-需要注意的是，实际生产环境运行速度会比上面测试数据更快。
+### 与DFA算法对比
 
-## 📦 安装
+|         | Aho-Corasick算法 | DFA算法 |
+|---------|----------------|--------|
+| 算法效率 | 多模式串时表现良好 | 单模式串时表现良好 |
+| 内存占用 | 需要更多内存空间 | 内存消耗小 |
+| 匹配速度 | 非常快，具有线性时间复杂度 | 常量时间复杂度，匹配速度受限于自动机大小 |
+| 实现难度 | 较为复杂，需要构建AC自动机并进行状态转移 | 实现简单，只需维护一个大的状态转移表 |
+| 匹配多个字符串 | 高效，可同时搜索多个模式字符串 | 必须为每个字符串单独执行匹配操作 |
+| 错误容错性 | 良好 | 不太好 |
+| 应用场景 | 多模式匹配 | 单模式匹配 |
 
-```javascript
-npm i -S mint-filter
-```
 
-或
 
-```javascript
+## 2. 安装
+
+```sh
 yarn add mint-filter
 ```
 
-## 🎉 使用
+## 3. 使用
 
 ### CommonJS导入
 ```javascript
@@ -72,6 +101,7 @@ const mint = new Mint(['敏感词数组'])
 mint.filter('需要验证的文本')
 ```
 
+## 4. 构造函数
 ### constructor
 
 • **new Mint**(`keys`)
@@ -86,7 +116,7 @@ mint.filter('需要验证的文本')
 
 [index.ts:26](https://github.com/ZhelinCheng/mint-filter/blob/f25e001/src/index.ts#L26)
 
-## 方法
+## 5. 方法
 
 ### add
 
@@ -217,16 +247,28 @@ Boolean
 
 
 
-## 📚开发
+## 6. 测试
 
-开发：
-
-```shell
-npm run dev
+```sh
+yarn run test
 ```
 
-构建：
+## 7. 作者
 
-```shell
-npm run build
-```
+👤 **ZhelinCheng**
+
+* Website: https://zhelin.me
+* Github: [@ZhelinCheng](https://github.com/ZhelinCheng)
+
+### 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/ZhelinCheng/mint-filter/issues). You can also take a look at the [contributing guide](https://github.com/ZhelinCheng/mint-filter/blob/master/CONTRIBUTING.md).
+
+### Show your support
+
+Give a ⭐️ if this project helped you!
+
+### 📝 License
+
+Copyright © 2023 [ZhelinCheng](https://github.com/ZhelinCheng).<br />
+This project is [MIT](https://github.com/ZhelinCheng/mint-filter/blob/master/LICENSE) licensed.
