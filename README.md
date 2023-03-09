@@ -1,5 +1,6 @@
 <h1 align="center">Welcome to mint-filter 👋</h1>
-<center>
+
+<p align="center">
   <a href="https://github.com/ZhelinCheng/mint-filter" target="_blank">
     <img alt="GitHub package.json version" src="https://img.shields.io/github/package-json/v/ZhelinCheng/mint-filter.svg">
   </a>
@@ -12,8 +13,8 @@
     <img alt="Download" src="https://img.shields.io/npm/dm/mint-filter.svg">
   </a>
 
-  <a href="https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master" target="_blank">
-    <img alt="Coverage" src="https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master">
+  <a href="https://coveralls.io/github/ZhelinCheng/mint-filter?branch=master" target="_blank">
+    <img alt="Coverage" src="https://coveralls.io/repos/github/ZhelinCheng/mint-filter/badge.svg?branch=master">
   </a>
 
   <br/>
@@ -31,7 +32,7 @@
   <a href="https://github.com/ZhelinCheng/mint-filter/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/ZhelinCheng/mint-filter" />
   </a>
-</center>
+</p>
 
 
 > 基于Aho–Corasick算法实现的敏感词过滤方案，Aho–Corasick算法是由Alfred V. Aho和Margaret J.Corasick 发明的字符串搜索算法，用于在输入的一串字符串中匹配有限组“字典”中的子串。它与普通字符串匹配的不同点在于同时与所有字典串进行匹配。算法均摊情况下具有近似于线性的时间复杂度，约为字符串的长度加所有匹配的数量。
