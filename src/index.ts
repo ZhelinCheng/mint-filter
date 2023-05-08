@@ -2,7 +2,7 @@
  * @Author       : 程哲林
  * @Date         : 2023-02-20 20:03:15
  * @LastEditors  : 程哲林
- * @LastEditTime : 2023-02-28 15:28:16
+ * @LastEditTime : 2023-05-08 18:09:03
  * @FilePath     : /mint-filter/src/index.ts
  * @Description  : 未添加文件描述
  */
@@ -20,15 +20,21 @@ interface FilterData {
   text: string;
 }
 
+interface MintOptions {
+  customCharacter?: string;
+}
+
 export class Mint {
   root: Node = new Node('root');
+  customCharacter: string;
 
-  constructor(keys: string[]) {
+  constructor(keys: string[], ops?: MintOptions) {
     const len = keys.length;
+    this.customCharacter = ops?.customCharacter || '*';
+
     for (let idx = 0; idx < len; idx++) {
       this.add(keys[idx], false);
     }
-
     this.build();
   }
 
@@ -93,7 +99,7 @@ export class Mint {
           word += v;
 
           if (replace) {
-            fText[idx] = '*';
+            fText[idx] = this.customCharacter;
           }
 
           idx++;
