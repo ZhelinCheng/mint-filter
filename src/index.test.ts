@@ -4,6 +4,11 @@ import Mint from './index';
 // const truthyStr = `这是一段没有敏感词的字符串，我在这里写了很多，十一月一日有很多优惠，我们要多购买。`;
 
 describe('基础测试', () => {
+  it('基本测验-自定义替换字符:', () => {
+    const mint = new Mint(['拼多多', '多少'], { customCharacter: '_' });
+    expect(mint.filter('拼多少，多少多').text).toEqual('拼__，__多');
+  });
+
   it('基本测验-中文:', () => {
     const mint = new Mint(['拼多多', '多少']);
     expect(mint.filter('拼多少，多少多').text).toEqual('拼**，**多');
